@@ -1,5 +1,4 @@
-src
-backup.cpp
+src/*
+!src/.vscode
 in.in
 out.out
-*.exe

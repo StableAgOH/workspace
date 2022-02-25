@@ -5,7 +5,8 @@ if not exist src (
 if not exist in.in (
     type nul > in.in
 )
-if exist src\temp.cpp (
-    copy src\temp.cpp backup.cpp
+if not exist out.out (
+    type nul > out.out
 )
-copy template.cpp src\temp.cpp
+code in.in out.out
+del init.bat
