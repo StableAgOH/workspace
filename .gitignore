@@ -1,4 +1,5 @@
+src
 backup.cpp
 in.in
 out.out
-src
+*.exe
