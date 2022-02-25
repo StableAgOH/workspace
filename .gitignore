@@ -1,3 +1,7 @@
-*.exe
-*.out
-temp.cpp
+*
+!.vscode
+!in.in
+!LICENSE
+!pr.bat
+!README.md
+!template.cpp
