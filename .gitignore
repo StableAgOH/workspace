@@ -1,7 +1,7 @@
 *
-!.vscode
 !in.in
 !LICENSE
+!oi-workspace.code-workspace
 !pr.bat
 !README.md
 !template.cpp
