@@ -24,7 +24,7 @@
                 "name": "g++.exe - 生成和调试活动文件",
                 "type": "cppdbg",
                 "request": "launch",
-                "program": "${fileDirname}\\${fileBasenameNoExtension}",
+                "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
                 "args": [],
                 "stopAtEntry": false,
                 "cwd": "${fileDirname}",
@@ -51,14 +51,14 @@
                 "type": "process",
                 "command": "g++",
                 "args": [
+                    "-fdiagnostics-color=always",
+                    "-g",
                     "${file}",
                     "-o",
-                    "${fileDirname}\\${fileBasenameNoExtension}",
-                    "-g",
+                    "${fileDirname}\\${fileBasenameNoExtension}.exe",
                     "-DLOCAL",
                     "-O2",
                     "-std=c++17",
-                    "-fdiagnostics-color=always"
                 ],
                 "options": {
                     "cwd": "${fileDirname}"
@@ -75,13 +75,13 @@
                 "type": "shell",
                 "command": "g++",
                 "args": [
+                    "-fdiagnostics-color=always",
                     "${file}",
                     "-o",
-                    "${fileDirname}\\${fileBasenameNoExtension}",
+                    "${fileDirname}\\${fileBasenameNoExtension}.exe",
                     "-DLOCAL",
                     "-O2",
                     "-std=c++17",
-                    "-fdiagnostics-color=always",
                     ";if($?){${fileDirname}\\${fileBasenameNoExtension}}"
                 ],
                 "options": {
