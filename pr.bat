@@ -1,5 +1,11 @@
 @echo off
-if exist temp.cpp (
-    copy temp.cpp backup.cpp
+if not exist src (
+    md src
 )
-copy template.cpp temp.cpp
+if not exist in.in (
+    type nul > in.in
+)
+if exist src\temp.cpp (
+    copy src\temp.cpp backup.cpp
+)
+copy template.cpp src\temp.cpp

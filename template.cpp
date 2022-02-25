@@ -14,14 +14,14 @@ const int maxn = 1e5+5;
 signed main(signed argc, char const *argv[])
 {
 #ifdef LOCAL
-    freopen("in.in", "r", stdin);
-    freopen("out.out", "w", stdout);
+    freopen("../in.in", "r", stdin);
+    freopen("../out.out", "w", stdout);
 #endif
     c1 = clock();
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     //======================================
-
+    
     //======================================
     exit();
 }

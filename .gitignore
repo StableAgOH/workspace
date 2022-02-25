@@ -1,6 +1,4 @@
-*
-!LICENSE
-!oi-workspace.code-workspace
-!pr.bat
-!README.md
-!template.cpp
+backup.cpp
+in.in
+out.out
+src
