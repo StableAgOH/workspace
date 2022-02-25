@@ -12,7 +12,7 @@
             "environment": [],
             "externalConsole": true,
             "MIMode": "gdb",
-            "miDebuggerPath": "gdb",
+            "miDebuggerPath": "{DEBUGGER_PATH}",
             "setupCommands": [
                 {
                     "description": "为 gdb 启用整齐打印",
