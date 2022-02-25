@@ -1,2 +1,5 @@
-@copy temp.cpp backup.cpp
-@copy text\template.cpp temp.cpp
+@echo off
+if exist temp.cpp (
+    copy temp.cpp backup.cpp
+)
+copy template.cpp temp.cpp
