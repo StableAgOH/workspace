@@ -19,7 +19,7 @@
             "**/include/c++/**": "cpp"
         },
         "code-runner.executorMap": {
-            "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt -DLOCAL -O2 -std=c++17 -fdiagnostics-color=always && $dir$fileNameWithoutExt",
+            "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt -DLOCAL -O2 -std=c++17 && $dir$fileNameWithoutExt",
         }
     },
     "launch": {
