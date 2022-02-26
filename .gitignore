@@ -1,4 +1,4 @@
-src/*
-!src/.vscode
 in.in
 out.out
+*.cpp
+*.exe
