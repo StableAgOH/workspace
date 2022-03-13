@@ -1,10 +1,5 @@
 {
     "files.associations": {
         "**/include/c++/**": "cpp"
-    },
-    "C_Cpp.default.cppStandard": "c++17",
-    "C_Cpp.default.defines": [
-        "LOCAL"
-    ],
-    "C_Cpp.default.intelliSenseMode": "windows-gcc-x64"
+    }
 }
