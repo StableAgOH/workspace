@@ -9,7 +9,7 @@
                 "-fdiagnostics-color=always",
                 "${file}",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${fileDirname}/${fileBasenameNoExtension}",
                 "-DLOCAL",
                 "-O2",
                 "-std=c++2a"
@@ -32,7 +32,7 @@
                 "-g",
                 "${file}",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${fileDirname}/${fileBasenameNoExtension}",
                 "-DLOCAL",
                 "-std=c++2a",
             ],
