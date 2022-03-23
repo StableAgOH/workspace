@@ -3,7 +3,7 @@
     "tasks": [
         {
             "label": "Compile",
-            "type": "process",
+            "type": "shell",
             "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
@@ -25,7 +25,7 @@
         },
         {
             "label": "Compile for debug",
-            "type": "process",
+            "type": "shell",
             "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
