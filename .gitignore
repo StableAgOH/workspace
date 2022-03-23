@@ -1,6 +1,6 @@
-c_cpp_properties.json
-in.in
-out.out
-*.cpp
-*.exe
-code
+*
+!.gitignore
+!LICENSE
+!README.md
+!.vscode
+!.vscode/*
