@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "LOCAL"
+            ],
+            "compilerPath": "D:/TDM-GCC-64/bin/g++.exe", // 根据实际情况更改
+            "cppStandard": "c++20", // 按需更改
+            "intelliSenseMode": "windows-gcc-x64"
+        }
+    ],
+    "version": 4
+}
