@@ -8,9 +8,9 @@
             "defines": [
                 "LOCAL"
             ],
-            "compilerPath": "D:/TDM-GCC-64/bin/g++.exe", // 根据实际情况更改
+            "compilerPath": "D:/cygwin/bin/g++", // 根据实际情况更改
             "cppStandard": "c++17", // 按需更改
-            "intelliSenseMode": "windows-gcc-x64"
+            "intelliSenseMode": "linux-gcc-x64" // 根据实际情况更改
         }
     ],
     "version": 4
