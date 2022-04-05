@@ -9,7 +9,7 @@
                 "LOCAL"
             ],
             "compilerPath": "D:/cygwin/bin/g++", // 根据实际情况更改
-            "cppStandard": "c++17", // 按需更改
+            "cppStandard": "c++20", // 按需更改
             "intelliSenseMode": "linux-gcc-x64" // 根据实际情况更改
         }
     ],
