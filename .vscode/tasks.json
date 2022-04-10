@@ -12,7 +12,8 @@
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-DLOCAL",
                 "-O2",
-                "-std=c++20"
+                "-std=c++20",
+                "'-Wl,--stack=268435456'"
             ],
             "options": {
                 "cwd": "${fileDirname}"
@@ -35,6 +36,7 @@
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-DLOCAL",
                 "-std=c++20",
+                "'-Wl,--stack=268435456'"
             ],
             "options": {
                 "cwd": "${fileDirname}"
