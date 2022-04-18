@@ -3,7 +3,7 @@
     "tasks": [
         {
             "label": "Compile",
-            "type": "shell",
+            "type": "cppbuild",
             "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
@@ -26,7 +26,7 @@
         },
         {
             "label": "Compile for debug",
-            "type": "shell",
+            "type": "cppbuild",
             "command": "g++",
             "args": [
                 "-fdiagnostics-color=always",
