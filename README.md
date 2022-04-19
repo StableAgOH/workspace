@@ -19,6 +19,8 @@
 
 ![1](https://user-images.githubusercontent.com/50107074/163986760-ccd6cdfa-a584-4964-a40a-94dff1740203.gif)
 
+AgOH 目前使用的代码模板至少需要 C++11 才可以使用
+
 若需要修改代码模板调用语句或内容，请修改 `.vscode/template.code-snippets` 文件
 
 注意带板子打带录屏的线上赛可能会被认定为携带代码进入考场算作作弊，配考场环境时记得删掉
