@@ -1,6 +1,6 @@
 # oi-workspace
 
-写题工作区
+写题工作区（Windows），在 Linux 下使用请切换至 Linux 分支
 
 ## 准备工作
 
