@@ -13,7 +13,7 @@
                 "-DLOCAL",
                 "-O2",
                 "-std=c++20",
-                "-Wl,--stack=268435456"
+                "-Wno-unused-result"
             ],
             "options": {
                 "cwd": "${fileDirname}"
@@ -36,7 +36,7 @@
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-DDEBUG",
                 "-std=c++20",
-                "-Wl,--stack=268435456"
+                "-Wno-unused-result"
             ],
             "options": {
                 "cwd": "${fileDirname}"
