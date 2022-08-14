@@ -1,5 +1,6 @@
 *
-!.gitignore
-!README.md
 !.vscode
 !.vscode/*
+!.gitignore
+!diff.sh
+!README.md
