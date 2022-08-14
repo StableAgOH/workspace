@@ -15,11 +15,11 @@
 
 ## 代码模板使用方法
 
-新建一个文件，在里面打 `pre`，第一个就是，回车即可。
+新建一个文件，在里面打 `nor`（普通模板）或 `cf`（codeforces 模板），第一个就是，回车即可。
 
-![1](https://user-images.githubusercontent.com/50107074/163986760-ccd6cdfa-a584-4964-a40a-94dff1740203.gif)
+![1](https://user-images.githubusercontent.com/50107074/184544437-0dabab5b-a959-44c6-9dcc-9c63d7b69396.gif)
 
-AgOH 目前使用的代码模板至少需要 C++11 才可以使用
+目前使用的代码模板至少需要 C++11 才可以使用
 
 若需要修改代码模板调用语句或内容，请修改 `.vscode/template.code-snippets` 文件
 
