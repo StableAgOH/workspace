@@ -14,7 +14,8 @@
                 "-O2",
                 "-std=c++20",
                 "-Wall",
-                "-Wno-unused-result"
+                "-Wno-unused-result",
+                "-ftrapv"
             ],
             "options": {
                 "cwd": "${fileDirname}"
@@ -38,7 +39,8 @@
                 "-DDEBUG",
                 "-std=c++20",
                 "-Wall",
-                "-Wno-unused-result"
+                "-Wno-unused-result",
+                "-ftrapv"
             ],
             "options": {
                 "cwd": "${fileDirname}"
