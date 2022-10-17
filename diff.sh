@@ -1,3 +1,4 @@
+#!/bin/bash
 set -e
 g++ temp.cpp -o temp -DLOCAL -O2 -Wno-unused-result -std=c++20
 g++ test.cpp -o test -Wno-unused-result
