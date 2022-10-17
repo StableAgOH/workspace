@@ -2,5 +2,7 @@
 !.vscode
 !.vscode/*
 !.gitignore
+!lib
+!lib/*
 !diff.sh
 !README.md
