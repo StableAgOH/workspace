@@ -8,5 +8,6 @@ void __cerr(const char* names, Arg1&& arg1, Args&&... args)
 {
     auto comma = strchr(names+1, ',');
     cerr.write(names, comma-names)<<": "<<arg1<<" | ";
-    __cerr(comma+1, args...);
+    while(*++comma==' ');
+    __cerr(comma, args...);
 }
