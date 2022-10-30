@@ -1,52 +1,13 @@
 {
-    "normal": {
+    "template": {
         "scope": "cpp",
-        "prefix": "normal",
+        "prefix": "prepare",
         "body": [
             "#include <bits/stdc++.h>",
             "using namespace std;",
             "typedef long long ll;",
             "#ifdef LOCAL",
-            "#include \"lib/debug.hpp\"",
-            "#define debug(...) __cerr(#__VA_ARGS__, __VA_ARGS__)",
-            "#else",
-            "#define debug(...) 42",
-            "#endif",
-            "//==========================================",
-            "const int maxn = 1e5+5;",
-            "signed main(signed argc, char const *argv[])",
-            "{",
-            "#if defined(LOCAL) || defined(DEBUG)",
-            "    freopen(\"in.in\", \"r\", stdin);",
-            "#ifndef DEBUG",
-            "    freopen(\"out.out\", \"w\", stdout);",
-            "    auto __c1 = chrono::high_resolution_clock::now();",
-            "#endif",
-            "#endif",
-            "    ios::sync_with_stdio(false);",
-            "    cin.tie(nullptr);",
-            "    //======================================",
-            "    $0",
-            "    //======================================",
-            "#ifdef LOCAL",
-            "    auto __c2 = chrono::high_resolution_clock::now();",
-            "    cerr<<\"Time Used:\"<<chrono::duration_cast<chrono::milliseconds>(__c2-__c1).count()<<\"ms\"<<endl;",
-            "#endif",
-            "    return 0;",
-            "}",
-            ""
-        ],
-        "description": "普通代码模板"
-    },
-    "codeforces": {
-        "scope": "cpp",
-        "prefix": "cf",
-        "body": [
-            "#include <bits/stdc++.h>",
-            "using namespace std;",
-            "typedef long long ll;",
-            "#ifdef LOCAL",
-            "#include \"lib/debug.hpp\"",
+            "#include \"lib/local.hpp\"",
             "#define debug(...) __cerr(#__VA_ARGS__, __VA_ARGS__)",
             "#else",
             "#define debug(...) 42",
@@ -54,12 +15,9 @@
             "//==========================================",
             "signed main(signed argc, char const *argv[])",
             "{",
-            "#if defined(LOCAL) || defined(DEBUG)",
-            "    freopen(\"in.in\", \"r\", stdin);",
-            "#ifndef DEBUG",
-            "    freopen(\"out.out\", \"w\", stdout);",
+            "#ifdef LOCAL",
+            "    __red(argc, argv);",
             "    auto __c1 = chrono::high_resolution_clock::now();",
-            "#endif",
             "#endif",
             "    ios::sync_with_stdio(false);",
             "    cin.tie(nullptr);",
@@ -79,6 +37,6 @@
             "}",
             ""
         ],
-        "description": "codeforces 代码模板"
+        "description": "代码模板"
     }
 }
