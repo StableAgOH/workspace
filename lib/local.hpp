@@ -13,11 +13,8 @@ void __cerr(const char* names, Arg1&& arg1, Args&&... args)
 }
 void __red(signed argc, char const *argv[])
 {
-    auto __case = string(argc==1?"1":argv[1]);
-    auto __ifname = "testcases/"+__case+".in";
-    freopen(__ifname.c_str(), "r", stdin);
+    freopen("in.in", "r", stdin);
 #ifndef DEBUG
-    auto __ofname = "testcases/"+__case+".out";
-    freopen(__ofname.c_str(), "w", stdout);
+    freopen("out.out", "w", stdout);
 #endif
 }
