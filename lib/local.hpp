@@ -11,10 +11,3 @@ void __cerr(const char* names, Arg1&& arg1, Args&&... args)
     while(*++comma==' ');
     __cerr(comma, args...);
 }
-void __red(signed argc, char const *argv[])
-{
-    freopen("in.in", "r", stdin);
-#ifndef DEBUG
-    freopen("out.out", "w", stdout);
-#endif
-}
