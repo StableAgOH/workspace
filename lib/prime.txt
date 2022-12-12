@@ -1,0 +1,77 @@
+const int N = sqrt(1e7)+1;
+vector<int> pri;
+vector<bool> vis(N+1);
+for(int i=2;i<=N;i++)
+{
+    if(!vis[i]) pri.push_back(i);
+    for(int j : pri)
+    {
+        if((ll)i*j>N) break;
+        vis[i*j] = true;
+        if(i%j==0) break;
+    }
+}
+debug(N, pri.size());
+
+auto factors_vec = [&](ll x)
+{
+    vector<ll> v;
+    for(auto i : pri)
+    {
+        if(x%i==0) v.push_back(i);
+        while(x%i==0) x /= i;
+    }
+    if(x>1) v.push_back(x);
+    return v;
+};
+
+auto factors_mp = [&](ll x)
+{
+    map<ll,int> mp;
+    for(auto i : pri)
+    {
+        while(x%i==0)
+        {
+            mp[i]++;
+            x /= i;
+        }
+    }
+    if(x>1) mp[x]++;
+    return mp;
+};
+
+auto factors_pairvec = [&](ll x)
+{
+    map<ll,int> mp;
+    for(auto i : pri)
+    {
+        while(x%i==0)
+        {
+            mp[i]++;
+            x /= i;
+        }
+    }
+    if(x>1) mp[x]++;
+    return vector<ll,int>(mp.begin(), mp.end());
+};
+
+// 枚举 z 的所有因子（除了 1）
+ll mul = 1;
+auto f = factors_pairvec(z);
+function<void(size_t)> dfs = [&](size_t p)
+{
+    if(mul!=1)
+    {
+        // get a factor
+    }
+    if(p==f.size()) return;
+    dfs(p+1);
+    auto [x,y] = f[p];
+    for(int i=0;i<y;i++)
+    {
+        mul *= x;
+        dfs(p+1);
+    }
+    for(int i=0;i<y;i++) mul /= x;
+};
+dfs(0);
