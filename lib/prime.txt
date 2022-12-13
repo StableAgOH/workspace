@@ -13,9 +13,9 @@ for(int i=2;i<=N;i++)
 }
 debug(N, pri.size());
 
-auto factors_vec = [&](ll x)
+auto pfac_vec = [&]<typename T>(T x)
 {
-    vector<ll> v;
+    vector<T> v;
     for(auto i : pri)
     {
         if(x%i==0) v.push_back(i);
@@ -25,9 +25,9 @@ auto factors_vec = [&](ll x)
     return v;
 };
 
-auto factors_mp = [&](ll x)
+auto pfac_mp = [&]<typename T>(T x)
 {
-    map<ll,int> mp;
+    map<T,int> mp;
     for(auto i : pri)
     {
         while(x%i==0)
@@ -40,9 +40,9 @@ auto factors_mp = [&](ll x)
     return mp;
 };
 
-auto factors_pairvec = [&](ll x)
+auto pfac_pairvec = [&]<typename T>(T x)
 {
-    map<ll,int> mp;
+    map<T,int> mp;
     for(auto i : pri)
     {
         while(x%i==0)
@@ -52,26 +52,25 @@ auto factors_pairvec = [&](ll x)
         }
     }
     if(x>1) mp[x]++;
-    return vector<ll,int>(mp.begin(), mp.end());
+    return vector(mp.begin(), mp.end());
 };
 
 // 枚举 z 的所有因子（除了 1）
-ll mul = 1;
-auto f = factors_pairvec(z);
+auto pf = pfac_pairvec(z);
+decltype(z) mul = 1;
+vector<decltype(z)> fac;
 function<void(size_t)> dfs = [&](size_t p)
 {
-    if(mul!=1)
-    {
-        // get a factor
-    }
-    if(p==f.size()) return;
+    if(p==pf.size()) return;
     dfs(p+1);
-    auto [x,y] = f[p];
-    for(int i=0;i<y;i++)
+    auto [a,b] = pf[p];
+    for(int i=0;i<b;i++)
     {
-        mul *= x;
+        mul *= a;
+        fac.push_back(mul);
         dfs(p+1);
     }
-    for(int i=0;i<y;i++) mul /= x;
+    for(int i=0;i<b;i++) mul /= a;
 };
 dfs(0);
+//* result: fac
