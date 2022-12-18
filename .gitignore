@@ -1,9 +1,11 @@
 *
 !.vscode
 !.vscode/*
+.vscode/c_cpp_properties.json
 !.gitignore
 !lib
 !lib/*
 !diff.sh
+!diff.ps1
 !README.md
 !run.sh

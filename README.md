@@ -1,11 +1,17 @@
 # oi-workspace
 
-写题工作区（Linux），在 Windows 下使用请切换至 windows 分支
+写题工作区
 
 ## 准备工作
 
 1. 下载本仓库（clone 或 Download ZIP），使用 VSCode 打开文件夹（文件/打开文件夹...或 `Ctrl+K Ctrl+O`）打开；
-2. 修改 `.vscode/c_cpp_properties.json` 内需要修改的内容。
+2. 安装插件 `ms-vscode.cpptools`，`vadimcn.vscode-lldb`，选装 CPH 插件（`DivyanshuAgrawal.competitive-programming-helper`）；
+3. 按 `Ctrl+Shift+P`，搜索并回车选择 `C/C++: Edit Configurations (UI)`；
+4. 修改需要修改的内容：
+   * 定义：在在其中添加 `LOCAL` 项；
+   * 编译器路径：下拉选择或填入你想使用的编译器的**绝对路径**；
+   * C++ 标准：填入你想使用的 `C++` 标准；
+   * IntelliSense 模式：根据你的操作系统、你想使用的编译器以及架构选择。
 
 ## 运行程序
 
