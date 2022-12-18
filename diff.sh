@@ -7,6 +7,6 @@ for ((i = 1; ; i++)); do
     python3 data.py >in.in
     ./temp
     ./test <in.in >out2.out
-    diff out.out out2.out
+    diff -w out.out out2.out
     sleep 0.5
 done
