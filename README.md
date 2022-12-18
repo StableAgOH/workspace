@@ -27,3 +27,12 @@
 * 目前使用的代码模板 C++98 即可使用；
 * 若需要修改代码模板调用语句或内容，请修改 `.vscode/template.code-snippets` 文件；
 * 注意带板子打带录屏的线上赛可能会被认定为携带代码进入考场算作作弊，请不要于这样的比赛中使用。
+
+## 对拍脚本使用方法
+
+1. 创建并撰写数据生成器文件 `data.py`；
+2. 运行对拍脚本：
+   * Windows：`powershell diff.ps1 ${code1} ${code2}`；
+   * Linux：`bash diff.sh ${code1} ${code2}` 。
+
+   `${code1}` 和 `${code2}` 为要对拍的两份代码文件，若不指定，默认 `${code1}` 为 `temp.cpp`，`${code2}` 为 `test.cpp`。
