@@ -1,7 +1,7 @@
 {
     "recommendations": [
         "ms-vscode.cpptools",
-        "DivyanshuAgrawal.competitive-programming-helper",
-        "vadimcn.vscode-lldb"
+        "vadimcn.vscode-lldb",
+        "DivyanshuAgrawal.competitive-programming-helper"
     ]
 }
