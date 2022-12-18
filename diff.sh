@@ -7,13 +7,16 @@ exit_if_not_zero() {
     fi
 }
 
-echo "[INFO] Compiling temp.cpp"
-clang++ temp.cpp -o temp -O2 -std=c++20
-exit_if_not_zero "[CE] temp.cpp"
+program1=${1:-"temp.cpp"}
+program2=${2:-"test.cpp"}
 
-echo "[INFO] Compiling test.cpp"
-clang++ test.cpp -o test -O2 -std=c++20
-exit_if_not_zero "[CE] test.cpp"
+echo "[INFO] Compiling $program1"
+clang++ $program1 -o temp -O2 -std=c++20
+exit_if_not_zero "[CE] $program1"
+
+echo "[INFO] Compiling $program2"
+clang++ $program2 -o test -O2 -std=c++20
+exit_if_not_zero "[CE] $program2"
 
 for ((i = 1; ; i++)); do
     echo "[INFO] Testcase No.$i"
@@ -21,11 +24,11 @@ for ((i = 1; ; i++)); do
     python3 data.py >in.in
     exit_if_not_zero "[RE] data.py"
 
-    ./temp
-    exit_if_not_zero "[RE] temp.cpp"
+    ./temp <in.in >out.out
+    exit_if_not_zero "[RE] $program1"
 
     ./test <in.in >out2.out
-    exit_if_not_zero "[RE] test.cpp"
+    exit_if_not_zero "[RE] $program2"
 
     diff -w out.out out2.out
     exit_if_not_zero "[ERROR] Two results do not match"
