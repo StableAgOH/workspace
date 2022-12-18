@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
-g++ temp.cpp -o temp -DLOCAL -O2 -Wno-unused-result -std=c++20
-g++ test.cpp -o test -Wno-unused-result
+clang++ temp.cpp -o temp -O2 -std=c++20
+clang++ test.cpp -o test -O2 -std=c++20
 for ((i = 1; ; i++)); do
     echo "No.$i"
     python3 data.py >in.in
