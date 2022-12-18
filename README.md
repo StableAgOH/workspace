@@ -16,7 +16,7 @@
 
 新建一个 `cpp` 文件，在里面打 `pre`，第一个就是，回车即可。
 
-![1](https://user-images.githubusercontent.com/50107074/184544437-0dabab5b-a959-44c6-9dcc-9c63d7b69396.gif)
+![1](https://user-images.githubusercontent.com/50107074/208286988-ec09dd1b-9bac-4463-84d7-094c0b52fa40.gif)
 
 * 目前使用的代码模板 C++98 即可使用；
 * 若需要修改代码模板调用语句或内容，请修改 `.vscode/template.code-snippets` 文件；
