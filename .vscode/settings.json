@@ -1,13 +1,5 @@
 {
     "files.associations": {
         "**/include/c++/**": "cpp"
-    },
-    "[cpp]": {
-        "editor.defaultFormatter": "ms-vscode.cpptools",
-    },
-    "cmake.configureOnOpen": false,
-    "cph.general.defaultLanguage": "cpp",
-    "cph.general.menuChoices": "cpp python java rust",
-    "cph.language.cpp.SubmissionCompiler": "GNU G++20 11.2.0 (64 bit, winlibs)",
-    "cph.general.useShortCodeForcesName": true
+    }
 }
