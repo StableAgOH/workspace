@@ -2,6 +2,7 @@
     "recommendations": [
         "ms-vscode.cpptools",
         "vadimcn.vscode-lldb",
-        "DivyanshuAgrawal.competitive-programming-helper"
+        "DivyanshuAgrawal.competitive-programming-helper",
+        "espresso3389.insert-file"
     ]
 }
