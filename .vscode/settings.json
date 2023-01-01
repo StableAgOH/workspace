@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "**/include/c++/**": "cpp"
+        "**/include/c++/**": "cpp",
+        "hasher": "cpp",
+        "prime": "cpp"
     }
 }

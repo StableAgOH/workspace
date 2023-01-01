@@ -23,12 +23,7 @@
             "    ios::sync_with_stdio(false);",
             "    cin.tie(NULL);",
             "    //======================================",
-            "    int t;",
-            "    cin>>t;",
-            "    while(t--)",
-            "    {",
-            "        $0",
-            "    }",
+            "    $0",
             "    //======================================",
             "#ifdef LOCAL",
             "    __after_run();",
@@ -38,5 +33,187 @@
             ""
         ],
         "description": "代码模板"
+    },
+    "mc": {
+        "scope": "cpp",
+        "prefix": "mc",
+        "body": [
+            "int t;",
+            "cin>>t;",
+            "while(t--)",
+            "{",
+            "    $0",
+            "}"
+        ],
+        "description": "multicases"
+    },
+    "vector_n_0": {
+        "scope": "cpp",
+        "prefix": "vn0",
+        "body": [
+            "vector<int> ${a}(n);"
+        ],
+        "description": "vector_n_0"
+    },
+    "vector_n_1": {
+        "scope": "cpp",
+        "prefix": "vn1",
+        "body": [
+            "vector<int> ${a}(n+1);"
+        ],
+        "description": "vector_n_1"
+    },
+    "input_vector_n_0": {
+        "scope": "cpp",
+        "prefix": "ivn0",
+        "body": [
+            "for(int i=0;i<n;i++) cin>>${a}[i];"
+        ],
+        "description": "input_vector_n_0"
+    },
+    "input_vector_n_1": {
+        "scope": "cpp",
+        "prefix": "ivn1",
+        "body": [
+            "for(int i=1;i<=n;i++) cin>>${a}[i];"
+        ],
+        "description": "input_vector_n_1"
+    },
+    "output_vector_n_0": {
+        "scope": "cpp",
+        "prefix": "ovn0",
+        "body": [
+            "for(int i=0;i<n;i++) cout<<${a}[i]<<\" \\n\"[i==n-1];"
+        ],
+        "description": "output_vector_n_0"
+    },
+    "output_vector_n_1": {
+        "scope": "cpp",
+        "prefix": "ovn1",
+        "body": [
+            "for(int i=1;i<=n;i++) cout<<${a}[i]<<\" \\n\"[i==n];"
+        ],
+        "description": "output_vector_n_1"
+    },
+    "vector_nm_0": {
+        "scope": "cpp",
+        "prefix": "vnm0",
+        "body": [
+            "vector<vector<int>> ${a}(n, vector<int>(m));"
+        ],
+        "description": "vector_nm_0"
+    },
+    "vector_nm_1": {
+        "scope": "cpp",
+        "prefix": "vnm1",
+        "body": [
+            "vector<vector<int>> ${a}(n+1, vector<int>(m+1));"
+        ],
+        "description": "vector_nm_1"
+    },
+    "input_vector_nm_0": {
+        "scope": "cpp",
+        "prefix": "ivnm0",
+        "body": [
+            "for(int i=0;i<n;i++)",
+            "    for(int j=0;j<m;j++)",
+            "        cin>>${a}[i][j];",
+        ],
+        "description": "input_vector_nm_0"
+    },
+    "input_vector_nm_1": {
+        "scope": "cpp",
+        "prefix": "ivnm1",
+        "body": [
+            "for(int i=1;i<=n;i++)",
+            "    for(int j=1;j<=m;j++)",
+            "        cin>>${a}[i][j];",
+        ],
+        "description": "input_vector_nm_1"
+    },
+    "output_vector_nm_0": {
+        "scope": "cpp",
+        "prefix": "ovnm0",
+        "body": [
+            "for(int i=0;i<n;i++)",
+            "    for(int j=0;j<m;j++)",
+            "        cout<<${a}[i][j]<<\" \\n\"[j==m-1];",
+        ],
+        "description": "output_vector_nm_0"
+    },
+    "output_vector_nm_1": {
+        "scope": "cpp",
+        "prefix": "ovnm1",
+        "body": [
+            "for(int i=1;i<=n;i++)",
+            "    for(int j=1;j<=m;j++)",
+            "        cout<<${a}[i][j]<<\" \\n\"[j==m];",
+        ],
+        "description": "output_vector_nm_1"
+    },
+    "modular": {
+        "scope": "cpp",
+        "prefix": "modular",
+        "body": [
+            "const int mod = 998244353;",
+            "auto qpow = [&](ll a,ll k,ll p)",
+            "{",
+            "    ll res = 1;",
+            "    for(;k;k>>=1,a=a*a%p)",
+            "        if(k&1) res=res*a%p;",
+            "    return res;",
+            "};",
+            "auto inv = [&](ll x) { return qpow(x, mod-2, mod); };"
+        ],
+        "description": "取模相关"
+    },
+    "tree": {
+        "scope": "cpp",
+        "prefix": "tree",
+        "body": [
+            "vector<vector<int>> G(n+1);",
+            "for(int i=1;i<n;i++)",
+            "{",
+            "    int u,v;",
+            "    cin>>u>>v;",
+            "    G[u].push_back(v);",
+            "    G[v].push_back(u);",
+            "}",
+            ""
+        ],
+        "description": "树"
+    },
+    "graph": {
+        "scope": "cpp",
+        "prefix": "graph",
+        "body": [
+            "vector<vector<int>> G(n+1);",
+            "for(int i=1;i<=m;i++)",
+            "{",
+            "    int u,v;",
+            "    cin>>u>>v;",
+            "    G[u].push_back(v);",
+            "    G[v].push_back(u);",
+            "}",
+            ""
+        ],
+        "description": "图"
+    },
+    "dfs": {
+        "scope": "cpp",
+        "prefix": "dfs",
+        "body": [
+            "function<void(int,int)> dfs = [&](int u,int p)",
+            "{",
+            "    for(auto v : G[u])",
+            "    {",
+            "        if(v==p) continue;",
+            "        dfs(v, u);",
+            "    }",
+            "};",
+            "dfs(1, 0);",
+            ""
+        ],
+        "description": "dfs for graph"
     }
 }
