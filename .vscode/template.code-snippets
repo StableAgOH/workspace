@@ -151,21 +151,32 @@
         ],
         "description": "output_vector_nm_1"
     },
-    "modular": {
+    "numno": {
         "scope": "cpp",
-        "prefix": "modular",
+        "prefix": "numno",
         "body": [
             "const int mod = 998244353;",
-            "auto qpow = [&](ll a,ll k,ll p)",
+            "ll qpow(ll a,ll k,ll p=mod)",
             "{",
             "    ll res = 1;",
             "    for(;k;k>>=1,a=a*a%p)",
             "        if(k&1) res=res*a%p;",
             "    return res;",
             "};",
-            "auto inv = [&](ll x) { return qpow(x, mod-2, mod); };"
+            "ll inv(ll a,ll p=mod) { return qpow(a, mod-2, mod); }",
+            "vector<ll> fac(1, 1), ifac(1, 1);",
+            "ll C(ll n,ll m)",
+            "{",
+            "    if(m<0||m>n) return 0LL;",
+            "    while((ll)fac.size()<n+1)",
+            "    {",
+            "        fac.push_back(fac.back()*fac.size());",
+            "        ifac.push_back(inv(fac.back()));",
+            "    }",
+            "    return fac[n]*ifac[m]%mod*ifac[n-m]%mod;",
+            "};"
         ],
-        "description": "取模相关"
+        "description": "常用数学"
     },
     "tree": {
         "scope": "cpp",
