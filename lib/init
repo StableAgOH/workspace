@@ -35,9 +35,11 @@ private:
 public:
     ~solver()
     {
+    #ifdef LOCAL
         auto end_time = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::milliseconds>(end_time-begin_time);
         clog<<"Time Used:"<<duration.count()<<"ms"<<endl;
+    #endif
     }
     void multicases() { this->mc = true; }
     void tfres(const char* tres, const char* fres)
@@ -61,12 +63,11 @@ int main(int argc, const char* argv[])
     cin.tie(nullptr);
     solver s;
     s.multicases();
+    auto f = []() {
     //======================================
-    auto f = []()
-    {
-        
+    
+    //======================================
     };
-    //======================================
     s.solve(f);
     return 0;
 }
