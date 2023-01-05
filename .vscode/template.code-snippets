@@ -55,6 +55,14 @@
         ],
         "description": "vector_n_0"
     },
+    "vector_nn_0": {
+        "scope": "cpp",
+        "prefix": "vnn0",
+        "body": [
+            "vector<int> ${a}(n), ${b}(n);"
+        ],
+        "description": "vector_nn_0"
+    },
     "vector_n_1": {
         "scope": "cpp",
         "prefix": "vn1",
@@ -62,6 +70,14 @@
             "vector<int> ${a}(n+1);"
         ],
         "description": "vector_n_1"
+    },
+    "vector_nn_1": {
+        "scope": "cpp",
+        "prefix": "vnn1",
+        "body": [
+            "vector<int> ${a}(n+1), ${b}(n+1);"
+        ],
+        "description": "vector_nn_1"
     },
     "input_vector_n_0": {
         "scope": "cpp",
