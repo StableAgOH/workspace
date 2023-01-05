@@ -2,15 +2,6 @@
 #include "prettyprint.hpp"
 using namespace std;
 
-#ifdef LOCAL
-    ifstream __fin("in.in");
-    ofstream __fout("out.out");
-#define cin __fin
-#ifndef DEBUG
-#define cout __fout
-#endif
-#endif
-
 namespace local
 {
 template <typename Arg1>
@@ -23,4 +14,13 @@ void debug(const char* names, Arg1&& arg1, Args&&... args)
     while(*++comma==' ');
     debug(comma, args...);
 }
+
+auto redirect = []()
+{
+    freopen("in.in", "r", stdin);
+#ifndef DEBUG
+    freopen("out.out", "w", stdout);
+#endif
+    return 0;
+}();
 } // namespace local
