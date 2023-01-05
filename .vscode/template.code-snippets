@@ -7,30 +7,74 @@
             "using namespace std;",
             "#ifdef LOCAL",
             "#include \"lib/local.hpp\"",
-            "#define debug(...) __cerr(#__VA_ARGS__, __VA_ARGS__)",
+            "#define debug(...) local::debug(#__VA_ARGS__, __VA_ARGS__)",
             "#else",
             "#define debug(...) 42",
             "#endif",
+            "#define UNREACHABLE false",
+            "#define unreachable() assert(UNREACHABLE)",
             "typedef long long ll;",
             "typedef long double ld;",
             "typedef pair<int,int> pii;",
-            "//==========================================",
-            "signed main(signed argc, char const *argv[])",
+            "class call_helper",
             "{",
-            "#ifdef LOCAL",
-            "    __before_run();",
-            "#endif",
+            "private:",
+            "    string_view tres, fres;",
+            "public:",
+            "    call_helper(const string& tres, const string& fres) : tres(tres), fres(fres) {}",
+            "    template <typename F>",
+            "    requires same_as<invoke_result_t<F>, void>",
+            "    void operator()(F func) { func(); }",
+            "    template <typename F>",
+            "    requires same_as<invoke_result_t<F>, bool>",
+            "    void operator()(F func) { cout<<(func()?tres:fres)<<'\\n'; }",
+            "    template <typename F>",
+            "    void operator()(F func) { cout<<func()<<'\\n'; }",
+            "};",
+            "class solver",
+            "{",
+            "private:",
+            "    bool mc = false;",
+            "    string tres=\"YES\", fres=\"NO\";",
+            "    chrono::_V2::system_clock::time_point begin_time = chrono::high_resolution_clock::now();",
+            "public:",
+            "    ~solver()",
+            "    {",
+            "        auto end_time = chrono::high_resolution_clock::now();",
+            "        auto duration = chrono::duration_cast<chrono::milliseconds>(end_time-begin_time);",
+            "        clog<<\"Time Used:\"<<duration.count()<<\"ms\"<<endl;",
+            "    }",
+            "    void multicases() { this->mc = true; }",
+            "    void tfres(const char* tres, const char* fres)",
+            "    {",
+            "        this->tres = tres;",
+            "        this->fres = fres;",
+            "    }",
+            "    template <typename F>",
+            "    void solve(F func)",
+            "    {",
+            "        call_helper call(tres, fres);",
+            "        int t = 1;",
+            "        if(mc) cin>>t;",
+            "        while(t--) call(func);",
+            "    }",
+            "};",
+            "int main(int argc, const char* argv[])",
+            "{",
             "    ios::sync_with_stdio(false);",
-            "    cin.tie(NULL);",
+            "    cin.tie(nullptr);",
+            "    solver s;",
+            "    s.multicases();",
             "    //======================================",
-            "    $0",
+            "    auto f = []()",
+            "    {",
+            "        ",
+            "    };",
             "    //======================================",
-            "#ifdef LOCAL",
-            "    __after_run();",
-            "#endif",
+            "    s.solve(f);",
             "    return 0;",
             "}",
-            ""
+            "",
         ],
         "description": "代码模板"
     },
@@ -45,7 +89,7 @@
             "    $0",
             "}"
         ],
-        "description": "multicases"
+        "description": "多组数据"
     },
     "vector_n_0": {
         "scope": "cpp",
@@ -53,7 +97,7 @@
         "body": [
             "vector<int> ${a}(n);"
         ],
-        "description": "vector_n_0"
+        "description": "0-indexed vector"
     },
     "vector_nn_0": {
         "scope": "cpp",
@@ -61,7 +105,7 @@
         "body": [
             "vector<int> ${a}(n), ${b}(n);"
         ],
-        "description": "vector_nn_0"
+        "description": "0-indexed vector * 2"
     },
     "vector_n_1": {
         "scope": "cpp",
@@ -69,7 +113,7 @@
         "body": [
             "vector<int> ${a}(n+1);"
         ],
-        "description": "vector_n_1"
+        "description": "1-indexed vector"
     },
     "vector_nn_1": {
         "scope": "cpp",
@@ -77,7 +121,7 @@
         "body": [
             "vector<int> ${a}(n+1), ${b}(n+1);"
         ],
-        "description": "vector_nn_1"
+        "description": "1-indexed vector * 2"
     },
     "input_vector_n_0": {
         "scope": "cpp",
@@ -85,7 +129,7 @@
         "body": [
             "for(int i=0;i<n;i++) cin>>${a}[i];"
         ],
-        "description": "input_vector_n_0"
+        "description": "input 0-indexed vector"
     },
     "input_vector_n_1": {
         "scope": "cpp",
@@ -93,7 +137,7 @@
         "body": [
             "for(int i=1;i<=n;i++) cin>>${a}[i];"
         ],
-        "description": "input_vector_n_1"
+        "description": "input 1-indexed vector"
     },
     "output_vector_n_0": {
         "scope": "cpp",
@@ -101,7 +145,7 @@
         "body": [
             "for(int i=0;i<n;i++) cout<<${a}[i]<<\" \\n\"[i==n-1];"
         ],
-        "description": "output_vector_n_0"
+        "description": "output 0-indexed vector"
     },
     "output_vector_n_1": {
         "scope": "cpp",
@@ -109,7 +153,7 @@
         "body": [
             "for(int i=1;i<=n;i++) cout<<${a}[i]<<\" \\n\"[i==n];"
         ],
-        "description": "output_vector_n_1"
+        "description": "output 1-indexed vector"
     },
     "vector_nm_0": {
         "scope": "cpp",
@@ -241,6 +285,17 @@
             "dfs(1, 0);",
             ""
         ],
-        "description": "dfs for graph"
+        "description": "图上 dfs"
+    },
+    "ufs":{
+        "scope":"cpp",
+        "prefix": "ufs",
+        "body": [
+            "vector<int> fa(n+1);",
+            "iota(fa.begin(), fa.end(), 0);",
+            "function<int(int)> find = [&](int x) { return x==fa[x]?x:fa[x]=find(fa[x]); };",
+            ""
+        ],
+        "description": "并查集"
     }
 }
