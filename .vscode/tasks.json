@@ -4,15 +4,13 @@
         {
             "label": "Compile",
             "type": "cppbuild",
-            "command": "clang++",
+            "command": "g++",
             "args": [
-                "-fcolor-diagnostics",
-                "-fansi-escape-codes",
+                "-fdiagnostics-color=always",
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-DLOCAL",
-                "-O2",
                 "-std=c++20",
                 "-Wall",
                 "-Wno-unused-result",
@@ -33,10 +31,9 @@
         {
             "label": "Compile for debug",
             "type": "cppbuild",
-            "command": "clang++",
+            "command": "g++",
             "args": [
-                "-fcolor-diagnostics",
-                "-fansi-escape-codes",
+                "-fdiagnostics-color=always",
                 "-g",
                 "${file}",
                 "-o",

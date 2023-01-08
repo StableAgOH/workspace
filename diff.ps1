@@ -12,11 +12,11 @@ $Program1 = $args[0] ? $args[0] : "temp.cpp"
 $Program2 = $args[1] ? $args[1] : "test.cpp"
 
 Write-Output "[INFO] Compiling $Program1"
-clang++ $Program1 -o temp -O2 -std=c++20
+g++ $Program1 -o temp -O2 -std=c++20
 ExitIfNotZero "[CE] $Program1"
 
 Write-Output "[INFO] Compiling $Program2"
-clang++ $Program2 -o test -O2 -std=c++20
+g++ $Program2 -o test -O2 -std=c++20
 ExitIfNotZero "[CE] $Program2"
 
 for ($i = 1; ; $i++) {
