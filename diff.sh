@@ -11,11 +11,11 @@ program1=${1:-"temp.cpp"}
 program2=${2:-"test.cpp"}
 
 echo "[INFO] Compiling $program1"
-clang++ $program1 -o temp -O2 -std=c++20
+g++ $program1 -o temp -O2 -std=c++20
 exit_if_not_zero "[CE] $program1"
 
 echo "[INFO] Compiling $program2"
-clang++ $program2 -o test -O2 -std=c++20
+g++ $program2 -o test -O2 -std=c++20
 exit_if_not_zero "[CE] $program2"
 
 for ((i = 1; ; i++)); do
