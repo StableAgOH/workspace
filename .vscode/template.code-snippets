@@ -1,4 +1,10 @@
 {
+    "init": {
+        "scope": "cpp",
+        "prefix": "init",
+        "body": "lib/init",
+        "description": "代码模板文件路径"
+    },
     "vector_n_0": {
         "scope": "cpp",
         "prefix": "vn0",
