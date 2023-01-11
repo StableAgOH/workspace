@@ -2,72 +2,63 @@
 using namespace std;
 #ifdef LOCAL
 #include "lib/local.hpp"
-#define debug(...) local::debug(#__VA_ARGS__, __VA_ARGS__)
+#define debug(...) debug(#__VA_ARGS__, __VA_ARGS__)
 #else
 #define debug(...) 42
 #endif
 #define UNREACHABLE false
 #define unreachable() assert(UNREACHABLE)
-typedef long long ll;
-typedef long double ld;
-typedef pair<int,int> pii;
-class call_helper
-{
-private:
-    string_view tres, fres;
-public:
-    call_helper(const string& tres, const string& fres) : tres(tres), fres(fres) {}
-    template <typename F>
-    requires same_as<invoke_result_t<F>, void>
-    void operator()(F func) { func(); }
-    template <typename F>
-    requires same_as<invoke_result_t<F>, bool>
-    void operator()(F func) { cout<<(func()?tres:fres)<<'\n'; }
-    template <typename F>
-    void operator()(F func) { cout<<func()<<'\n'; }
-};
+using ll = long long;
+using ld = long double;
+template <typename T>
+using pi = pair<T,T>;
+template <typename T>
+using tp3 = tuple<T,T,T>;
 class solver
 {
 private:
-    bool mc = false;
-    string tres="YES", fres="NO";
-    chrono::_V2::system_clock::time_point begin_time = chrono::high_resolution_clock::now();
-public:
-    ~solver()
-    {
-    #ifdef LOCAL
-        auto end_time = chrono::high_resolution_clock::now();
-        auto duration = chrono::duration_cast<chrono::milliseconds>(end_time-begin_time);
-        clog<<"Time Used:"<<duration.count()<<"ms"<<endl;
-    #endif
-    }
-    void multicases() { this->mc = true; }
-    void tfres(const char* tres, const char* fres)
-    {
-        this->tres = tres;
-        this->fres = fres;
-    }
     template <typename F>
-    void solve(F func)
+    requires same_as<invoke_result_t<F>, void>
+    static void call(F func) { func(); }
+    template <typename F>
+    requires same_as<invoke_result_t<F>, bool>
+    static void call(F func) { cout<<(func()?tf.first:tf.second)<<'\n'; }
+    template <typename F>
+    static void call(F func) { cout<<func()<<'\n'; }
+public:
+    static bool multicases;
+    static pi<string> tf;
+    template <typename F>
+    static void solve(F func)
     {
-        call_helper call(tres, fres);
         int t = 1;
-        if(mc) cin>>t;
+        if(multicases) cin>>t;
         while(t--) call(func);
     }
 };
 //==========================================
+pi<string> solver::tf = {"YES", "NO"};
+bool solver::multicases = true;
+auto solve()
+{
+    
+}
 int main(int argc, const char* argv[])
 {
+#ifdef LOCAL
+    freopen("in.in", "r", stdin);
+#ifndef DEBUG
+    freopen("out.out", "w", stdout);
+#endif
+    auto begin_time = chrono::high_resolution_clock::now();
+#endif
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
-    solver s;
-    s.multicases();
-    auto f = []() {
-    //======================================
-    
-    //======================================
-    };
-    s.solve(f);
+    solver::solve(solve);
+#ifdef LOCAL
+    auto end_time = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::milliseconds>(end_time-begin_time);
+    clog<<"Time Used:"<<duration.count()<<"ms"<<endl;
+#endif
     return 0;
 }
