@@ -11,9 +11,9 @@
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-DLOCAL",
+                "-O2",
                 "-std=c++20",
                 "-Wall",
-                "-Wno-unused-result",
                 "-ftrapv"
             ],
             "options": {
@@ -42,7 +42,6 @@
                 "-DDEBUG",
                 "-std=c++20",
                 "-Wall",
-                "-Wno-unused-result",
                 "-ftrapv"
             ],
             "options": {
