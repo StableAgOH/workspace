@@ -135,24 +135,28 @@ public:
     }
 };
 
-// 枚举 z 的所有因子（除了 1）
-prime<prime_minf_tag> pri(1e7);
-auto mp = pri.divide_map_logn(z);
-auto pf = vector(mp.begin(), mp.end());
-decltype(z) mul = 1;
-vector<decltype(z)> fac;
-function<void(size_t)> dfs = [&](size_t p)
+// 枚举 z 的所有因子
+const int N = 1e5;
+prime<prime_minf_tag> pri(N);
+auto f = [&](auto z)
 {
-    if(p==pf.size()) return;
-    dfs(p+1);
-    auto [a,b] = pf[p];
-    for(int i=0;i<b;i++)
+    auto mp = pri.divide_map_logn(z);
+    auto pf = vector(mp.begin(), mp.end());
+    decltype(z) mul = 1;
+    vector<decltype(z)> fac = {1};
+    function<void(size_t)> dfs = [&](size_t p)
     {
-        mul *= a;
-        fac.push_back(mul);
+        if(p==pf.size()) return;
         dfs(p+1);
-    }
-    for(int i=0;i<b;i++) mul /= a;
+        auto [a,b] = pf[p];
+        for(int i=0;i<b;i++)
+        {
+            mul *= a;
+            fac.push_back(mul);
+            dfs(p+1);
+        }
+        for(int i=0;i<b;i++) mul /= a;
+    };
+    dfs(0);
+    return fac;
 };
-dfs(0);
-//* result: fac
