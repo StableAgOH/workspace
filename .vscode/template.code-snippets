@@ -209,7 +209,7 @@
             "ll C(int n,int m)",
             "{",
             "\tif(m<0||m>n) return 0;",
-            "\twhile(fac.size()<n+1)",
+            "\twhile((int)fac.size()<n+1)",
             "\t{",
             "\t\tif(fac.empty()) fac = ifac = {1};",
             "\t\telse",
