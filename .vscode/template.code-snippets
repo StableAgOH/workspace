@@ -22,10 +22,8 @@
             "{",
             "array<string,2> tfmsg;",
             "bool multicases;",
-            "",
             "template <typename F> using sol_res_t = result_of<F(int)>::type;",
             "template <typename T, typename U> concept sol_res_same_as = same_as<sol_res_t<T>, U>;",
-            "",
             "template <typename F>",
             "requires sol_res_same_as<F, void>",
             "void call(F solve, int kase) { solve(kase); }",
@@ -35,7 +33,6 @@
             "template <typename F>",
             "requires (!sol_res_same_as<F, void>) && (!sol_res_same_as<F, bool>)",
             "void call(F solve, int kase) { cout<<solve(kase)<<'\\n'; }",
-            "",
             "template <typename F>",
             "void solve(F func)",
             "{",
@@ -69,8 +66,7 @@
             "\treturn 0;",
             "}",
             ""
-        ],
-        "description": "代码模板"
+        ]
     },
     "vector_n_0": {
         "scope": "cpp",
