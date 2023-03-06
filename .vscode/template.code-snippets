@@ -192,7 +192,7 @@
         "scope": "cpp",
         "prefix": "numno",
         "body": [
-            "const int mod = 1e9+7;",
+            "const int mod = 998244353;",
             "ll qpow(ll a,ll k,ll p=mod)",
             "{",
             "\tll res = 1;",
@@ -202,7 +202,7 @@
             "};",
             "ll inv(ll a,ll p=mod) { return qpow(a, mod-2, mod); }",
             "vector<ll> fac, ifac;",
-            "ll C(int n,int m)",
+            "ll A(int n,int m)",
             "{",
             "\tif(m<0||m>n) return 0;",
             "\twhile((int)fac.size()<n+1)",
@@ -210,14 +210,14 @@
             "\t\tif(fac.empty()) fac = ifac = {1};",
             "\t\telse",
             "\t\t{",
-            "\t\t    fac.push_back(fac.back()*fac.size()%mod);",
-            "\t\t    ifac.push_back(inv(fac.back()));",
+            "\t\t\tfac.push_back(fac.back()*fac.size()%mod);",
+            "\t\t\tifac.push_back(inv(fac.back()));",
             "\t\t}",
             "\t}",
-            "\treturn fac[n]*ifac[m]%mod*ifac[n-m]%mod;",
-            "}"
-        ],
-        "description": "常用数学"
+            "\treturn fac[n]*ifac[m]%mod;",
+            "}",
+            "ll C(int n,int m) { return A(n,m)*ifac[n-m]%mod; }"
+        ]
     },
     "tree": {
         "scope": "cpp",
