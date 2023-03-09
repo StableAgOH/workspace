@@ -11,6 +11,7 @@
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-DLOCAL",
+                "-DDBG_MACRO_NO_WARNING",
                 "-O2",
                 "-std=c++20",
                 "-Wall",
@@ -40,6 +41,7 @@
                 "${fileDirname}/${fileBasenameNoExtension}",
                 "-DLOCAL",
                 "-DDEBUG",
+                "-DDBG_MACRO_NO_WARNING",
                 "-std=c++20",
                 "-Wall",
                 "-ftrapv"
