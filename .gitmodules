@@ -1,0 +1,3 @@
+[submodule "lib/dbg-macro"]
+	path = lib/dbg-macro
+	url = https://github.com/sharkdp/dbg-macro.git
