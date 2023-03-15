@@ -17,6 +17,7 @@
             "using ll = long long;",
             "using ld = long double;",
             "using pii = pair<int,int>;",
+            "template <typename T> T INF = numeric_limits<T>::max()/2;",
             "namespace solver",
             "{",
             "array<string,2> tfmsg;",
@@ -272,7 +273,7 @@
         "prefix": "ufs",
         "body": [
             "vector<int> fa(n+1);",
-            "iota(fa.begin(), fa.end(), 0);",
+            "iota(fa.begin()+1, fa.end(), 1);",
             "function<int(int)> find = [&](int x) { return x==fa[x]?x:fa[x]=find(fa[x]); };",
             ""
         ],
