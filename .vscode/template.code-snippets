@@ -260,7 +260,7 @@
             "\tfor(auto v : G[u])",
             "\t{",
             "\t\tif(v==p) continue;",
-            "\t\tdfs(v, u);",
+            "\t\tdfs(v,u);",
             "\t}",
             "};",
             "dfs(1,0);",
