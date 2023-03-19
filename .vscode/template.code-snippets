@@ -9,7 +9,7 @@
             "#include \"lib/local.hpp\"",
             "#define utime() timer::utime(__LINE__)",
             "#else",
-            "#define debug(...) (__VA_ARGS__)",
+            "#define dbg(...) (__VA_ARGS__)",
             "#define utime() 42",
             "#endif",
             "#define UNREACHABLE false",
