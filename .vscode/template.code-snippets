@@ -6,7 +6,7 @@
             "#include <bits/stdc++.h>",
             "using namespace std;",
             "#ifdef LOCAL",
-            "#include \"lib/local.hpp\"",
+            "#include \"lib/local.h\"",
             "#define utime() timer::utime(__LINE__)",
             "#else",
             "#define dbg(...) (__VA_ARGS__)",

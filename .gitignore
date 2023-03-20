@@ -5,6 +5,7 @@
 !.gitignore
 !lib
 !lib/*
+lib/*.gch
 !diff.sh
 !diff.ps1
 !README.md
