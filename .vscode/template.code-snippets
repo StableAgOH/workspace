@@ -137,7 +137,7 @@
         "scope": "cpp",
         "prefix": "vnm0",
         "body": [
-            "vector<vector<int>> ${a}(n, vector<int>(m));"
+            "vector ${a}(n, vector<int>(m));"
         ],
         "description": "vector_nm_0"
     },
@@ -145,7 +145,7 @@
         "scope": "cpp",
         "prefix": "vnm1",
         "body": [
-            "vector<vector<int>> ${a}(n+1, vector<int>(m+1));"
+            "vector ${a}(n+1, vector<int>(m+1));"
         ],
         "description": "vector_nm_1"
     },
