@@ -217,7 +217,12 @@
             "\t}",
             "\treturn fac[n]*ifac[m]%mod;",
             "}",
-            "ll C(int n,int m) { return A(n,m)*ifac[n-m]%mod; }"
+            "ll C(int n,int m)",
+            "{",
+            "\tauto a = A(n,m);",
+            "\tif(!a) return a;",
+            "\telse return a*ifac[n-m]%mod;",
+            "}"
         ]
     },
     "tree": {
