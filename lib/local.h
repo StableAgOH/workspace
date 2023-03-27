@@ -1,5 +1,6 @@
 #include <chrono>
 #include "dbg-macro/dbg.h"
+#define debug(...) dbg(__VA_ARGS__)
 using namespace std;
 class timer
 {
