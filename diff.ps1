@@ -8,8 +8,14 @@ function ExitIfNotZero {
     }
 }
 
-$Program1 = $args[0] ? $args[0] : "temp.cpp"
-$Program2 = $args[1] ? $args[1] : "test.cpp"
+$Program1 = $args[0]
+if (!$Program1) {
+    $Program1 = "temp.cpp"
+}
+$Program2 = $args[1]
+if (!$Program2) {
+    $Program2 = "test.cpp"
+}
 
 Write-Output "[INFO] Compiling $Program1"
 g++ $Program1 -o temp -O2 -std=c++20
