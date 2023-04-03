@@ -27,7 +27,7 @@
             "array<string,2> tfmsg;",
             "bool multicases;",
             "template <typename F>",
-            "void solve(F func)",
+            "void solve(F&& func)",
             "{",
             "\tusing R = result_of<F(int)>::type;",
             "\tint t = 1;",
