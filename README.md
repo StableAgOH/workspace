@@ -24,7 +24,7 @@
 
 ![template](https://user-images.githubusercontent.com/50107074/212595545-38a6fc7c-7551-4b1f-b78b-8ebf35b9e30b.gif)
 
-* 目前使用的代码模板需要 C++20；
+* 目前使用的代码模板需要 C++17；
 * 若需要修改代码模板调用语句或内容，请修改 `.vscode/template.code-snippets` 文件；
 * 注意带板子打带录屏的线上赛可能会被认定为携带代码进入考场算作作弊，请不要于这样的比赛中使用。
 

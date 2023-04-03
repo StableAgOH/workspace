@@ -29,7 +29,7 @@
             "template <typename F>",
             "void solve(F&& func)",
             "{",
-            "\tusing R = result_of<F(int)>::type;",
+            "\tusing R = typename result_of<F(int)>::type;",
             "\tint t = 1;",
             "\tif(multicases) cin>>t;",
             "\tfor(int i=1;i<=t;i++)",
