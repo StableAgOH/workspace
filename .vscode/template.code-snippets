@@ -19,7 +19,7 @@
             "namespace solver",
             "{",
             "template <typename F>",
-            "void solve(F&& func, const array<const char*, 2> tfmsg, bool multicases)",
+            "void solve(F&& func, const initializer_list<const char*>&& tfmsg, bool multicases)",
             "{",
             "\tusing R = result_of_t<F(int)>;",
             "\tint t = 1;",
