@@ -313,5 +313,21 @@
             "}",
             "return ans;"
         ]
+    },
+    "bsr": {
+        "scope": "cpp",
+        "prefix": "bsr",
+        "body": [
+            "auto bsr = []<typename T, typename F>(T l, T r, const F&& check)",
+            "{",
+            "\twhile(l<r)",
+            "\t{",
+            "\t\tauto m = midpoint(l,r);",
+            "\t\tif(check(m)) r = m;",
+            "\t\telse l = m+1;",
+            "\t}",
+            "\treturn l;",
+            "};"
+        ]
     }
 }
