@@ -325,5 +325,42 @@
             "\treturn l;",
             "};"
         ]
+    },
+    "modui": {
+        "scope": "cpp",
+        "prefix": "modui",
+        "body": [
+            "int siz = sqrt(n);",
+            "vector<int> pos(n+1);",
+            "for(int i=1;i<=n;i++) pos[i] = i/siz;",
+            "int res = 0;",
+            "auto add = [&](int p) {};",
+            "auto del = [&](int p) {};",
+            "vector<tuple<int,int,int>> q(m);",
+            "for(int i=0;i<m;i++)",
+            "{",
+            "\tauto& [l,r,k] = q[i];",
+            "\tcin>>l>>r;",
+            "\tk = i;",
+            "}",
+            "sort(q.begin(), q.end(), [&](auto& p, auto& q) {",
+            "\tauto [l1,r1,k1] = p;",
+            "\tauto [l2,r2,k2] = q;",
+            "\treturn pos[l1]==pos[l2]",
+            "\t\t? r1==r2?false:((pos[l1]&1)^(r1<r2))",
+            "\t\t: l1<l2;",
+            "});",
+            "vector<int> ans(m);",
+            "int l=1, r=0;",
+            "for(auto [L,R,K] : q)",
+            "{",
+            "\twhile(L<l) add(--l);",
+            "\twhile(R>r) add(++r);",
+            "\twhile(L>l) del(l++);",
+            "\twhile(R<r) del(r--);",
+            "\tans[K] = res;",
+            "}",
+            "for(int i=0;i<m;i++) cout<<ans[i]<<'\\n';"
+        ]
     }
 }
