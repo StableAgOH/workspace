@@ -83,7 +83,6 @@ public:
     template <integral T>
     auto divide_uniqvec_sqrtn(T x) const
     {
-        assert(sqrt(x)<=this->n);
         vector<T> res;
         for(auto i : primes)
         {
@@ -97,7 +96,6 @@ public:
     template <integral T>
     auto divide_map_sqrtn(T x) const
     {
-        assert(sqrt(x)<=this->n);
         map<T, int> mp;
         for(auto i : primes)
         {
