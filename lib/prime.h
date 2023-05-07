@@ -1,36 +1,23 @@
-class prime_tag_base
+class prime_tag
 {
 protected:
     int n;
-};
-class prime_tag : public virtual prime_tag_base
-{
-protected:
-    typedef int prime_t;
-    virtual void update_prime(const prime_t i) = 0;
-    virtual void update_composite(const prime_t i, const prime_t j) = 0;
-    prime_tag(const int n) { this->n = n; }
-};
-template <int I>
-class prime_null_tag : public prime_tag
-{
-protected:
-    void update_prime(const prime_t i) {}
-    void update_composite(const prime_t i, const prime_t j) {}
-    prime_null_tag(const int n) : prime_tag(n) {}
+    virtual void update_prime(int i) = 0;
+    virtual void update_composite(int i, int j) = 0;
+    prime_tag(int n) : n(n) {}
 };
 class prime_minf_tag : public prime_tag
 {
 protected:
-    prime_minf_tag(const int n) : prime_tag(n) { minf.resize(n+1); }
-    void update_prime(const prime_t i) { minf[i] = i; }
-    void update_composite(const prime_t i, const prime_t j) { minf[i*j] = j; }
+    prime_minf_tag(int n) : prime_tag(n) { minf.resize(n+1); }
+    void update_prime(int i) { minf[i] = i; }
+    void update_composite(int i, int j) { minf[i*j] = j; }
 public:
-    vector<prime_t> minf;
-    auto divide_uniqvec_logn(prime_t x) const
+    vector<int> minf;
+    auto divide_uniqvec_logn(int x) const
     {
         assert(x<=this->n);
-        vector<prime_t> res;
+        vector<int> res;
         while(x>1)
         {
             if(res.empty()||minf[x]!=res.back()) res.push_back(minf[x]);
@@ -38,10 +25,10 @@ public:
         }
         return res;
     }
-    auto divide_map_logn(prime_t x) const
+    auto divide_map_logn(int x) const
     {
         assert(x<=this->n);
-        map<prime_t, int> mp;
+        map<int, int> mp;
         while(x>1)
         {
             mp[minf[x]]++;
@@ -53,47 +40,38 @@ public:
 class prime_phi_tag : public prime_tag
 {
 protected:
-    prime_phi_tag(const int n) : prime_tag(n) { phi.resize(n+1); }
-    void update_prime(const prime_t i) { phi[i] = i-1; }
-    void update_composite(const prime_t i, const prime_t j)
+    prime_phi_tag(int n) : prime_tag(n) { phi.resize(n+1); }
+    void update_prime(int i) { phi[i] = i-1; }
+    void update_composite(int i, int j)
     {
         if(i%j==0) phi[i*j] = phi[i]*j;
         else phi[i*j] = phi[i]*(j-1);
     }
 public:
-    vector<prime_t> phi;
+    vector<int> phi;
 };
-template <typename T1=prime_null_tag<0>, typename T2=prime_null_tag<1>>
-requires derived_from<T1, prime_tag> && derived_from<T2, prime_tag>
-class prime : public T1, public T2
+template <derived_from<prime_tag>... Tags>
+class prime : public Tags...
 {
 private:
-    typedef prime_tag::prime_t prime_t;
-    void update_prime(const prime_t i)
-    {
-        T1::update_prime(i);
-        T2::update_prime(i);
-    }
-    void update_composite(const prime_t i, const prime_t j)
-    {
-        T1::update_composite(i, j);
-        T2::update_composite(i, j);
-    }
+    void update_prime(int i) { (..., Tags::update_prime(i)); }
+    void update_composite(int i, int j) { (..., Tags::update_composite(i, j)); }
 public:
     vector<bool> is_prime;
-    vector<prime_t> primes;
+    vector<int> primes;
     prime() = delete;
-    prime(const int n) : T1(n), T2(n)
+    prime(int n) : Tags(n)...
     {
+        assert(n<=1e8);
         is_prime.resize(n+1);
-        for(prime_t i=2;i<=n;i++)
+        for(int i=2;i<=n;i++)
         {
             if(!is_prime[i])
             {
                 primes.push_back(i);
                 update_prime(i);
             }
-            for(prime_t j : primes)
+            for(auto j : primes)
             {
                 if(i*j>n) break;
                 is_prime[i*j] = true;
