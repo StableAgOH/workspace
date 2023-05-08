@@ -362,5 +362,38 @@
             "}",
             "for(int i=0;i<m;i++) cout<<ans[i]<<'\\n';"
         ]
+    },
+    "shuwei": {
+        "scope": "cpp",
+        "prefix": "shuwei",
+        "body": [
+            "auto f = [&](ll x) -> ll // [1,x]",
+            "{",
+            "\tauto s = to_string(x);",
+            "\tint len = s.length();",
+            "\tvector<int> a(len);",
+            "\tranges::transform(s, a.begin(), [](char c) { return c-'0'; });",
+            "\tvector dp(15, vector(15, vector(2, vector<ll>(2, -1))));",
+            "\t// 到第 p 位，x 代表到当前位 [...]，前一位是否顶着上界(lim)，前一位是不是前导零(zero)",
+            "\tfunction<ll(int,int,bool,bool)> dfs = [&](int p, int x, bool lim, bool zero) -> ll",
+            "\t{",
+            "\t\tif(p==len) return /* [...] */;  // 找到一个解（确定一个解对答案的贡献）",
+            "\t\tif(~dp[p][x][lim][zero]) return dp[p][x][lim][zero];",
+            "\t\tll res = 0;",
+            "\t\tfor(int i=zero;i<=(lim?a[p]:9);i++)   // 第 p 位取 i",
+            "\t\t{",
+            "\t\t\t/* [...] */ // 确定是否需要筛选 i",
+            "\t\t\tauto nxt = [&]() -> int { /* [...] */ };   // 根据需要计算 x 值",
+            "\t\t\tres += dfs(p+1, nxt(), lim&&i==a[p], false);",
+            "\t\t}",
+            "\t\treturn dp[p][x][lim][zero] = res;",
+            "\t};",
+            "\tll ret = 0;",
+            "\tret += dfs(0,/* [...] */,true,true);",
+            "\tfor(int i=1;i<len;i++) ret += dfs(i,/* [...] */,false,true);  // 第 i 位是第一个非 0 的",
+            "\treturn ret;",
+            "};"
+        ],
+        "description": "数位 DP"
     }
 }
