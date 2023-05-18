@@ -6,7 +6,7 @@ protected:
     virtual void update_composite(int i, int j) = 0;
     prime_tag(int n) : n(n) {}
 };
-class prime_minf_tag : public prime_tag
+class prime_minf_tag : public virtual prime_tag
 {
 protected:
     prime_minf_tag(int n) : prime_tag(n) { minf.resize(n+1); }
@@ -37,7 +37,7 @@ public:
         return mp;
     }
 };
-class prime_phi_tag : public prime_tag
+class prime_phi_tag : public virtual prime_tag
 {
 protected:
     prime_phi_tag(int n) : prime_tag(n) { phi.resize(n+1); }
@@ -51,7 +51,7 @@ public:
     vector<int> phi;
 };
 template <derived_from<prime_tag>... Tags>
-class prime : public Tags...
+class prime : virtual prime_tag, public Tags...
 {
 private:
     void update_prime(int i) { (..., Tags::update_prime(i)); }
@@ -60,7 +60,7 @@ public:
     vector<bool> is_prime;
     vector<int> primes;
     prime() = delete;
-    prime(int n) : Tags(n)...
+    prime(int n) : prime_tag(n), Tags(n)...
     {
         assert(n<=1e8);
         is_prime.resize(n+1);
