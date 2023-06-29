@@ -12,7 +12,7 @@ public:
     {
         auto end_time = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::milliseconds>(end_time-begin_time);
-        clog<<duration.count()<<" ms used at line "<<line<<endl;
+        clog<<format("{} ms used at line {}", duration.count(), line)<<endl;
     }
 };
 chrono::_V2::system_clock::time_point timer::begin_time;
