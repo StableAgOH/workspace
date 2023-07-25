@@ -1,6 +1,5 @@
-#include <chrono>
-#include "dbg-macro/dbg.h"
-#define debug(...) dbg(__VA_ARGS__)
+#include <bits/stdc++.h>
+#include "debug.h"
 using namespace std;
 class timer
 {
@@ -16,3 +15,4 @@ public:
     }
 };
 chrono::_V2::system_clock::time_point timer::begin_time;
+#define utime() timer::utime(__LINE__)
