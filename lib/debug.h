@@ -1,5 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
+namespace _debug
+{
 template <typename T, typename U>
 ostream& operator<<(ostream& os, const pair<T,U>& x)
 {
@@ -41,7 +43,7 @@ auto trim(const R& r)
         | views::reverse;
 }
 template <typename F, typename... Args>
-void _debug(int line, string_view names, F&& first, Args&&... args)
+void debug(int line, string_view names, F&& first, Args&&... args)
 {
     clog<<line<<" | ";
     auto vi = views::split(names, ',');
@@ -51,4 +53,5 @@ void _debug(int line, string_view names, F&& first, Args&&... args)
     ((clog<<", ", ranges::copy(trim(*++it), ostream_iterator<char>(clog)), clog<<'='<<args), ...);
     clog<<endl;
 }
-#define debug(...) _debug(__LINE__, #__VA_ARGS__, __VA_ARGS__)
+}
+#define debug(...) _debug::debug(__LINE__, #__VA_ARGS__, __VA_ARGS__)
