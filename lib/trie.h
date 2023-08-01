@@ -5,7 +5,7 @@ private:
     vector<array<size_t, S>> nxt;
     vector<bool> end;
 public:
-    void insert(const string_view s)
+    void insert(const string_view& s)
     {
         assert(all_of(s.begin(), s.end(), [](char c) { return c>=F; }));
         size_t p = 0;
@@ -19,7 +19,7 @@ public:
         if(p>=end.size()) end.resize(p+1);
         end[p] = true;
     }
-    bool find(const string_view s)
+    bool find(const string_view& s)
     {
         assert(all_of(s.begin(), s.end(), [](char c) { return c>=F; }));
         size_t p = 0;
