@@ -14,6 +14,7 @@ ostream& operator<<(ostream& os, const tuple<Args...>& x)
     apply([&](auto&& first, auto&&... args) { os<<first; ((os<<','<<args), ...); }, x);
     return os<<')';
 }
+// std::queue, std::stack and std::priority_queue
 template <typename T> requires requires(T t) { t.pop(); }
 ostream& operator<<(ostream& os, T x)
 {
@@ -45,12 +46,13 @@ auto trim(const R& r)
 template <typename F, typename... Args>
 void debug(int line, string_view names, F&& first, Args&&... args)
 {
-    clog<<line<<" | ";
     auto vi = views::split(names, ',');
-    auto it = begin(vi);
-    ranges::copy(trim(*it), ostream_iterator<char>(clog));
+    auto it_name = begin(vi);
+    auto it_out = ostream_iterator<char>(clog);
+    clog<<line<<" | ";
+    ranges::copy(trim(*it_name), it_out);
     clog<<'='<<first;
-    ((clog<<", ", ranges::copy(trim(*++it), ostream_iterator<char>(clog)), clog<<'='<<args), ...);
+    ((clog<<", ", ranges::copy(trim(*++it_name), it_out), clog<<'='<<args), ...);
     clog<<endl;
 }
 }
