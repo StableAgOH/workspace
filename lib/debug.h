@@ -30,13 +30,13 @@ ostream& operator<<(ostream& os, T x)
     return os;
 }
 template <ranges::range R> requires (!requires(R r) { cout<<r; })
-ostream& operator<<(ostream& os, const R& x)
+ostream& operator<<(ostream& os, R&& x)
 {
     for(auto it=begin(x);it!=end(x);++it) os<<",["[it==begin(x)]<<*it;
     return os<<']';
 }
 template <ranges::range R>
-auto trim(const R& r)
+auto trim(R&& r)
 {
     return r | views::drop_while(::isspace)
         | views::reverse
