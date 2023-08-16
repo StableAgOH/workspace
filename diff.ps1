@@ -28,16 +28,16 @@ ExitIfNotZero "[CE] $Program2"
 for ($i = 1; ; $i++) {
     Write-Output "[INFO] Testcase No.$i"
 
-    python data.py > in.in
+    python data.py > in.txt
     ExitIfNotZero "[RE] data.py"
 
-    Get-Content in.in | ./temp > out.out
+    Get-Content in.txt | ./temp > out.txt
     ExitIfNotZero "[RE] $Program1"
 
-    Get-Content in.in | ./test > out2.out
+    Get-Content in.txt | ./test > out2.txt
     ExitIfNotZero "[RE] $Program2"
 
-    fc.exe /W out.out out2.out
+    fc.exe /W out.txt out2.txt
     ExitIfNotZero "[ERROR] Two results do not match"
 
     Start-Sleep 0.5
