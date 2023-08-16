@@ -7,7 +7,7 @@ private:
     size_t lowbit(size_t x) { return x&-x; }
 public:
     fenwick(const size_t n) : n(n) { pre.resize(n+1); }
-    void add(size_t p, const T& x) { for(auto i=p;i<=n;i+=lowbit(i)) pre[p] += x; }
+    void add(size_t p, const T& x) { for(auto i=p;i<=n;i+=lowbit(i)) pre[i] += x; }
     T query(size_t p)
     {
         assert(p<=n);
