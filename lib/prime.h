@@ -57,16 +57,16 @@ private:
     void update_prime(int i) { (..., Tags::update_prime(i)); }
     void update_composite(int i, int j) { (..., Tags::update_composite(i, j)); }
 public:
-    vector<bool> is_prime;
+    vector<bool> not_prime;
     vector<int> primes;
     prime() = delete;
     prime(int n) : prime_tag(n), Tags(n)...
     {
         assert(n<=1e8);
-        is_prime.resize(n+1);
+        not_prime.resize(n+1);
         for(int i=2;i<=n;i++)
         {
-            if(!is_prime[i])
+            if(!not_prime[i])
             {
                 primes.push_back(i);
                 update_prime(i);
@@ -74,7 +74,7 @@ public:
             for(auto j : primes)
             {
                 if(i*j>n) break;
-                is_prime[i*j] = true;
+                not_prime[i*j] = true;
                 update_composite(i, j);
                 if(i%j==0) break;
             }
