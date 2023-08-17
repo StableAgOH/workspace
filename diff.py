@@ -1,9 +1,9 @@
 import argparse
 import difflib
+import itertools
 import logging
 import subprocess
 import sys
-import itertools
 
 
 def exec_and_check(command, msg: str, **kwargs):
