@@ -1,6 +1,5 @@
 {
     "files.associations": {
-        "**/include/c++/**": "cpp",
-    },
-    "cph.language.cpp.Args": "-std=c++20"
+        "**/include/c++/**": "cpp"
+    }
 }
