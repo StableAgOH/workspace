@@ -12,7 +12,7 @@
             "#define utime() 42",
             "#endif",
             "#define TT template <typename T>",
-            "TT constexpr T ceil_div(T x, T y) { return x/y+!!(x%y); }",
+            "TT constexpr T div_ceil(T x, T y) { auto [q,r] = div(x,y); return q+!!r; }",
             "TT constexpr bool chmin(T& a, const T& b) { return b<a&&(a=b, true); }",
             "TT constexpr bool chmax(T& a, const T& b) { return b>a&&(a=b, true); }",
             "TT void solve(array<const char*, 2> msg, bool is_multicase, T func)",
