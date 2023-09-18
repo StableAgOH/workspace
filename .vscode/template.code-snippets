@@ -43,7 +43,7 @@
             "\tios::sync_with_stdio(false);",
             "\tcin.tie(nullptr);",
             "\t//======================================",
-            "\tsolve({\"YES\", \"NO\"}, false, [&](const int kase)",
+            "\tsolve({\"YES\", \"NO\"}, true, [&](const int kase)",
             "\t{",
             "\t\t$0",
             "\t});",
