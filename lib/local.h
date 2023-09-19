@@ -18,6 +18,7 @@ ostream& operator<<(ostream& os, const tuple<Args...>& x)
 template <typename T> requires requires(T t) { t.pop(); }
 ostream& operator<<(ostream& os, T x)
 {
+    if(x.empty()) return os<<"{}";
     os<<'{';
     while(!x.empty())
     {
@@ -32,6 +33,7 @@ ostream& operator<<(ostream& os, T x)
 template <ranges::range R> requires (!requires(R r) { cout<<r; })
 ostream& operator<<(ostream& os, R&& x)
 {
+    if(x.empty()) return os<<"[]";
     for(auto it=begin(x);it!=end(x);++it) os<<",["[it==begin(x)]<<*it;
     return os<<']';
 }
