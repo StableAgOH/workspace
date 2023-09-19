@@ -259,16 +259,27 @@
         ],
         "description": "图上 dfs"
     },
-    "ufs": {
+    "hasher": {
         "scope": "cpp",
-        "prefix": "ufs",
+        "prefix": "hasher",
         "body": [
-            "vector<int> fa(n+1);",
-            "iota(fa.begin()+1, fa.end(), 1);",
-            "function<int(int)> find = [&](int x) { return x==fa[x]?x:fa[x]=find(fa[x]); };",
+            "struct hasher",
+            "{",
+            "\tstatic uint64_t splitmix64(uint64_t x)",
+            "\t{",
+            "\t\tx += 0x9e3779b97f4a7c15;",
+            "\t\tx = (x^(x>>30))*0xbf58476d1ce4e5b9;",
+            "\t\tx = (x^(x>>27))*0x94d049bb133111eb;",
+            "\t\treturn x^(x>>31);",
+            "\t}",
+            "\tsize_t operator()(uint64_t x) const ",
+            "\t{",
+            "\t\tstatic const uint64_t fix = chrono::steady_clock::now().time_since_epoch().count();",
+            "\t\treturn splitmix64(x+fix);",
+            "\t}",
+            "};",
             ""
-        ],
-        "description": "并查集"
+        ]
     },
     "erfen": {
         "scope": "cpp",

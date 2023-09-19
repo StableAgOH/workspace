@@ -1,3 +1,5 @@
+#include <bits/stdc++.h>
+using namespace std;
 template <size_t S=26, char F='a'>
 class trie
 {
