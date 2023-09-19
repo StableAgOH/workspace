@@ -24,7 +24,7 @@
 
 ![template](https://github.com/StableAgOH/workspace/assets/50107074/c6567ade-28b3-4255-88f0-bb7ab839074d)
 
-* 目前使用的代码模板需要 C++17 及以上；
+* 目前使用的代码模板需要 C++20 及以上；
 * 若需要修改代码模板调用语句或内容，请修改 `.vscode/template.code-snippets` 文件；
 * 注意带板子打带录屏的线上赛可能会被认定为携带代码进入考场算作作弊，请不要于这样的比赛中使用。
 
