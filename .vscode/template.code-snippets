@@ -200,7 +200,7 @@
             "\t\t\tifac.push_back(inv(fac.back()));",
             "\t\t}",
             "\t}",
-            "\treturn fac[n]*ifac[m]%mod;",
+            "\treturn fac[n]*ifac[n-m]%mod;",
             "}",
             "ll C(int n,int m)",
             "{",
