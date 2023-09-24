@@ -205,8 +205,7 @@
             "ll C(int n,int m)",
             "{",
             "\tauto a = A(n,m);",
-            "\tif(!a) return a;",
-            "\telse return a*ifac[n-m]%mod;",
+            "\treturn a?a*ifac[n-m]%mod:0;",
             "}"
         ]
     },
