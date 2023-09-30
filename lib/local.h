@@ -33,7 +33,7 @@ ostream& operator<<(ostream& os, T x)
 template <typename C, typename T, ranges::range R>
 basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x)
 {
-    if(x.empty()) return os<<"[]";
+    if(ranges::empty(x)) return os<<"[]";
     for(auto it=begin(x);it!=end(x);++it) os<<",["[it==begin(x)]<<*it;
     return os<<']';
 }
