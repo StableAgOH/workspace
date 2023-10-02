@@ -22,4 +22,5 @@ public:
         return true;
     }
     int operator[](int x) { return find(x); }
+    int siz(int x) { return this->siz[x]; }
 };
