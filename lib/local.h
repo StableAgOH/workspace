@@ -2,6 +2,8 @@
 using namespace std;
 namespace debug_macro
 {
+template <typename C, typename T, ranges::range R>
+basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x);
 template <typename T, typename U>
 ostream& operator<<(ostream& os, const pair<T,U>& x)
 {
