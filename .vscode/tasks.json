@@ -15,6 +15,7 @@
                 "-O2",
                 "-std=c++20",
                 "-Wall",
+                "-Wextra",
                 "-Wl,--stack=268435456",
                 "-ftrapv"
             ],
@@ -45,6 +46,7 @@
                 "-D_GLIBCXX_DEBUG",
                 "-std=c++20",
                 "-Wall",
+                "-Wextra",
                 "-Wl,--stack=268435456",
                 "-ftrapv"
             ],
