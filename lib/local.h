@@ -63,8 +63,19 @@ auto trim(R&& r)
 template <typename F, typename... Args>
 void debug(int line, string_view names, F&& first, Args&&... args)
 {
-    auto vi = views::split(names, ',');
-    auto it_name = begin(vi);
+    vector<string> name_list(1);
+    int cnt = 0;
+    for(auto c : names)
+    {
+        if(c==','&&!cnt) name_list.emplace_back();
+        else
+        {
+            if(c=='(') cnt++;
+            else if(c==')') cnt--;
+            name_list.back().push_back(c);
+        }
+    }
+    auto it_name = begin(name_list);
     auto it_out = ostream_iterator<char>(clog);
     clog<<line<<" | ";
     ranges::copy(trim(*it_name), it_out);
