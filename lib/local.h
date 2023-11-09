@@ -2,8 +2,16 @@
 using namespace std;
 namespace debug_macro
 {
+template <typename T>
+concept printble = requires(T t) { cout<<t; };
+template <typename T>
+concept pointer_or_iterator = (!printble<T>) && requires (T p) { { *p } -> printble; };
+
 template <typename C, typename T, ranges::range R>
 basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x);
+template <pointer_or_iterator P>
+ostream& operator<<(ostream& os, const P& x);
+
 template <typename T, typename U>
 ostream& operator<<(ostream& os, const pair<T,U>& x)
 {
@@ -41,6 +49,9 @@ basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x)
     for(;it!=ed;++it) os<<','<<*it;
     return os<<']';
 }
+template <pointer_or_iterator P>
+ostream& operator<<(ostream& os, const P& x) { return os<<'*'<<*x; }
+
 template <ranges::range R>
 auto trim(R&& r)
 {
