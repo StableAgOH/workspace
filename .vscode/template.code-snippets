@@ -58,39 +58,23 @@
         "scope": "cpp",
         "prefix": "vn0",
         "body": [
-            "vector<int> ${a}(n);"
+            "vector<int> ${a}(${n});"
         ],
         "description": "0-indexed vector"
-    },
-    "vector_nn_0": {
-        "scope": "cpp",
-        "prefix": "vnn0",
-        "body": [
-            "vector<int> ${a}(n), ${b}(n);"
-        ],
-        "description": "0-indexed vector * 2"
     },
     "vector_n_1": {
         "scope": "cpp",
         "prefix": "vn1",
         "body": [
-            "vector<int> ${a}(n+1);"
+            "vector<int> ${a}(${n}+1);"
         ],
         "description": "1-indexed vector"
-    },
-    "vector_nn_1": {
-        "scope": "cpp",
-        "prefix": "vnn1",
-        "body": [
-            "vector<int> ${a}(n+1), ${b}(n+1);"
-        ],
-        "description": "1-indexed vector * 2"
     },
     "input_vector_n_0": {
         "scope": "cpp",
         "prefix": "ivn0",
         "body": [
-            "for(int i=0;i<n;i++) cin>>${a}[i];"
+            "for(int i=0;i<${n};i++) cin>>${a}[i];"
         ],
         "description": "input 0-indexed vector"
     },
@@ -98,7 +82,7 @@
         "scope": "cpp",
         "prefix": "ivn1",
         "body": [
-            "for(int i=1;i<=n;i++) cin>>${a}[i];"
+            "for(int i=1;i<=${n};i++) cin>>${a}[i];"
         ],
         "description": "input 1-indexed vector"
     },
@@ -106,7 +90,7 @@
         "scope": "cpp",
         "prefix": "ovn0",
         "body": [
-            "for(int i=0;i<n;i++) cout<<${a}[i]<<\" \\n\"[i==n-1];"
+            "for(int i=0;i<${n};i++) cout<<${a}[i]<<\" \\n\"[i==${n}-1];"
         ],
         "description": "output 0-indexed vector"
     },
@@ -114,7 +98,7 @@
         "scope": "cpp",
         "prefix": "ovn1",
         "body": [
-            "for(int i=1;i<=n;i++) cout<<${a}[i]<<\" \\n\"[i==n];"
+            "for(int i=1;i<=${n};i++) cout<<${a}[i]<<\" \\n\"[i==${n}];"
         ],
         "description": "output 1-indexed vector"
     },
@@ -174,6 +158,15 @@
         ],
         "description": "output_vector_nm_1"
     },
+    "isort": {
+        "scope": "cpp",
+        "prefix": "isort",
+        "body": [
+            "vector<int> o(n);",
+            "\t\tiota(o.begin(), o.end(), 0);",
+            "\t\tranges::sort(o, [&](int i,int j) { return ${a}[i]<${a}[j]; });"
+        ]
+    },
     "numno": {
         "scope": "cpp",
         "prefix": "numno",
@@ -220,8 +213,7 @@
             "\tcin>>u>>v;",
             "\tG[u].push_back(v);",
             "\tG[v].push_back(u);",
-            "}",
-            ""
+            "}"
         ],
         "description": "树"
     },
@@ -236,8 +228,7 @@
             "\tcin>>u>>v;",
             "\tG[u].push_back(v);",
             "\tG[v].push_back(u);",
-            "}",
-            ""
+            "}"
         ],
         "description": "图"
     },
@@ -245,16 +236,15 @@
         "scope": "cpp",
         "prefix": "dfs",
         "body": [
-            "function<void(int,int)> dfs = [&](int u,int p)",
+            "function<void(int,int)> dfs = [&](int u,int f)",
             "{",
             "\tfor(auto v : G[u])",
             "\t{",
-            "\t\tif(v==p) continue;",
+            "\t\tif(v==f) continue;",
             "\t\tdfs(v,u);",
             "\t}",
             "};",
-            "dfs(1,0);",
-            ""
+            "dfs(1,0);"
         ],
         "description": "图上 dfs"
     },
@@ -276,8 +266,7 @@
             "\t\tstatic const uint64_t fix = chrono::steady_clock::now().time_since_epoch().count();",
             "\t\treturn splitmix64(x+fix);",
             "\t}",
-            "};",
-            ""
+            "};"
         ]
     },
     "erfen": {
@@ -319,22 +308,6 @@
             "\t}",
             "}",
             "return ans;"
-        ]
-    },
-    "bsr": {
-        "scope": "cpp",
-        "prefix": "bsr",
-        "body": [
-            "auto bsr = []<typename T, typename F>(T l, T r, const F&& check)",
-            "{",
-            "\twhile(l<r)",
-            "\t{",
-            "\t\tauto m = midpoint(l,r);",
-            "\t\tif(check(m)) r = m;",
-            "\t\telse l = m+1;",
-            "\t}",
-            "\treturn l;",
-            "};"
         ]
     },
     "modui": {
