@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "**/include/c++/**": "cpp"
+        "**/include/c++/**": "cpp",
+        "template.code-snippets": "json"
     }
 }
