@@ -163,8 +163,8 @@
         "prefix": "isort",
         "body": [
             "vector<int> o(n);",
-            "\t\tiota(o.begin(), o.end(), 0);",
-            "\t\tranges::sort(o, [&](int i,int j) { return ${a}[i]<${a}[j]; });"
+            "iota(o.begin(), o.end(), 0);",
+            "ranges::sort(o, [&](int i,int j) { return ${a}[i]<${a}[j]; });"
         ]
     },
     "numno": {
