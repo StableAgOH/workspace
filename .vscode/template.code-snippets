@@ -379,5 +379,35 @@
             "};"
         ],
         "description": "数位 DP"
+    },
+    "hjt": {
+        "scope": "cpp",
+        "prefix": "hjt",
+        "body": [
+            "struct Node { int l,r,val; };",
+            "vector<Node> t(m*(ceil(log2(n))+1));",
+            "vector<int> root(n+1);",
+            "int cnt = 0;",
+            "auto ins = [&](auto&& ins, int l,int r,int pre,int& k,int x)",
+            "{",
+            "\tk = ++cnt;",
+            "\tt[k] = t[pre];",
+            "\tt[k].val++;",
+            "\tif(l==r) return;",
+            "\tint m = (l+r)>>1;",
+            "\tif(x<=m) ins(ins,l,m,t[pre].l,t[k].l,x);",
+            "\telse ins(ins,m+1,r,t[pre].r,t[k].r,x);",
+            "};",
+            "auto query = [&](auto&& query,int l,int r,int L,int R,int x,int y)",
+            "{",
+            "\tif(x<=l&&y>=r) return t[R].val-t[L].val;",
+            "\tint m = (l+r)>>1;",
+            "\tint sum = 0;",
+            "\tif(x<=m) sum += query(query,l,m,t[L].l,t[R].l,x,y);",
+            "\tif(y>m) sum += query(query,m+1,r,t[L].r,t[R].r,x,y);",
+            "\treturn sum;",
+            "};",
+            ""
+        ]
     }
 }
