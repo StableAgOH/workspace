@@ -78,8 +78,7 @@ private:
     }
 public:
     segment_tree(int n) : n(n), root(0) { t.reserve(2*n); t.resize(1); }
-    template <ranges::range R>
-    segment_tree(const R& r) : segment_tree(ranges::size(r))
+    segment_tree(const ranges::range auto& r) : segment_tree(ranges::size(r))
     {
         auto it = ranges::begin(r);
         auto build = [&](auto&& build,int& k,int l,int r)
