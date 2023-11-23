@@ -236,15 +236,15 @@
         "scope": "cpp",
         "prefix": "dfs",
         "body": [
-            "auto dfs = [&](auto&& dfs,int u,int f) -> void",
+            "auto ${dfs} = [&](auto&& ${dfs},int u,int f) -> void",
             "{",
             "\tfor(auto v : G[u])",
             "\t{",
             "\t\tif(v==f) continue;",
-            "\t\tdfs(dfs,v,u);",
+            "\t\t${dfs}(${dfs},v,u);",
             "\t}",
             "};",
-            "dfs(dfs,1,0);"
+            "${dfs}(${dfs},1,0);"
         ]
     },
     "hasher": {
