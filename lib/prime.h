@@ -42,7 +42,7 @@ public:
 class prime_phi_tag : public virtual prime_tag
 {
 protected:
-    prime_phi_tag(int n) : prime_tag(n) { phi.resize(n+1); }
+    prime_phi_tag(int n) : prime_tag(n) { phi.resize(n+1); phi[1] = 1; }
     void update_prime(int i) { phi[i] = i-1; }
     void update_composite(int i, int j)
     {
