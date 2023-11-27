@@ -20,3 +20,4 @@ public:
         return O(f[k][l], f[k][r-(1<<k)+1]);
     }
 };
+#define functor(name, op) auto name = [](const auto& x, const auto& y) { return op(x,y); };
