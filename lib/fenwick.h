@@ -6,29 +6,29 @@ class fenwick
 private:
     O op;
     int n;
-    vector<T> pre;
+    vector<T> c;
     int lowbit(int x) const { return x&-x; }
 public:
-    fenwick(int n) : n(n) { pre.resize(n+1); }
-    fenwick(const ranges::range auto& r)
+    fenwick(int n) : n(n) { c.resize(n+1); }
+    fenwick(const ranges::range auto& r) : fenwick(ranges::size(r))
     {
-        n = ranges::size(r);
-        pre.resize(n+1);
-        int p = 0;
-        for(auto i : r) add(p++, i);
+        vector<T> pre(n+1);
+        partial_sum(r.begin(), r.end(), pre.begin()+1);
+        for(int i=1;i<=n;i++) c[i] = pre[i]-pre[i-lowbit(i)];
     }
+    void clear() { ranges::fill(c, T()); }
     void add(int p, const T& x)
     {
-        for(int i=p+1;i<=n;i+=lowbit(i)) pre[i] = op(pre[i], x);
+        for(int i=p;i<=n;i+=lowbit(i)) c[i] = op(c[i], x);
     }
     auto operator()(int p) const
     {
-        T sum = T();
-        for(int i=p+1;i;i-=lowbit(i)) sum += pre[i];
+        T sum{};
+        for(int i=p;i;i-=lowbit(i)) sum += c[i];
         return sum;
     }
     auto operator()(int l, int r) const
     {
-        return operator()(r)-operator()(l-1);
+        return (*this)(r)-(*this)(l-1);
     }
 };
