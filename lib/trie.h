@@ -5,7 +5,7 @@ class trie
 {
 private:
     vector<array<size_t, S>> nxt;
-    vector<bool> end;
+    vector<int> end;
 public:
     void insert(const string_view& s)
     {
@@ -19,7 +19,7 @@ public:
             p = nxt[p][x];
         }
         if(p>=end.size()) end.resize(p+1);
-        end[p] = true;
+        end[p]++;
     }
     bool find(const string_view& s)
     {
