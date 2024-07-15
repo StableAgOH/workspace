@@ -9,14 +9,22 @@ public:
     friend mint operator^(mint lhs, long long rhs)
     {
         mint res = 1;
-        for(;rhs;rhs>>=1,lhs=lhs*lhs) if(rhs&1) res = res*lhs;
+        for(;rhs;rhs>>=1)
+        {
+            if(rhs&1) res *= lhs;
+            lhs *= lhs;
+        }
         return res;
     }
     mint operator~() { return (*this)^(mod-2); }
-    friend mint operator+(mint lhs, mint rhs) { return lhs.x+rhs.x; }
-    friend mint operator-(mint lhs, mint rhs) { return lhs.x-rhs.x; }
-    friend mint operator*(mint lhs, mint rhs) { return lhs.x*rhs.x; }
-    friend mint operator/(mint lhs, mint rhs) { return lhs*(~rhs); }
+    friend mint operator+=(mint& lhs, mint rhs) { return lhs = lhs.x+rhs.x; }
+    friend mint operator+(mint lhs, mint rhs) { return lhs += rhs; }
+    friend mint operator-=(mint& lhs, mint rhs) { return lhs = lhs.x-rhs.x; }
+    friend mint operator-(mint lhs, mint rhs) { return lhs -= rhs; }
+    friend mint operator*=(mint& lhs, mint rhs) { return lhs = lhs.x*rhs.x; }
+    friend mint operator*(mint lhs, mint rhs) { return lhs *= rhs; }
+    friend mint operator/=(mint& lhs, mint rhs) { return lhs *= (~rhs); }
+    friend mint operator/(mint lhs, mint rhs) { return lhs /= rhs; }
     friend istream& operator>>(istream& is, mint& rhs) { is>>rhs.x; rhs.norm(); return is; }
     friend ostream& operator<<(ostream& os, mint rhs) { return os<<rhs.x; }
 };
