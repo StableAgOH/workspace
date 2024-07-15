@@ -16,7 +16,6 @@ public:
     {
         x=find(x), y=find(y);
         if(x==y) return false;
-        if(siz[x]>siz[y]) swap(x,y);
         fa[x] = y;
         siz[y] += siz[x];
         return true;
