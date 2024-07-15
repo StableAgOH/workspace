@@ -186,7 +186,7 @@
             "mint C(int n,int m)",
             "{",
             "\tauto a = A(n,m);",
-            "\treturn int(a)?a*ifac[m]:mint(0);",
+            "\treturn a?a*ifac[m]:mint(0);",
             "}"
         ]
     },
