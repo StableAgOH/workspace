@@ -176,7 +176,7 @@
             "\t\tif(k&1) res=res*a%p;",
             "\treturn res;",
             "};",
-            "ll inv(ll a,ll p=mod) { return qpow(a, mod-2, mod); }",
+            "ll inv(ll a,ll p=mod) { return qpow(a, p-2, p); }",
             "vector<ll> fac, ifac;",
             "ll A(int n,int m)",
             "{",
