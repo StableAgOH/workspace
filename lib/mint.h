@@ -6,6 +6,8 @@ class mint
 public:
     mint() : x(0) {}
     mint(long long x) : x(x) { norm(); }
+    template <typename T>
+    operator T() { return x; }
     friend mint operator^(mint lhs, long long rhs)
     {
         mint res = 1;
