@@ -33,7 +33,7 @@ private:
             pushup(k);
         }
     }
-    void add(int x,int y,const T& z,int l,int r,Node* k)
+    void add_impl(int x,int y,const T& z,int l,int r,Node* k)
     {
         if(x<=l&&r<=y)
         {
@@ -44,12 +44,12 @@ private:
         {
             pushdw(l,r,k);
             int m = midpoint(l,r);
-            if(x<=m) add(x,y,z,l,m,k->ls);
-            if(y>m) add(x,y,z,m+1,r,k->rs);
+            if(x<=m) add_impl(x,y,z,l,m,k->ls);
+            if(y>m) add_impl(x,y,z,m+1,r,k->rs);
             pushup(k);
         }
     }
-    T query(int x,int y,int l,int r,Node* k)
+    T query_impl(int x,int y,int l,int r,Node* k)
     {
         if(x<=l&&r<=y) return k->val;
         else
@@ -57,8 +57,8 @@ private:
             pushdw(l,r,k);
             int m = midpoint(l,r);
             T res{};
-            if(x<=m) res += query(x,y,l,m,k->ls);
-            if(y>m) res += query(x,y,m+1,r,k->rs);
+            if(x<=m) res += query_impl(x,y,l,m,k->ls);
+            if(y>m) res += query_impl(x,y,m+1,r,k->rs);
             return res;
         }
     }
@@ -69,6 +69,8 @@ public:
         auto it = rg.begin();
         build(0,n-1,root,it);
     }
-    void add(int x,int y,const T& z) { add(x,y,z,0,n-1,root); }
-    T query(int x,int y) { return query(x,y,0,n-1,root); }
+    void add(int x,int y,const T& z) { add_impl(x,y,z,0,n-1,root); }
+    void add(int x,const T& z) { add(x,x,z); }
+    T operator()(int l,int r) { return query_impl(l,r,0,n-1,root); }
+    T operator()(int p) { return (*this)(p,p); }
 };
