@@ -51,6 +51,27 @@
             ""
         ]
     },
+    "simple": {
+        "scope": "cpp",
+        "prefix": "simple",
+        "body": [
+            "#include <bits/stdc++.h>",
+            "using namespace std;",
+            "using ll = long long;",
+            "int main()",
+            "{",
+            "#ifdef LOCAL",
+            "\tfreopen(\"in.txt\", \"r\", stdin);",
+            "\tfreopen(\"out.txt\", \"w\", stdout);",
+            "#endif",
+            "\tios::sync_with_stdio(false);",
+            "\tcin.tie(nullptr);",
+            "\t$0",
+            "\treturn 0;",
+            "}",
+            ""
+        ]
+    },
     "vector_n_0": {
         "scope": "cpp",
         "prefix": "vn0",

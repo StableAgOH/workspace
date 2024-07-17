@@ -7,10 +7,16 @@ private:
         Node* ls;
         Node* rs;
         T val, lazy;
+        Node() : ls(nullptr), rs(nullptr), val{}, lazy{} {}
     };
     int n;
     Node* root;
-    void pushup(Node* k) { k->val = k->ls->val+k->rs->val; }
+    void pushup(Node* k)
+    {
+        k->val = T();
+        if(k->ls) k->val += k->ls->val;
+        if(k->rs) k->val += k->rs->val;
+    }
     void pushdw(int l,int r,Node* k)
     {
         int m = midpoint(l,r);
@@ -51,6 +57,7 @@ private:
     }
     T query_impl(int x,int y,int l,int r,Node* k)
     {
+        if(!k) return T();
         if(x<=l&&r<=y) return k->val;
         else
         {
