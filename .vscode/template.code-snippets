@@ -72,6 +72,20 @@
             ""
         ]
     },
+    "chmax": {
+        "scope": "cpp",
+        "prefix": "chmax",
+        "body": [
+            "$x = max($x, $y);"
+        ]
+    },
+    "chmin": {
+        "scope": "cpp",
+        "prefix": "chmin",
+        "body": [
+            "$x = min($x, $y);"
+        ]
+    },
     "vector_n_0": {
         "scope": "cpp",
         "prefix": "vn0",
