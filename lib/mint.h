@@ -1,14 +1,12 @@
 class mint
 {
-    const static int mod = 998244353;
-    long long x;
+    const static ll mod = 998244353;
     void norm() { x = (x%mod+mod)%mod; }
 public:
+    ll x;
     mint() : x(0) {}
-    mint(long long x) : x(x) { norm(); }
-    template <typename T>
-    operator T() { return x; }
-    friend mint operator^(mint lhs, long long rhs)
+    mint(ll x) : x(x) { norm(); }
+    friend mint operator^(mint lhs, ll rhs)
     {
         mint res = 1;
         for(;rhs;rhs>>=1)
