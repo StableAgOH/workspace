@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 class prime_tag
 {
 protected:
