@@ -17,6 +17,8 @@ public:
         return res;
     }
     mint operator~() { return (*this)^(mod-2); }
+    friend bool operator<(mint lhs, mint rhs) { return lhs.x<rhs.x; }
+    friend bool operator==(mint lhs, mint rhs) { return lhs.x==rhs.x; }
     friend mint operator+=(mint& lhs, mint rhs) { return lhs = lhs.x+rhs.x; }
     friend mint operator+(mint lhs, mint rhs) { return lhs += rhs; }
     friend mint operator-=(mint& lhs, mint rhs) { return lhs = lhs.x-rhs.x; }
