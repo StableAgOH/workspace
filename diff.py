@@ -25,12 +25,14 @@ logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
 parser = argparse.ArgumentParser()
 parser.add_argument("your_code")
 parser.add_argument("answer_code")
+parser.add_argument("--cache", action="store_true")
 
 args = parser.parse_args()
 solution = args.your_code.split(".")[0]
 answer = args.answer_code.split(".")[0]
-compile(solution)
-compile(answer)
+if not args.cache:
+    compile(solution)
+    compile(answer)
 for i in itertools.count(1):
     logging.info(f"Testcase No.{i}")
     exec_and_check(
