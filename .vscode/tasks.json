@@ -13,11 +13,12 @@
                 "-DLOCAL",
                 "-D_GLIBCXX_DEBUG",
                 "-O2",
-                "-std=c++20",
+                "-std=c++23",
                 "-Wall",
                 "-Wextra",
                 "-Wl,--stack=268435456",
-                "-ftrapv"
+                "-ftrapv",
+                "-lstdc++exp"
             ],
             "options": {
                 "cwd": "${fileDirname}"
@@ -44,11 +45,12 @@
                 "-DLOCAL",
                 "-DDEBUG",
                 "-D_GLIBCXX_DEBUG",
-                "-std=c++20",
+                "-std=c++23",
                 "-Wall",
                 "-Wextra",
                 "-Wl,--stack=268435456",
-                "-ftrapv"
+                "-ftrapv",
+                "-lstdc++exp"
             ],
             "options": {
                 "cwd": "${fileDirname}"
