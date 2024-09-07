@@ -5,22 +5,24 @@ import logging
 import subprocess
 import sys
 
+logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
+
 
 def exec_and_check(command, msg: str, **kwargs):
     try:
         subprocess.run(command, check=True, **kwargs)
-    except:
-        logging.error(msg)
-        exit(0)
+    except subprocess.CalledProcessError as e:
+        logging.error(f"{msg}: {e.output}")
+        exit(e.returncode)
 
 
 def compile(filename: str):
     logging.info(f"Compiling {filename}")
-    exec_and_check(["g++", f"{filename}.cpp", "-o", filename, "-O2", "-std=c++20"], f"Failed to compile {filename}")
-    logging.debug(f"Compiled {filename}")
+    exec_and_check(
+        ["g++", f"{filename}.cpp", "-o", filename, "-O2", "-std=c++23", "-lstdc++exp"],
+        f"Failed to compile {filename}",
+    )
 
-
-logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
 
 parser = argparse.ArgumentParser()
 parser.add_argument("your_code")
@@ -30,9 +32,11 @@ parser.add_argument("--cache", action="store_true")
 args = parser.parse_args()
 solution = args.your_code.split(".")[0]
 answer = args.answer_code.split(".")[0]
+
 if not args.cache:
     compile(solution)
     compile(answer)
+
 for i in itertools.count(1):
     logging.info(f"Testcase No.{i}")
     exec_and_check(
@@ -58,7 +62,9 @@ for i in itertools.count(1):
     output2 = list(map(lambda s: s.rstrip(" "), open("out2.txt", "r").readlines()))
     while output2 and output2[-1] == "\n":
         output2.pop()
-    diff = list(difflib.context_diff(output1, output2, args.your_code, args.answer_code))
+    diff = list(
+        difflib.context_diff(output1, output2, args.your_code, args.answer_code)
+    )
     if diff:
         if len(diff) > 100:
             logging.warning("Diff result is too long for output")

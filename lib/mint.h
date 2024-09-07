@@ -1,17 +1,18 @@
+ll mod = 998244353;
 class mint
 {
-    const static ll mod = 998244353;
+    ll x;
     void norm() { x = (x%mod+mod)%mod; }
 public:
-    ll x;
-    mint() : x(0) {}
+    mint() : mint(0) {}
     mint(ll x) : x(x) { norm(); }
-    friend mint operator^(mint lhs, ll rhs)
+    auto val() const { return x; }
+    friend mint operator^(mint lhs, mint rhs)
     {
         mint res = 1;
-        for(;rhs;rhs>>=1)
+        for(;rhs.x;rhs.x>>=1)
         {
-            if(rhs&1) res *= lhs;
+            if(rhs.x&1) res *= lhs;
             lhs *= lhs;
         }
         return res;
@@ -29,4 +30,12 @@ public:
     friend mint operator/(mint lhs, mint rhs) { return lhs /= rhs; }
     friend istream& operator>>(istream& is, mint& rhs) { is>>rhs.x; rhs.norm(); return is; }
     friend ostream& operator<<(ostream& os, mint rhs) { return os<<rhs.x; }
+};
+template <>
+struct std::formatter<mint> : std::formatter<ll>
+{
+    auto format(mint m, format_context& ctx) const
+    {
+        return std::formatter<ll>::format(m.val(), ctx);
+    }
 };

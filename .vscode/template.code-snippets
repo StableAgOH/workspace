@@ -1,28 +1,25 @@
 {
-    "template": {
+    "codeforces": {
         "scope": "cpp",
-        "prefix": "prepare",
+        "prefix": "codeforces",
         "body": [
             "#include <bits/stdc++.h>",
             "using namespace std;",
             "#ifdef LOCAL",
             "#include \"lib/local.h\"",
             "#else",
-            "#define debug(...) 42",
-            "#define utime() 42",
+            "#define debug(...)",
+            "#define utime()",
             "#endif",
-            "auto div_ceil(integral auto x, integral auto y) { auto [p,q]=div(x,y); return p+(q>0); }",
-            "bool chmin(auto& a, const auto& b) { return b<a&&(a=b,true); }",
-            "bool chmax(auto& a, const auto& b) { return b>a&&(a=b,true); }",
-            "void solve(array<const char*, 2> msg, bool is_multicase, auto&& func)",
+            "void solve(array<const char*, 2> boolmsg, bool multicase, auto&& func)",
             "{",
             "\tusing R = invoke_result_t<decltype(func), int>;",
             "\tint t = 1;",
-            "\tif(is_multicase) cin>>t;",
+            "\tif(multicase) cin>>t;",
             "\tfor(int i=1;i<=t;i++)",
             "\t{",
             "\t\tif constexpr(is_same_v<R, void>) func(i);",
-            "\t\telse if constexpr(is_same_v<R, bool>) cout<<msg[!func(i)]<<'\\n';",
+            "\t\telse if constexpr(is_same_v<R, bool>) cout<<boolmsg[!func(i)]<<'\\n';",
             "\t\telse cout<<func(i)<<'\\n';",
             "\t}",
             "}",
@@ -42,7 +39,7 @@
             "\t//======================================",
             "\tsolve({\"Yes\", \"No\"}, true, [&]([[maybe_unused]] const int kase)",
             "\t{",
-            "\t\t$0",
+            "\t\t",
             "\t});",
             "\t//======================================",
             "\tutime();",
@@ -72,83 +69,61 @@
             ""
         ]
     },
-    "chmax": {
-        "scope": "cpp",
-        "prefix": "chmax",
-        "body": [
-            "$x = max($x, $y);"
-        ]
-    },
-    "chmin": {
-        "scope": "cpp",
-        "prefix": "chmin",
-        "body": [
-            "$x = min($x, $y);"
-        ]
-    },
     "vector_n_0": {
         "scope": "cpp",
         "prefix": "vn0",
         "body": [
             "vector<int> ${a}(${n});"
-        ],
-        "description": "0-indexed vector"
+        ]
     },
     "vector_n_1": {
         "scope": "cpp",
         "prefix": "vn1",
         "body": [
             "vector<int> ${a}(${n}+1);"
-        ],
-        "description": "1-indexed vector"
+        ]
     },
     "input_vector_n_0": {
         "scope": "cpp",
         "prefix": "ivn0",
         "body": [
             "for(int i=0;i<${n};i++) cin>>${a}[i];"
-        ],
-        "description": "input 0-indexed vector"
+        ]
     },
     "input_vector_n_1": {
         "scope": "cpp",
         "prefix": "ivn1",
         "body": [
             "for(int i=1;i<=${n};i++) cin>>${a}[i];"
-        ],
-        "description": "input 1-indexed vector"
+        ]
     },
     "output_vector_n_0": {
         "scope": "cpp",
         "prefix": "ovn0",
         "body": [
             "for(int i=0;i<${n};i++) cout<<${a}[i]<<\" \\n\"[i==${n}-1];"
-        ],
-        "description": "output 0-indexed vector"
+        ]
     },
     "output_vector_n_1": {
         "scope": "cpp",
         "prefix": "ovn1",
         "body": [
             "for(int i=1;i<=${n};i++) cout<<${a}[i]<<\" \\n\"[i==${n}];"
-        ],
-        "description": "output 1-indexed vector"
+        ]
     },
     "vector_nm_0": {
         "scope": "cpp",
         "prefix": "vnm0",
         "body": [
             "vector ${a}(n, vector<int>(m));"
-        ],
-        "description": "vector_nm_0"
+        ]
     },
     "vector_nm_1": {
         "scope": "cpp",
         "prefix": "vnm1",
         "body": [
             "vector ${a}(n+1, vector<int>(m+1));"
-        ],
-        "description": "vector_nm_1"
+        ]
     },
     "input_vector_nm_0": {
         "scope": "cpp",
@@ -157,8 +132,7 @@
             "for(int i=0;i<n;i++)",
             "\tfor(int j=0;j<m;j++)",
             "\t\tcin>>${a}[i][j];",
-        ],
-        "description": "input_vector_nm_0"
+        ]
     },
     "input_vector_nm_1": {
         "scope": "cpp",
@@ -167,8 +141,7 @@
             "for(int i=1;i<=n;i++)",
             "\tfor(int j=1;j<=m;j++)",
             "\t\tcin>>${a}[i][j];",
-        ],
-        "description": "input_vector_nm_1"
+        ]
     },
     "output_vector_nm_0": {
         "scope": "cpp",
@@ -177,8 +150,7 @@
             "for(int i=0;i<n;i++)",
             "\tfor(int j=0;j<m;j++)",
             "\t\tcout<<${a}[i][j]<<\" \\n\"[j==m-1];",
-        ],
-        "description": "output_vector_nm_0"
+        ]
     },
     "output_vector_nm_1": {
         "scope": "cpp",
@@ -187,8 +159,7 @@
             "for(int i=1;i<=n;i++)",
             "\tfor(int j=1;j<=m;j++)",
             "\t\tcout<<${a}[i][j]<<\" \\n\"[j==m];",
-        ],
-        "description": "output_vector_nm_1"
+        ]
     },
     "isort": {
         "scope": "cpp",
@@ -212,8 +183,8 @@
             "\t\tif(fac.empty()) fac = ifac = {1};",
             "\t\telse",
             "\t\t{",
-            "\t\t\tfac.push_back(fac.back()*mint(fac.size()));",
-            "\t\t\tifac.push_back(mint(1)/fac.back());",
+            "\t\t\tfac.push_back(fac.back()*fac.size());",
+            "\t\t\tifac.push_back(1/fac.back());",
             "\t\t}",
             "\t}",
             "\treturn fac[n]*ifac[n-m];",
@@ -221,7 +192,7 @@
             "mint C(int n,int m)",
             "{",
             "\tauto a = A(n,m);",
-            "\treturn a?a*ifac[m]:mint(0);",
+            "\treturn a==0?0:a*ifac[m];",
             "}"
         ]
     },
@@ -237,8 +208,7 @@
             "\tG[u].push_back(v);",
             "\tG[v].push_back(u);",
             "}"
-        ],
-        "description": "树"
+        ]
     },
     "graph": {
         "scope": "cpp",
@@ -252,22 +222,42 @@
             "\tG[u].push_back(v);",
             "\tG[v].push_back(u);",
             "}"
-        ],
-        "description": "图"
+        ]
+    },
+    "div_ceil": {
+        "scope": "cpp",
+        "prefix": "div_ceil",
+        "body": [
+            "auto div_ceil = [&](auto x, auto y) { return x/y+bool(x%y); };"
+        ]
+    },
+    "chmin": {
+        "scope": "cpp",
+        "prefix": "chmin",
+        "body": [
+            "auto chmin = [&](auto& a, const auto& b) { return b<a&&(a=b,true); };"
+        ]
+    },
+    "chmax": {
+        "scope": "cpp",
+        "prefix": "chmax",
+        "body": [
+            "auto chmax = [&](auto& a, const auto& b) { return b>a&&(a=b,true); };"
+        ]
     },
     "dfs": {
         "scope": "cpp",
         "prefix": "dfs",
         "body": [
-            "auto ${dfs} = [&](auto&& ${dfs},int u,int f) -> void",
+            "auto dfs = [&](this auto dfs,int u,int f) -> void",
             "{",
             "\tfor(auto v : G[u])",
             "\t{",
             "\t\tif(v==f) continue;",
-            "\t\t${dfs}(${dfs},v,u);",
+            "\t\tdfs(v,u);",
             "\t}",
             "};",
-            "${dfs}(${dfs},1,0);"
+            "dfs(1,0);"
         ]
     },
     "hasher": {
