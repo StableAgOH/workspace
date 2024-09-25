@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 template <typename T, typename O=plus<T>>
 class fenwick
 {
