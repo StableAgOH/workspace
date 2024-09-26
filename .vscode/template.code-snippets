@@ -32,7 +32,7 @@
             "#ifndef DEBUG",
             "\tfreopen(\"out.txt\", \"w\", stdout);",
             "#endif",
-            "\ttimer::set_begin_time();",
+            "\ttimer::set_start_time();",
             "#endif",
             "\tios::sync_with_stdio(false);",
             "\tcin.tie(nullptr);",
@@ -165,9 +165,8 @@
         "scope": "cpp",
         "prefix": "isort",
         "body": [
-            "vector<int> o(n);",
-            "iota(o.begin(), o.end(), 0);",
-            "ranges::sort(o, [&](int i,int j) { return ${a}[i]<${a}[j]; });"
+            "auto o = ranges::to<vector>(views::iota(0, n));",
+            "ranges::sort(o, [&](auto i, auto j) { return a[i]<a[j]; });"
         ]
     },
     "comb": {
@@ -175,7 +174,7 @@
         "prefix": "comb",
         "body": [
             "vector<mint> fac, ifac;",
-            "mint A(int n,int m)",
+            "mint A(int n, int m)",
             "{",
             "\tif(m<0||m>n) return 0;",
             "\twhile((int)fac.size()<n+1)",
@@ -189,9 +188,9 @@
             "\t}",
             "\treturn fac[n]*ifac[n-m];",
             "}",
-            "mint C(int n,int m)",
+            "mint C(int n, int m)",
             "{",
-            "\tauto a = A(n,m);",
+            "\tauto a = A(n, m);",
             "\treturn a==0?0:a*ifac[m];",
             "}"
         ]
@@ -215,7 +214,7 @@
         "prefix": "graph",
         "body": [
             "vector<vector<int>> G(n+1);",
-            "for(int i=1;i<=m;i++)",
+            "for(int i=0;i<m;i++)",
             "{",
             "\tint u,v;",
             "\tcin>>u>>v;",
@@ -228,7 +227,7 @@
         "scope": "cpp",
         "prefix": "div_ceil",
         "body": [
-            "auto div_ceil = [&](auto x, auto y) { return x/y+bool(x%y); };"
+            "auto div_ceil = [&](auto x, auto y) { return x/y+!!(x%y); };"
         ]
     },
     "chmin": {
@@ -249,15 +248,15 @@
         "scope": "cpp",
         "prefix": "dfs",
         "body": [
-            "auto dfs = [&](this auto dfs,int u,int f) -> void",
+            "auto dfs = [&](this auto dfs, int u, int f) -> void",
             "{",
             "\tfor(auto v : G[u])",
             "\t{",
             "\t\tif(v==f) continue;",
-            "\t\tdfs(v,u);",
+            "\t\tdfs(v, u);",
             "\t}",
             "};",
-            "dfs(1,0);"
+            "dfs(1, 0);"
         ]
     },
     "hasher": {
@@ -326,6 +325,8 @@
         "scope": "cpp",
         "prefix": "modui",
         "body": [
+            "vector<pair<int,int>> q(m);",
+            "for(int i=0;i<m;i++) cin>>q[i].first>>q[i].second;",
             "int siz = n/sqrt(m)+1;",
             "vector<int> pos(n+1);",
             "for(int i=1;i<=n;i++) pos[i] = i/siz;",
@@ -336,11 +337,8 @@
             "auto del = [&](int p)",
             "{",
             "};",
-            "vector<pair<int,int>> q(m);",
-            "for(int i=0;i<m;i++) cin>>q[i].first>>q[i].second;",
-            "vector<int> o(m);",
-            "iota(o.begin(), o.end(), 0);",
-            "sort(o.begin(), o.end(), [&](int i, int j) {",
+            "auto o = ranges::to<vector>(views::iota(0, n));",
+            "ranges::sort(o, [&](int i, int j) {",
             "\tauto [l1,r1] = q[i];",
             "\tauto [l2,r2] = q[j];",
             "\treturn pos[l1]==pos[l2]",
@@ -367,32 +365,28 @@
         "body": [
             "auto f = [&](ll x) -> ll // [1,x]",
             "{",
-            "\tauto s = to_string(x);",
-            "\tint len = s.length();",
-            "\tvector<int> a(len);",
-            "\tranges::transform(s, a.begin(), [](char c) { return c-'0'; });",
+            "\tauto a = ranges::to<vector>(to_string(x)|views::transform([](char c) { return c-'0'; }));",
             "\tvector dp(15, vector(15, vector(2, vector<ll>(2, -1))));",
-            "\t// 到第 p 位，x 代表到当前位 [...]，前一位是否顶着上界(lim)，前一位是不是前导零(zero)",
-            "\tfunction<ll(int,int,bool,bool)> dfs = [&](int p, int x, bool lim, bool zero) -> ll",
+            "\t// 到第 p 位，x 代表到当前位时 {?}，前一位是否顶着上界(lim)，前一位是不是前导零(zero)",
+            "\tauto dfs = [&](this auto dfs, size_t p, int x, bool lim, bool zero) -> ll",
             "\t{",
-            "\t\tif(p==len) return /* [...] */;  // 找到一个解（确定一个解对答案的贡献）",
+            "\t\tif(p==a.size()) return /* {确定一个解对答案的贡献} */;",
             "\t\tif(~dp[p][x][lim][zero]) return dp[p][x][lim][zero];",
             "\t\tll res = 0;",
-            "\t\tfor(int i=zero;i<=(lim?a[p]:9);i++)   // 第 p 位取 i",
+            "\t\tfor(int i=zero;i<=(lim?a[p]:9);i++) // 第 p 位取 i",
             "\t\t{",
-            "\t\t\t/* [...] */ // 确定是否需要筛选 i",
-            "\t\t\tauto nxt = [&]() -> int { /* [...] */ };   // 根据需要计算 x 值",
-            "\t\t\tres += dfs(p+1, nxt(), lim&&i==a[p], false);",
+            "\t\t\t/* {确定是否需要筛选 i} */",
+            "\t\t\tres += dfs(p+1, /* {确定 x 的变化} */, lim&&i==a[p], false);",
             "\t\t}",
             "\t\treturn dp[p][x][lim][zero] = res;",
             "\t};",
             "\tll ret = 0;",
-            "\tret += dfs(0,/* [...] */,true,true);",
-            "\tfor(int i=1;i<len;i++) ret += dfs(i,/* [...] */,false,true);  // 第 i 位是第一个非 0 的",
+            "\tfor(size_t i=0;i<a.size();i++)  // 第 i 位是第一个非 0 的",
+            "\t\tret += dfs(i, /* {x 的初始值} */, !i, true);",
             "\treturn ret;",
-            "};"
-        ],
-        "description": "数位 DP"
+            "};",
+            ""
+        ]
     },
     "hjt": {
         "scope": "cpp",
@@ -412,13 +406,13 @@
             "\tif(x<=m) ins(ins,l,m,t[pre].l,t[k].l,x);",
             "\telse ins(ins,m+1,r,t[pre].r,t[k].r,x);",
             "};",
-            "auto query = [&](auto&& query,int l,int r,int L,int R,int x,int y)",
+            "auto query = [&](this auto query,int l,int r,int L,int R,int x,int y)",
             "{",
             "\tif(x<=l&&y>=r) return t[R].val-t[L].val;",
             "\tint m = (l+r)>>1;",
             "\tint sum = 0;",
-            "\tif(x<=m) sum += query(query,l,m,t[L].l,t[R].l,x,y);",
-            "\tif(y>m) sum += query(query,m+1,r,t[L].r,t[R].r,x,y);",
+            "\tif(x<=m) sum += query(l,m,t[L].l,t[R].l,x,y);",
+            "\tif(y>m) sum += query(m+1,r,t[L].r,t[R].r,x,y);",
             "\treturn sum;",
             "};",
             ""
@@ -430,7 +424,7 @@
         "body": [
             "int tim = 0;",
             "vector<int> siz(n+1), son(n+1), dfn(n+1), id(n+1);",
-            "auto dfs1 = [&](auto&& dfs1,int u,int f) -> void",
+            "auto dfs1 = [&](this auto dfs1,int u,int f) -> void",
             "{",
             "\tsiz[u] = 1;",
             "\tdfn[u] = ++tim;",
@@ -438,7 +432,7 @@
             "\tfor(auto v : G[u])",
             "\t{",
             "\t\tif(v==f) continue;",
-            "\t\tdfs1(dfs1,v,u);",
+            "\t\tdfs1(v,u);",
             "\t\tsiz[u] += siz[v];",
             "\t\tif(siz[v]>siz[son[u]]) son[u] = v;",
             "\t}",
@@ -449,14 +443,14 @@
             "auto del = [&](int u)",
             "{",
             "};",
-            "auto dfs2 = [&](auto&& dfs2,int u,int f,bool keep) -> void",
+            "auto dfs2 = [&](this auto dfs2,int u,int f,bool keep) -> void",
             "{",
             "\tfor(auto v : G[u])",
             "\t{",
             "\t\tif(v==f||v==son[u]) continue;",
-            "\t\tdfs2(dfs2,v,u,false);",
+            "\t\tdfs2(v,u,false);",
             "\t}",
-            "\tif(son[u]) dfs2(dfs2,son[u],u,true);",
+            "\tif(son[u]) dfs2(son[u],u,true);",
             "\tadd(u);",
             "\tfor(auto v : G[u])",
             "\t{",
@@ -471,8 +465,8 @@
             "\t\t\tdel(id[i]);",
             "\t}",
             "};",
-            "dfs1(dfs1,1,0);",
-            "dfs2(dfs2,1,0,false);",
+            "dfs1(1,0);",
+            "dfs2(1,0,false);",
             ""
         ]
     },
