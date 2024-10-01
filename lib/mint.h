@@ -1,6 +1,6 @@
-ll mod = 998244353;
 class mint
 {
+    const static ll mod = 998244353;
     ll x;
     void norm()
     {
