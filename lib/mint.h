@@ -2,7 +2,12 @@ ll mod = 998244353;
 class mint
 {
     ll x;
-    void norm() { x = (x%mod+mod)%mod; }
+    void norm()
+    {
+        if(-mod<=x&&x<mod) return;
+        else x %= mod;
+        if(x<0) x += mod;
+    }
 public:
     mint() : mint(0) {}
     mint(ll x) : x(x) { norm(); }
