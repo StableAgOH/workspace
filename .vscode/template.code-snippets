@@ -283,18 +283,9 @@
         "scope": "cpp",
         "prefix": "erfen",
         "body": [
-            "auto check = [&](auto g)",
-            "{",
-            "\t$0",
-            "};",
-            "ll l=1, r=1e9;",
-            "while(l<r)",
-            "{",
-            "\tauto m = midpoint(l,r);",
-            "\tif(check(m)) r = m;",
-            "\telse l = m+1;",
-            "}",
-            "return l;"
+            "ranges::partition_point(views::iota($1, $2), [&](ll g) {",
+            "\treturn $3;",
+            "});"
         ]
     },
     "sanfen": {
@@ -383,8 +374,7 @@
             "\tfor(size_t i=0;i<a.size();i++)  // 第 i 位是第一个非 0 的",
             "\t\tret += dfs(i, /* {x 的初始值} */, !i, true);",
             "\treturn ret;",
-            "};",
-            ""
+            "};"
         ]
     },
     "hjt": {
@@ -413,8 +403,7 @@
             "\tif(x<=m) sum += query(l,m,t[L].l,t[R].l,x,y);",
             "\tif(y>m) sum += query(m+1,r,t[L].r,t[R].r,x,y);",
             "\treturn sum;",
-            "};",
-            ""
+            "};"
         ]
     },
     "dsuontree": {
@@ -465,8 +454,7 @@
             "\t}",
             "};",
             "dfs1(1,0);",
-            "dfs2(1,0,false);",
-            ""
+            "dfs2(1,0,false);"
         ]
     },
 }
