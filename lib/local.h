@@ -77,8 +77,8 @@ void debug(int line, string_view names, F&& first, Args&&... args)
         }
     }
     auto it_name = begin(name_list);
-    print(stderr, "{} | {}={}", line, *it_name, first);
-    (print(stderr, ", {}={}", *++it_name, args), ...);
+    print(stderr, "{} | {}={}", line, trim(*it_name), first);
+    (print(stderr, ", {}={}", trim(*++it_name), args), ...);
     print(stderr, "\n");
 }
 }
