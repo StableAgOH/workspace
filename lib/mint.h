@@ -4,12 +4,11 @@ class mint
     ll x;
     void norm()
     {
-        if(-mod<=x&&x<mod) return;
-        else x %= mod;
+        if(!(-mod<=x&&x<mod)) x %= mod;
         if(x<0) x += mod;
     }
 public:
-    mint() : mint(0) {}
+    mint() : x(0) {}
     mint(ll x) : x(x) { norm(); }
     auto val() const { return x; }
     friend mint operator^(mint lhs, mint rhs)
