@@ -43,12 +43,12 @@ struct std::formatter<modular<T>> : formatter<string>
         return format_to(ctx.out(), "{}", m());
     }
 };
-const int mod = 1e9+7;
 // #define DYNAMIC_MOD
 #ifdef DYNAMIC_MOD
-struct MT { static int value; };
-int MT::value = mod;
+struct mod { static int value; };
+int mod::value = 1e9+7;
+using mint = modular<mod>;
 #else
-using MT = integral_constant<int, mod>;
+const int mod = 1e9+7;
+using mint = modular<integral_constant<int, mod>>;
 #endif
-using mint = modular<MT>;
