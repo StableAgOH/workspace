@@ -21,3 +21,13 @@ ostream& operator<<(ostream& os, __int128 x)
     os<<int(abs(x)%10);
     return os;
 }
+template <>
+struct std::formatter<__int128> : formatter<string>
+{
+    auto format(__int128 x, format_context& ctx) const
+    {
+        if(x<0) format_to(ctx.out(), "-");
+        if(x>9) format_to(ctx.out(), "{}", x/10);
+        return format_to(ctx.out(), "{}", int(::abs(x)%10));
+    }
+};
