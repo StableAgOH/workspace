@@ -1,152 +1,39 @@
-class Fraction
+template <typename T>
+class fraction
 {
-private:
-    __int128_t numerator, denominator;
-
-    static __int128_t gcd(const __int128_t a, const __int128_t b)
-    {
-        return b ? gcd(b, a % b) : a;
-    }
+    T x, y;
     void reduct()
     {
-        auto g = gcd(this->numerator, this->denominator);
-        this->numerator /= g;
-        this->denominator /= g;
+        auto g = gcd(x, y);
+        x /= g;
+        y /= g;
     }
-
 public:
-    Fraction() : numerator(0), denominator(1)
-    {
-    }
-    Fraction(const __int128_t num) : numerator(num), denominator(1)
-    {
-    }
-    Fraction(const __int128_t numerator, const __int128_t denominator)
-        : numerator(((denominator > 0) ? 1 : -1) * numerator), denominator(denominator > 0 ? denominator : -denominator)
-    {
-        reduct();
-    }
-    auto get_numerator() const
-    {
-        return numerator;
-    }
-    auto get_denominator() const
-    {
-        return denominator;
-    }
-    auto operator-() const
-    {
-        return Fraction(-numerator, denominator);
-    }
-    auto operator+=(const Fraction& f)
-    {
-        auto g = gcd(denominator, f.denominator);
-        numerator = f.denominator / g * numerator + denominator / g * f.numerator;
-        denominator = denominator / g * f.denominator;
-        reduct();
-        return *this;
-    }
-    auto operator-=(const Fraction& f)
-    {
-        auto g = gcd(denominator, f.denominator);
-        numerator = f.denominator / g * numerator - denominator / g * f.numerator;
-        denominator = denominator / g * f.denominator;
-        reduct();
-        return *this;
-    }
-    auto operator*=(const Fraction& f)
-    {
-        auto g1 = gcd(numerator, f.denominator);
-        auto g2 = gcd(denominator, f.numerator);
-        numerator = numerator / g1 * (f.numerator / g2);
-        denominator = denominator / g2 * (f.denominator / g1);
-        return *this;
-    }
-    auto operator/=(const Fraction& f)
-    {
-        auto g1 = gcd(numerator, f.numerator);
-        auto g2 = gcd(denominator, f.denominator);
-        numerator = numerator / g1 * (f.denominator / g2);
-        denominator = denominator / g2 * (f.numerator / g1);
-        return *this;
-    }
-    auto toInteger() const
-    {
-        return numerator / denominator;
-    }
-    auto toDouble() const
-    {
-        return double(numerator) / denominator;
-    }
-    auto toString() const
-    {
-        std::stack<char> st;
-        std::string ret;
-        auto f = [&](__int128_t x) {
-            while(x)
-            {
-                st.push(x % 10 + '0');
-                x /= 10;
-            }
-            while(!st.empty())
-            {
-                ret.push_back(st.top());
-                st.pop();
-            }
-            if(ret.empty()) ret.push_back('0');
-        };
-        f(numerator);
-        ret.push_back(' ');
-        f(denominator);
-        return ret;
-    }
-    friend Fraction operator+(const Fraction&, const Fraction&);
-    friend Fraction operator-(const Fraction&, const Fraction&);
-    friend Fraction operator*(const Fraction&, const Fraction&);
-    friend Fraction operator/(const Fraction&, const Fraction&);
-    friend bool operator<(const Fraction&, const Fraction&);
-    friend bool operator>(const Fraction&, const Fraction&);
-    friend bool operator==(const Fraction&, const Fraction&);
-    friend bool operator!=(const Fraction&, const Fraction&);
+    fraction(): x(0), y(1) {}
+    fraction(const auto& x) : x(x), y(1) {}
+    fraction(const T& x, const T& y) : x(y>0?x:-x), y(abs(y)) { reduct(); }
+    template <typename U>
+    explicit operator U() const { return U(x)/y; }
+    auto numerator() const { return x; }
+    auto denominator() const { return y; }
+    auto operator<=>(const fraction& rhs) const { return x*rhs.y<=>rhs.x*y; }
+    auto operator-() const { return fraction(-x, y); }
+    auto& operator+=(const fraction& rhs) { return *this = fraction(x*rhs.y+rhs.x*y, y*rhs.y); }
+    auto& operator-=(const fraction& rhs) { return *this = fraction(x*rhs.y-rhs.x*y, y*rhs.y); }
+    auto& operator*=(const fraction& rhs) { return *this = fraction(x*rhs.x, y*rhs.y); }
+    auto& operator/=(const fraction& rhs) { return *this = fraction(x*rhs.y, y*rhs.x); }
+    friend auto operator+(fraction lhs, const fraction& rhs) { return lhs += rhs; }
+    friend auto operator-(fraction lhs, const fraction& rhs) { return lhs -= rhs; }
+    friend auto operator*(fraction lhs, const fraction& rhs) { return lhs *= rhs; }
+    friend auto operator/(fraction lhs, const fraction& rhs) { return lhs /= rhs; }
+    friend auto& operator>>(istream& is, fraction& rhs) { is>>rhs.x>>rhs.y; rhs.reduct(); return is; }
+    friend auto& operator<<(ostream& os, const fraction& rhs) { return os<<rhs.x<<'/'<<rhs.y; }
 };
-
-Fraction operator+(const Fraction& f1, const Fraction& f2)
+template <typename T>
+struct std::formatter<fraction<T>> : formatter<string>
 {
-    auto g = Fraction::gcd(f1.denominator, f2.denominator);
-    return Fraction(f2.denominator / g * f1.numerator + f1.denominator / g * f2.numerator,
-                    f1.denominator / g * f2.denominator);
-}
-Fraction operator-(const Fraction& f1, const Fraction& f2)
-{
-    auto g = Fraction::gcd(f1.denominator, f2.denominator);
-    return Fraction(f2.denominator / g * f1.numerator - f1.denominator / g * f2.numerator,
-                    f1.denominator / g * f2.denominator);
-}
-Fraction operator*(const Fraction& f1, const Fraction& f2)
-{
-    auto g1 = Fraction::gcd(f1.numerator, f2.denominator);
-    auto g2 = Fraction::gcd(f1.denominator, f2.numerator);
-    return Fraction(f1.numerator / g1 * (f2.numerator / g2), f1.denominator / g2 * (f2.denominator / g1));
-}
-Fraction operator/(const Fraction& f1, const Fraction& f2)
-{
-    auto g1 = Fraction::gcd(f1.numerator, f2.numerator);
-    auto g2 = Fraction::gcd(f1.denominator, f2.denominator);
-    return Fraction(f1.numerator / g1 * (f2.denominator / g2), f1.denominator / g2 * (f2.numerator / g1));
-}
-bool operator<(const Fraction& f1, const Fraction& f2)
-{
-    return (f1 - f2).numerator < 0;
-}
-bool operator>(const Fraction& f1, const Fraction& f2)
-{
-    return (f1 - f2).numerator > 0;
-}
-bool operator==(const Fraction& f1, const Fraction& f2)
-{
-    return f1.numerator == f2.numerator && f1.denominator == f2.denominator;
-}
-bool operator!=(const Fraction& f1, const Fraction& f2)
-{
-    return !(f1 == f2);
-}
+    auto format(const fraction<T>& f, format_context& ctx) const
+    {
+        return format_to(ctx.out(), "{}/{}", f.numerator(), f.denominator());
+    }
+};

@@ -22,6 +22,7 @@ public:
     }
     auto operator~() const { return *this^(mod()-2); }
     auto operator<=>(const modular& rhs) const = default;
+    auto operator-() const { return modular(-x); }
     auto& operator+=(const modular& rhs) { if((x+=rhs.x)>=mod()) x -= mod(); return *this; }
     auto& operator-=(const modular& rhs) { if((x-=rhs.x)<0) x += mod(); return *this; }
     auto& operator*=(const modular& rhs) { return *this = (ll)x*rhs.x; }
