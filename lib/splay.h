@@ -1,5 +1,5 @@
-template <typename T, int Size>
-struct splay
+template <typename T, int S>
+class splay
 {
     struct Node
     {
@@ -8,7 +8,6 @@ struct splay
     };
     int root;
     vector<Node> t;
-    splay() { root=0; t.resize(1); t.reserve(Size); }
     void update(int x) { t[x].siz = t[t[x].ch[0]].siz+t[t[x].ch[1]].siz+1; }
     int ident(int x, int f) { return t[f].ch[1]==x; }
     void connect(int x,int f,int s) { t[f].ch[s]=x; t[x].fa=f; }
@@ -19,16 +18,6 @@ struct splay
         connect(x, ff, ident(f,ff));
         connect(f, x, k^1);
         update(f); update(x);
-    }
-    void splaying(int x,int top)
-    {
-        if(!top) root = x;
-        while(t[x].fa!=top)
-        {
-            int f=t[x].fa, ff=t[f].fa;
-            if(ff!=top) ident(x,f)^ident(f,ff)?rotate(x):rotate(f);
-            rotate(x);
-        }
     }
     int newnode(T x,int fa)
     {
@@ -48,7 +37,6 @@ struct splay
         else if(x<t[k].val) insert(x, t[k].ch[0], k);
         else insert(x, t[k].ch[1], k);
     }
-    void insert(const T& x) { insert(x, root, 0);}
     void erase_node(int k)
     {
         splaying(k, 0);
@@ -74,8 +62,21 @@ struct splay
         else if(x<t[k].val) erase(x, t[k].ch[0]);
         else erase(x, t[k].ch[1]);
     }
+public:
+    splay() : root(0), t(1) { t.reserve(S); }
+    void splaying(int x,int top)
+    {
+        if(!top) root = x;
+        while(t[x].fa!=top)
+        {
+            int f=t[x].fa, ff=t[f].fa;
+            if(ff!=top) ident(x,f)^ident(f,ff)?rotate(x):rotate(f);
+            rotate(x);
+        }
+    }
+    void insert(const T& x) { insert(x, root, 0);}
     void erase(const T& x) { erase(x, root); }
-    int get_rank(T x)
+    int order_of_key(const T& x)
     {
         int u=root, rank=1, p=0;
         while(u)
@@ -94,7 +95,7 @@ struct splay
         if(p) splaying(p, 0);
         return rank;
     }
-    T get_val(int rank)
+    T find_by_order(int rank)
     {
         int u = root;
         while (u)
@@ -113,6 +114,6 @@ struct splay
         }
         return t[u].val;
     }
-    T pre(T x) { return get_val(get_rank(x)-1); }
-    T nxt(T x) { return get_val(get_rank(x+1)); }
+    T pre(T x) { return find_by_order(order_of_key(x)-1); }
+    T nxt(T x) { return find_by_order(order_of_key(x+1)); }
 };
