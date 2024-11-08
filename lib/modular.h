@@ -21,9 +21,7 @@ public:
         return res;
     }
     auto operator~() const { return *this^(mod()-2); }
-    auto operator<=>(const modular& rhs) const { return x<=>rhs.x; }
-    auto operator==(const modular& rhs) const { return x==rhs.x; }
-    auto operator!=(const modular& rhs) const { return x!=rhs.x; }
+    auto operator<=>(const modular& rhs) const = default;
     auto& operator+=(const modular& rhs) { if((x+=rhs.x)>=mod()) x -= mod(); return *this; }
     auto& operator-=(const modular& rhs) { if((x-=rhs.x)<0) x += mod(); return *this; }
     auto& operator*=(const modular& rhs) { return *this = (ll)x*rhs.x; }
@@ -49,6 +47,6 @@ struct mod { static int value; };
 int mod::value = 1e9+7;
 using mint = modular<mod>;
 #else
-const int mod = 1e9+7;
+constexpr int mod = 1e9+7;
 using mint = modular<integral_constant<int, mod>>;
 #endif
