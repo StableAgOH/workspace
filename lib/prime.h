@@ -114,13 +114,12 @@ public:
 // 枚举 z 的所有因子
 const int N = 1e5;
 prime<prime_minf_tag> pri(N);
-auto f = [&](auto z)
+auto divide = [&](auto z)
 {
-    auto mp = pri.divide_map_logn(z);
-    auto pf = vector(mp.begin(), mp.end());
+    auto pf = ranges::to<vector>(pri.divide_map_logn(z));
     decltype(z) mul = 1;
-    vector<decltype(z)> fac = {1};
-    function<void(size_t)> dfs = [&](size_t p)
+    vector fac = {mul};
+    auto dfs = [&](this auto dfs, size_t p)
     {
         if(p==pf.size()) return;
         dfs(p+1);
