@@ -283,7 +283,7 @@
         "scope": "cpp",
         "prefix": "erfen",
         "body": [
-            "ranges::partition_point(views::iota($1, $2), [&](ll g) {",
+            "auto res = *ranges::partition_point(views::iota($1, $2), [&](ll g) {",
             "\treturn $3;",
             "});"
         ]
