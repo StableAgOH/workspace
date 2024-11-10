@@ -247,15 +247,15 @@
         "scope": "cpp",
         "prefix": "dfs",
         "body": [
-            "auto dfs = [&](this auto dfs, int u, int f) -> void",
+            "auto dfs = [&](this auto dfs,int u,int f) -> void",
             "{",
             "\tfor(auto v : G[u])",
             "\t{",
             "\t\tif(v==f) continue;",
-            "\t\tdfs(v, u);",
+            "\t\tdfs(v,u);",
             "\t}",
             "};",
-            "dfs(1, 0);"
+            "dfs(1,0);"
         ]
     },
     "hasher": {
@@ -283,7 +283,7 @@
         "scope": "cpp",
         "prefix": "erfen",
         "body": [
-            "auto res = *ranges::partition_point(views::iota($1, $2), [&](ll g) {",
+            "auto res = *ranges::partition_point(views::iota($1, $2), [&](auto g) {",
             "\treturn $3;",
             "});"
         ]
