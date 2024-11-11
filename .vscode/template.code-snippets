@@ -165,7 +165,7 @@
         "prefix": "isort",
         "body": [
             "auto o = ranges::to<vector>(views::iota(0, n));",
-            "ranges::sort(o, [&](auto i, auto j) { return a[i]<a[j]; });"
+            "ranges::sort(o, [&](int i, int j) { return a[i]<a[j]; });"
         ]
     },
     "comb": {
@@ -283,9 +283,11 @@
         "scope": "cpp",
         "prefix": "erfen",
         "body": [
-            "auto res = *ranges::partition_point(views::iota($1, $2), [&](auto g) {",
-            "\treturn $3;",
-            "});"
+            "auto check = [&](auto g) -> bool",
+            "{",
+            "\t$3",
+            "};",
+            "auto res = *ranges::partition_point(views::iota($1, $2), check);"
         ]
     },
     "sanfen": {
