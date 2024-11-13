@@ -1,125 +1,79 @@
-class prime_tag
+class prime_minf_tag
 {
 protected:
-    int n;
-    virtual void update_prime(int i) = 0;
-    virtual void update_composite(int i, int j) = 0;
-    prime_tag(int n) : n(n) {}
-};
-class prime_minf_tag : public virtual prime_tag
-{
-protected:
-    prime_minf_tag(int n) : prime_tag(n) { minf.resize(n+1); }
-    void update_prime(int i) { minf[i] = i; }
-    void update_composite(int i, int j) { minf[i*j] = j; }
+    prime_minf_tag(int n) : minf(n+1) {}
+    void upd_p(int i) { minf[i] = i; }
+    void upd_c(int i, int j) { minf[i*j] = j; }
 public:
     vector<int> minf;
-    auto divide_uniqvec_logn(int x) const
+    auto factorization_logn(integral auto x) const
     {
-        assert(x<=this->n);
         vector<int> res;
-        while(x>1)
-        {
-            if(res.empty()||minf[x]!=res.back()) res.push_back(minf[x]);
-            x /= minf[x];
-        }
+        for(;x>1;x/=minf[x]) res.push_back(minf[x]);
         return res;
     }
-    auto divide_map_logn(int x) const
-    {
-        assert(x<=this->n);
-        map<int, int> mp;
-        while(x>1)
-        {
-            mp[minf[x]]++;
-            x /= minf[x];
-        }
-        return mp;
-    }
 };
-class prime_phi_tag : public virtual prime_tag
+class prime_phi_tag
 {
 protected:
-    prime_phi_tag(int n) : prime_tag(n) { phi.resize(n+1); phi[1] = 1; }
-    void update_prime(int i) { phi[i] = i-1; }
-    void update_composite(int i, int j)
-    {
-        if(i%j==0) phi[i*j] = phi[i]*j;
-        else phi[i*j] = phi[i]*(j-1);
-    }
+    prime_phi_tag(int n) : phi(n+1) { phi[1] = 1; }
+    void upd_p(int i) { phi[i] = i-1; }
+    void upd_c(int i, int j) { phi[i*j] = i%j?phi[i]*(j-1):phi[i]*j; }
 public:
     vector<int> phi;
 };
-template <derived_from<prime_tag>... Tags>
-class prime : virtual prime_tag, public Tags...
+template <typename... Tags>
+class prime : public Tags...
 {
-private:
-    void update_prime(int i) { (..., Tags::update_prime(i)); }
-    void update_composite(int i, int j) { (..., Tags::update_composite(i, j)); }
+    void upd_p([[maybe_unused]] int i)
+    {
+        primes.push_back(i);
+        (..., Tags::upd_p(i));
+    }
+    void upd_c([[maybe_unused]] int i, [[maybe_unused]] int j)
+    {
+        is_prime[i*j] = false;
+        (..., Tags::upd_c(i,j));
+    }
 public:
-    vector<bool> not_prime;
+    vector<bool> is_prime;
     vector<int> primes;
     prime() = delete;
-    prime(int n) : prime_tag(n), Tags(n)...
+    prime(int n) : Tags(n)..., is_prime(n+1, true)
     {
-        assert(n<=1e8);
-        not_prime.resize(n+1);
         for(int i=2;i<=n;i++)
         {
-            if(!not_prime[i])
-            {
-                primes.push_back(i);
-                update_prime(i);
-            }
+            if(is_prime[i]) upd_p(i);
             for(auto j : primes)
             {
                 if(i*j>n) break;
-                not_prime[i*j] = true;
-                update_composite(i, j);
+                upd_c(i,j);
                 if(i%j==0) break;
             }
         }
     }
-    template <integral T>
-    auto divide_uniqvec_sqrtn(T x) const
+    auto factorization_sqrtn(integral auto x) const
     {
-        vector<T> res;
+        vector<decltype(x)> res;
         for(auto i : primes)
         {
-            if(i>x) break;
-            if(x%i==0) res.push_back(i);
-            while(x%i==0) x /= i;
+            if(decltype(x)(i)*i>x) break;
+            for(;x%i==0;x/=i) res.push_back(i);
         }
         if(x>1) res.push_back(x);
         return res;
     }
-    template <integral T>
-    auto divide_map_sqrtn(T x) const
-    {
-        map<T, int> mp;
-        for(auto i : primes)
-        {
-            if(i>x) break;
-            while(x%i==0)
-            {
-                mp[i]++;
-                x /= i;
-            }
-        }
-        if(x>1) mp[x]++;
-        return mp;
-    }
 };
 
-// 枚举 z 的所有因子
-const int N = 1e5;
-prime<prime_minf_tag> pri(N);
-auto divide = [&](auto z)
+prime<prime_minf_tag> pri(/* maxz */);
+auto factorize = [&](auto z)
 {
-    auto pf = ranges::to<vector>(pri.divide_map_logn(z));
+    map<int,int> cnt;
+    for(auto i : pri.factorization_logn(z)) cnt[i]++;
+    vector pf(cnt.begin(), cnt.end());
     decltype(z) mul = 1;
     vector fac = {mul};
-    auto dfs = [&](this auto dfs, size_t p)
+    auto dfs = [&](this auto dfs, int p)
     {
         if(p==pf.size()) return;
         dfs(p+1);
