@@ -4,12 +4,7 @@ private:
     vector<int> fa, siz;
     int find(int x) { return fa[x]==x?x:fa[x]=find(fa[x]); }
 public:
-    dsu(int n)
-    {
-        fa.resize(n);
-        siz.assign(n,1);
-        iota(fa.begin(), fa.end(), 0);
-    }
+    dsu(int n) : fa(ranges::to<vector>(views::iota(0,n))), siz(n,1) {}
     bool merge(int x,int y)
     {
         x=find(x), y=find(y);
@@ -19,5 +14,5 @@ public:
         return true;
     }
     int operator[](int x) { return find(x); }
-    int size(int x) { return this->siz[x]; }
+    int size(int x) { return siz[x]; }
 };
