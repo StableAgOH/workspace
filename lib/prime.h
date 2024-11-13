@@ -73,7 +73,7 @@ auto factorize = [&](auto z)
     vector pf(cnt.begin(), cnt.end());
     decltype(z) mul = 1;
     vector fac = {mul};
-    auto dfs = [&](this auto dfs, int p)
+    auto dfs = [&](this auto dfs, size_t p)
     {
         if(p==pf.size()) return;
         dfs(p+1);
