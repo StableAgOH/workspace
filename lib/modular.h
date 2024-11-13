@@ -14,13 +14,13 @@ public:
     modular(const auto& x) : x(norm(x)) {}
     explicit operator auto() const { return x; }
     auto operator()() const { return x; }
-    auto operator^(integral auto rhs) const
+    auto pow(integral auto rhs) const
     {
         modular a=*this, res=1;
         for(;rhs;rhs>>=1,a*=a) if(rhs&1) res *= a;
         return res;
     }
-    auto operator~() const { return *this^(mod()-2); }
+    auto operator~() const { return pow(mod()-2); }
     auto operator<=>(const modular& rhs) const = default;
     auto operator-() const { return modular(-x); }
     auto operator++() { return *this += 1; }
