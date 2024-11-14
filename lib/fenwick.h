@@ -1,32 +1,34 @@
+#include <bits/stdc++.h>
+using namespace std;
 template <typename T, typename O=plus<T>>
 class fenwick
 {
-private:
-    O op;
+    static constexpr auto lowbit(auto x) { return x&-x; }
     int n;
     vector<T> c;
-    int lowbit(int x) const { return x&-x; }
 public:
-    fenwick(int n) : n(n) { c.resize(n+1); }
-    fenwick(const ranges::range auto& r) : fenwick(ranges::size(r))
+    fenwick(int n) : n(n), c(n+1) {}
+    fenwick(const ranges::range auto& r) : fenwick(a.size())
     {
-        vector<T> pre(n+1);
-        partial_sum(r.begin(), r.end(), pre.begin()+1);
-        for(int i=1;i<=n;i++) c[i] = pre[i]-pre[i-lowbit(i)];
+        vector<T> p(n+1);
+        partial_sum(r.begin(), r.end(), p.begin()+1);
+        for(int i=1;i<=n;i++) c[i] = p[i]-p[i-lowbit(i)];
     }
+    fenwick(int n, const T& x) : fenwick(vector(n,x)) {}
     void clear() { ranges::fill(c, T()); }
+    int size() { return n; }
     void add(int p, const T& x)
     {
-        for(int i=p;i<=n;i+=lowbit(i)) c[i] = op(c[i], x);
+        for(int i=p+1;i<=n;i+=lowbit(i))
+            c[i] = O()(c[i], x);
     }
-    auto operator()(int p) const
+    auto prefix_sum(int p) const
     {
         T sum{};
-        for(int i=p;i;i-=lowbit(i)) sum += c[i];
+        for(int i=p+1;i;i-=lowbit(i))
+            sum = O()(sum, c[i]);
         return sum;
     }
-    auto operator()(int l, int r) const
-    {
-        return (*this)(r)-(*this)(l-1);
-    }
+    auto operator()(int l) const { return operator()(l,l); }
+    auto operator()(int l, int r) const { return prefix_sum(r)-prefix_sum(l-1); }
 };
