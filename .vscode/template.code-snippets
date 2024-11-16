@@ -34,6 +34,7 @@
             "#endif",
             "\ttimer::set_start_time();",
             "#endif",
+            "\tios::sync_with_stdio(false);",
             "\tcin.tie(nullptr);",
             "\t//======================================",
             "\tsolve({\"Yes\", \"No\"}, true, [&]([[maybe_unused]] const int kase)",
