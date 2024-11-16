@@ -29,11 +29,3 @@ public:
     friend auto& operator>>(istream& is, fraction& rhs) { is>>rhs.x>>rhs.y; rhs.reduct(); return is; }
     friend auto& operator<<(ostream& os, const fraction& rhs) { return os<<rhs.x<<'/'<<rhs.y; }
 };
-template <typename T>
-struct std::formatter<fraction<T>> : formatter<string>
-{
-    auto format(const fraction<T>& f, format_context& ctx) const
-    {
-        return format_to(ctx.out(), "{}/{}", f.numerator(), f.denominator());
-    }
-};

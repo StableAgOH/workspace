@@ -38,14 +38,6 @@ public:
     friend auto& operator>>(istream& is, modular& rhs) { is>>rhs.x; rhs.x = norm(rhs.x); return is; }
     friend auto& operator<<(ostream& os, const modular& rhs) { return os<<rhs.x; }
 };
-template <typename T>
-struct std::formatter<modular<T>> : formatter<string>
-{
-    auto format(const modular<T>& m, format_context& ctx) const
-    {
-        return format_to(ctx.out(), "{}", m());
-    }
-};
 // #define DYNAMIC_MOD
 #ifdef DYNAMIC_MOD
 struct mod { static int value; };
