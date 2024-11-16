@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 template <typename T, typename O, size_t L=(size_t)ceil(log2(1e7))>
 class sparse_table
 {

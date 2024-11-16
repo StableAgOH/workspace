@@ -1,5 +1,3 @@
-#include <bits/stdc++.h>
-using namespace std;
 template <typename T, typename O=plus<T>>
 class fenwick
 {
@@ -8,7 +6,7 @@ class fenwick
     vector<T> c;
 public:
     fenwick(int n) : n(n), c(n+1) {}
-    fenwick(const ranges::range auto& r) : fenwick(a.size())
+    fenwick(const ranges::range auto& r) : fenwick(ranges::size(r))
     {
         vector<T> p(n+1);
         partial_sum(r.begin(), r.end(), p.begin()+1);
