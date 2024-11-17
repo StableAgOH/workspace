@@ -12,5 +12,5 @@ public:
             h.push_back((h[i-1]*p+s[i-1])%mod);
         }
     }
-    auto operator()(int l,int r) { return (h[r]-h[l-1]*w[r-l+1]%mod+mod)%mod; }
+    auto operator()(int l,int r) { return (h[r+1]-h[l]*w[r-l+1]%mod+mod)%mod; }
 };

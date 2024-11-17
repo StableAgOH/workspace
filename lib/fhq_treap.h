@@ -1,8 +1,7 @@
-template <integral T, int Seed=23333>
+template <integral T>
 class fhq_treap
 {
-private:
-    mt19937 rnd = mt19937(Seed);
+    mt19937 rnd;
     struct Node { int l,r,key,siz; T val; };
     int root;
     vector<Node> t;
@@ -44,7 +43,7 @@ private:
         update(x);
     }
 public:
-    fhq_treap() : root(0) { t.resize(1); }
+    fhq_treap() : rnd(chrono::steady_clock::now().time_since_epoch().count()), root(0), t(1) {}
     void insert(T val)
     {
         int u,v;
