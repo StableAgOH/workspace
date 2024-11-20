@@ -330,7 +330,7 @@
             "auto del = [&](int p)",
             "{",
             "};",
-            "auto o = ranges::to<vector>(views::iota(0, n));",
+            "auto o = ranges::to<vector>(views::iota(0, m));",
             "ranges::sort(o, [&](int i, int j) {",
             "\tauto [l1,r1] = q[i];",
             "\tauto [l2,r2] = q[j];",
