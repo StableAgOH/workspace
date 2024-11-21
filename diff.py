@@ -27,7 +27,7 @@ def compile(filename: str):
 parser = argparse.ArgumentParser()
 parser.add_argument("your_code")
 parser.add_argument("answer_code")
-parser.add_argument("--cache", action="store_true")
+parser.add_argument("--cache", action="store_true", help="do not compile")
 
 args = parser.parse_args()
 solution = args.your_code.split(".")[0]
