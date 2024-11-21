@@ -77,7 +77,7 @@ void debug(int line, string_view names, F&& first, Args&&... args)
     }
     auto it_name = begin(name_list);
     auto it_out = ostream_iterator<char>(clog);
-    clog<<line<<" | ";
+    clog<<boolalpha<<line<<" | ";
     ranges::copy(trim(*it_name), it_out);
     clog<<'='<<first;
     ((clog<<", ", ranges::copy(trim(*++it_name), it_out), clog<<'='<<args), ...);
