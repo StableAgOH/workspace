@@ -22,6 +22,11 @@
                     "description": "将反汇编风格设置为 Intel",
                     "text": "-gdb-set disassembly-flavor intel",
                     "ignoreFailures": true
+                },
+                {
+                    "description": "开启 ASLR",
+                    "text": "-gdb-set disable-randomization off",
+                    "ignoreFailures": true
                 }
             ],
             "preLaunchTask": "Compile for debug"
