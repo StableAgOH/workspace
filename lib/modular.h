@@ -41,9 +41,9 @@ public:
 // #define DYNAMIC_MOD
 #ifdef DYNAMIC_MOD
 struct mod { static int value; };
-int mod::value = 1e9+7;
+int mod::value;
 using mint = modular<mod>;
 #else
-constexpr int mod = 1e9+7;
+const int mod = 1e9+7;
 using mint = modular<integral_constant<int, mod>>;
 #endif
