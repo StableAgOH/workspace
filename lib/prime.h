@@ -1,71 +1,79 @@
+template <int Mx>
 class prime_minf_tag
 {
 protected:
-    prime_minf_tag(int n) : minf(n+1) {}
     void upd_p(int i) { minf[i] = i; }
     void upd_c(int i, int j) { minf[i*j] = j; }
+    prime_minf_tag() = default;
 public:
-    vector<int> minf;
-    auto factorization_logn(integral auto x) const
-    {
-        vector<int> res;
-        for(;x>1;x/=minf[x]) res.push_back(minf[x]);
-        return res;
-    }
+    array<int, Mx+1> minf = {};
+    template <integral T>
+    generator<T> factorization_logn(T x) const { for(;x>1;x/=minf[x]) co_yield minf[x]; }
 };
+template <int Mx>
 class prime_phi_tag
 {
 protected:
-    prime_phi_tag(int n) : phi(n+1) { phi[1] = 1; }
+    prime_phi_tag() = default;
     void upd_p(int i) { phi[i] = i-1; }
     void upd_c(int i, int j) { phi[i*j] = i%j?phi[i]*(j-1):phi[i]*j; }
 public:
-    vector<int> phi;
+    array<int, Mx+1> phi = {0,1};
 };
-template <typename... Tags>
-class prime : public Tags...
+template <int Mx, template <int> typename... Tags>
+class prime : public Tags<Mx>...
 {
-    void upd_p([[maybe_unused]] int i)
+    static_assert(Mx>0);
+    bitset<Mx+1> not_prime;
+    void upd_p(int i)
     {
         primes.push_back(i);
-        (..., Tags::upd_p(i));
+        (..., Tags<Mx>::upd_p(i));
     }
-    void upd_c([[maybe_unused]] int i, [[maybe_unused]] int j)
+    void upd_c(int i, int j)
     {
-        is_prime[i*j] = false;
-        (..., Tags::upd_c(i,j));
+        not_prime[i*j] = true;
+        (..., Tags<Mx>::upd_c(i,j));
     }
 public:
-    vector<bool> is_prime;
     vector<int> primes;
-    prime() = delete;
-    prime(int n) : Tags(n)..., is_prime(n+1, true)
+    prime()
     {
-        for(int i=2;i<=n;i++)
+        for(int i=2;i<=Mx;i++)
         {
-            if(is_prime[i]) upd_p(i);
+            if(!not_prime[i]) upd_p(i);
             for(auto j : primes)
             {
-                if(i*j>n) break;
+                if(i*j>Mx) break;
                 upd_c(i,j);
                 if(i%j==0) break;
             }
         }
     }
-    auto factorization_sqrtn(integral auto x) const
+    bool is_prime(integral auto x) const
     {
-        vector<decltype(x)> res;
+        if(x<=1) return false;
+        if(x<=Mx) return !not_prime[x];
+        auto s = sqrt(x);
         for(auto i : primes)
         {
-            if(decltype(x)(i)*i>x) break;
-            for(;x%i==0;x/=i) res.push_back(i);
+            if(i>s) break;
+            if(x%i==0) return false;
         }
-        if(x>1) res.push_back(x);
-        return res;
+        return true;
+    }
+    template <integral T>
+    generator<T> factorization_sqrtn(T x) const
+    {
+        for(auto i : primes)
+        {
+            if(i>sqrt(x)) break;
+            for(;x%i==0;x/=i) co_yield i;
+        }
+        if(x>1) co_yield x;
     }
 };
 
-prime<prime_minf_tag> pri(/* maxz */);
 auto factorize = [&](auto z)
 {
     map<int,int> cnt;
