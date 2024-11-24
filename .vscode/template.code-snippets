@@ -165,7 +165,8 @@
         "scope": "cpp",
         "prefix": "isort",
         "body": [
-            "auto o = ranges::to<vector>(views::iota(0, n));",
+            "vector<int> o(n);",
+            "iota(o.begin(), o.end(), 0);",
             "ranges::sort(o, [&](int i, int j) { return a[i]<a[j]; });"
         ]
     },
@@ -344,7 +345,8 @@
             "auto del = [&](int p)",
             "{",
             "};",
-            "auto o = ranges::to<vector>(views::iota(0, m));",
+            "vector<int> o(m);",
+            "iota(o.begin(), o.end(), 0);",
             "ranges::sort(o, [&](int i, int j) {",
             "\tauto [l1,r1] = q[i];",
             "\tauto [l2,r2] = q[j];",
@@ -372,8 +374,9 @@
         "body": [
             "auto f = [&](ll x) -> ll // [1,x]",
             "{",
-            "\tauto a = ranges::to<vector>(to_string(x)|views::transform([](char c) { return c-'0'; }));",
-            "\tvector dp(15, vector(15, vector(2, vector<ll>(2, -1))));",
+            "\tvector<int> a;",
+            "\tfor(auto c : to_string(x)) a.push_back(c-'0');",
+            "\tarray<array<array<array<ll, 2>, 2>, 20>, 20> dp = {-1};",
             "\t// 到第 p 位，x 代表到当前位时 {?}，前一位是否顶着上界(lim)，前一位是不是前导零(zero)",
             "\tauto dfs = [&](this auto dfs, size_t p, int x, bool lim, bool zero) -> ll",
             "\t{",
