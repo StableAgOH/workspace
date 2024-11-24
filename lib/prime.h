@@ -7,8 +7,17 @@ protected:
     prime_minf_tag() = default;
 public:
     array<int, Mx+1> minf = {};
+#ifdef __cpp_lib_generator
     template <integral T>
     generator<T> factorization_logn(T x) const { for(;x>1;x/=minf[x]) co_yield minf[x]; }
+#else
+    auto factorization_logn(integral auto x) const
+    {
+        vector<int> res;
+        for(;x>1;x/=minf[x]) res.push_back(minf[x]);
+        return res;
+    }
+#endif
 };
 template <int Mx>
 class prime_phi_tag
@@ -62,6 +71,7 @@ public:
         }
         return true;
     }
+#ifdef __cpp_lib_generator
     template <integral T>
     generator<T> factorization_sqrtn(T x) const
     {
@@ -72,6 +82,19 @@ public:
         }
         if(x>1) co_yield x;
     }
+#else
+    auto factorization_sqrtn(integral auto x) const
+    {
+        vector<int> res;
+        for(auto i : primes)
+        {
+            if(i>sqrt(x)) break;
+            for(;x%i==0;x/=i) res.push_back(i);
+        }
+        if(x>1) res.push_back(x);
+        return res;
+    }
+#endif
 };
 
 auto factorize = [&](auto z)
