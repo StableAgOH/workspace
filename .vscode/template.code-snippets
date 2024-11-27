@@ -32,7 +32,7 @@
             "#ifndef DEBUG",
             "\tfreopen(\"out.txt\", \"w\", stdout);",
             "#endif",
-            "\ttimer::set_start_time();",
+            "\ttimer::start_time = chrono::high_resolution_clock::now();",
             "#endif",
             "\tios::sync_with_stdio(false);",
             "\tcin.tie(nullptr);",

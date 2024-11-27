@@ -2,15 +2,8 @@
 using namespace std;
 namespace debug_macro
 {
-template <typename T>
-concept printble = requires(T t) { cout<<t; };
-template <typename T>
-concept pointer_or_iterator = (!printble<T>) && requires (T p) { { *p } -> printble; };
-
 template <typename C, typename T, ranges::range R>
 basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x);
-template <pointer_or_iterator P>
-ostream& operator<<(ostream& os, const P& x);
 
 template <typename T, typename U>
 ostream& operator<<(ostream& os, const pair<T,U>& x)
@@ -49,19 +42,15 @@ basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x)
     for(;it!=ed;++it) os<<','<<*it;
     return os<<']';
 }
-template <pointer_or_iterator P>
-ostream& operator<<(ostream& os, const P& x) { return os<<'*'<<*x; }
 
-template <ranges::range R>
-auto trim(R&& r)
+auto trim(const string s)
 {
-    return r | views::drop_while(::isspace)
+    return s | views::drop_while(::isspace)
         | views::reverse
         | views::drop_while(::isspace)
         | views::reverse;
 }
-template <typename F, typename... Args>
-void debug(int line, string_view names, F&& first, Args&&... args)
+void debug(int line, string_view names, auto&& first, auto&&... args)
 {
     vector<string> name_list(1);
     int cnt = 0;
@@ -75,29 +64,25 @@ void debug(int line, string_view names, F&& first, Args&&... args)
             name_list.back().push_back(c);
         }
     }
+    clog<<boolalpha<<line<<" | ";
     auto it_name = begin(name_list);
     auto it_out = ostream_iterator<char>(clog);
-    clog<<boolalpha<<line<<" | ";
     ranges::copy(trim(*it_name), it_out);
     clog<<'='<<first;
     ((clog<<", ", ranges::copy(trim(*++it_name), it_out), clog<<'='<<args), ...);
     clog<<endl;
 }
 }
-class timer
+namespace timer
 {
-private:
-    static chrono::_V2::system_clock::time_point start_time;
-public:
-    static void set_start_time() { start_time = chrono::high_resolution_clock::now(); }
-    static void utime(int line)
+    chrono::time_point<chrono::high_resolution_clock> start_time;
+    void utime(int line)
     {
         auto end_time = chrono::high_resolution_clock::now();
         auto duration = chrono::duration_cast<chrono::milliseconds>(end_time-start_time);
         clog<<duration.count()<<" ms used at line "<<line<<endl;
     }
-};
-chrono::_V2::system_clock::time_point timer::start_time;
+}
 
 #define debug(...) debug_macro::debug(__LINE__, #__VA_ARGS__, __VA_ARGS__)
 #define utime() timer::utime(__LINE__)
