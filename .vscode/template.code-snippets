@@ -13,7 +13,7 @@
             "#endif",
             "void solve(array<string_view, 2> boolmsg, bool multicase, auto&& func)",
             "{",
-            "\tusing R = invoke_result_t<decltype(func), int>;",
+            "\tusing R = decltype(func(int()));",
             "\tint t = 1;",
             "\tif(multicase) cin>>t;",
             "\tfor(int i=1;i<=t;i++)",
