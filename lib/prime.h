@@ -96,27 +96,27 @@ public:
     }
 #endif
 };
-
-auto factorize = [&](auto z)
+auto factorize(auto&& factorization_result)
 {
-    map<int,int> cnt;
-    for(auto i : pri.factorization_logn(z)) cnt[i]++;
+    using T = decay_t<decltype(*factorization_result.begin())>;
+    map<T,int> cnt;
+    for(auto i : factorization_result) cnt[i]++;
     vector pf(cnt.begin(), cnt.end());
-    decltype(z) mul = 1;
-    vector fac = {mul};
-    auto dfs = [&](this auto dfs, size_t p)
+    vector<T> fac;
+    auto dfs = [&](this auto dfs, size_t p, T mul)
     {
-        if(p==pf.size()) return;
-        dfs(p+1);
-        auto [a,b] = pf[p];
-        for(int i=0;i<b;i++)
+        if(p==pf.size())
         {
-            mul *= a;
             fac.push_back(mul);
-            dfs(p+1);
+            return;
         }
-        for(int i=0;i<b;i++) mul /= a;
+        for(auto i : views::iota(0))
+        {
+            dfs(p+1, mul);
+            if(i==pf[p].second) break;
+            mul *= pf[p].first;
+        }
     };
-    dfs(0);
+    dfs(0, 1);
     return fac;
 };
