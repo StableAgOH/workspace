@@ -76,6 +76,7 @@ void debug(int line, string_view names, auto&& first, auto&&... args)
 namespace timer
 {
     chrono::time_point<chrono::high_resolution_clock> start_time;
+    void set_start_time() { start_time = chrono::high_resolution_clock::now(); };
     void utime(int line)
     {
         auto end_time = chrono::high_resolution_clock::now();
