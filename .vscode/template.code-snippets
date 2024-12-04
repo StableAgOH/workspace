@@ -170,6 +170,14 @@
             "ranges::sort(o, [&](int i, int j) { return a[i]<a[j]; });"
         ]
     },
+    "mcnt": {
+        "scope": "cpp",
+        "prefix": "mcnt",
+        "body": [
+            "map<decltype(a)::value_type, int> cnt;",
+            "for(auto i : a) cnt[i]++;"
+        ]
+    },
     "comb": {
         "scope": "cpp",
         "prefix": "comb",
