@@ -1,5 +1,5 @@
 /**
- * @brief ST 表，支持所有“可重复贡献问题”。参见：https://oi-wiki.org/ds/sparse-table/
+ * @brief ST 表，支持“可重复贡献问题”的区间查询。参见：https://oi-wiki.org/ds/sparse-table/
  * 
  * 构造（以在 a 上建立一个求 max 的 ST 表为例）：
  * @code{.cpp} sparse_table<int, [](int x,int y) { return max(x,y); }> st(a); @endcode
