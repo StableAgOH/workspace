@@ -32,7 +32,7 @@ public:
         }
     }
     /**
-     * @brief 查询闭区间 [l,r] 的结果
+     * @brief 查询 0-indexed 闭区间 [l,r] 的结果
      */
     T operator()(int l,int r)
     {
