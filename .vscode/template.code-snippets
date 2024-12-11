@@ -69,6 +69,29 @@
             ""
         ]
     },
+    "leetcode": {
+        "scope": "cpp",
+        "prefix": "leetcode",
+        "body": [
+            "#ifdef LOCAL",
+            "#include \"lib/leetcode.h\"",
+            "#include \"lib/local.h\"",
+            "#endif",
+            "using ll = long long;",
+            "class Solution",
+            "{",
+            "public:",
+            "\tauto solve()",
+            "\t{",
+            "\t\t$0",
+            "\t}",
+            "};",
+            "#ifdef LOCAL",
+            "LEETCODE_MAIN(solve);",
+            "#endif",
+            ""
+        ]
+    },
     "vector_n_0": {
         "scope": "cpp",
         "prefix": "vn0",
