@@ -1,9 +1,10 @@
 #include <bits/stdc++.h>
+#include <experimental/iterator>
 using namespace std;
 namespace debug_macro
 {
 template <typename C, typename T, ranges::range R>
-basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x);
+basic_ostream<C,T>& operator<<(basic_ostream<C,T>&, const R&);
 
 template <typename T, typename U>
 ostream& operator<<(ostream& os, const pair<T,U>& x)
@@ -37,12 +38,9 @@ template <typename C, typename T, ranges::range R>
 basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x)
 {
     os<<'[';
-    auto it=ranges::begin(x), ed=ranges::end(x);
-    if(it!=ed) os<<*it++;
-    for(;it!=ed;++it) os<<','<<*it;
+    copy(x.begin(), x.end(), experimental::make_ostream_joiner(os, ","));
     return os<<']';
 }
-
 auto trim(const string s)
 {
     return s | views::drop_while(::isspace)
