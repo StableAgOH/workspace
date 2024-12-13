@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <experimental/iterator>
 #include "local.h"
 using namespace std;
 struct ListNode
@@ -8,11 +9,10 @@ struct ListNode
     ListNode() : val(0), next(nullptr) {}
     ListNode(int x) : val(x), next(nullptr) {}
     ListNode(int x, ListNode* next) : val(x), next(next) {}
-    ~ListNode() { delete next; }
     friend istream& operator>>(istream& is, ListNode*& l)
     {
         assert(is.get()=='[');
-        if(cin.peek()==']') return is;
+        if(is.peek()==']') return is.ignore(1);
         auto head=new ListNode(), p=head;
         while(true)
         {
@@ -39,12 +39,66 @@ struct TreeNode
     TreeNode() : val(0), left(nullptr), right(nullptr) {}
     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
     TreeNode(int x, TreeNode* left, TreeNode* right) : val(x), left(left), right(right) {}
-    ~TreeNode() { delete left; delete right; }
+    friend istream& operator>>(istream& is, TreeNode*& t)
+    {
+        assert(is.get()=='[');
+        if(is.peek()==']') return is.ignore(1);
+        auto p = new TreeNode();
+        queue<TreeNode*> q;
+        q.push(p);
+        bool right = true;
+        while(!q.empty())
+        {
+            if(is.peek()!='n')
+            {
+                int x;
+                is>>x;
+                auto n = new TreeNode(x);
+                if(right) q.front()->right = n;
+                else q.front()->left = n;
+                q.push(n);
+            }
+            else is.ignore(4);
+            if(is.get()==']') break;
+            if(right) q.pop();
+            right ^= 1;
+        }
+        t = p->right;
+        return is;
+    }
+    friend ostream& operator<<(ostream& os, TreeNode* t)
+    {
+        os<<"[";
+        queue<TreeNode*> q;
+        if(t)
+        {
+            q.push(t);
+            os<<t->val;
+        }
+        while(!q.empty())
+        {
+            auto u = q.front();
+            q.pop();
+            if(u->left)
+            {
+                os<<","<<u->left->val;
+                q.push(u->left);
+            }
+            else os<<",null";
+            if(u->right)
+            {
+                os<<","<<u->right->val;
+                q.push(u->right);
+            }
+            else os<<",null";
+        }
+        return os<<"]";
+    }
 };
 istream& operator>>(istream& is, ranges::range auto& r)
 {
     assert(is.get()=='[');
-    if(cin.peek()==']') return is;
+    if(is.peek()==']') return is.ignore(1);
     ranges::range_value_t<decltype(r)> x;
     while(true)
     {
@@ -58,33 +112,31 @@ template <typename C, typename T>
 basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const ranges::range auto& r)
 {
     os<<'[';
-    for(auto it=ranges::begin(r);it!=ranges::end(r);)
-        os<<*it++<<",]"[it==ranges::end(r)];
-    return os;
+    copy(r.begin(), r.end(), experimental::make_ostream_joiner(os, ","));
+    return os<<']';
 }
 template <typename T, typename F, typename... Args>
 void execute(T (F::*solve)(Args...))
 {
-    while(true)
+    while(!(cin.peek()==EOF||cin.peek()=='\n'))
     {
         tuple<decay_t<Args>...> rargs;
         apply([&](auto&&... rarg) { (..., (cin>>rarg, cin.get())); }, rargs);
         auto args = tuple_cat(tuple(F()), rargs);
         if constexpr(same_as<T, void>) apply(solve, args);
         else cout<<apply(solve, args)<<'\n';
-        if(cin.peek()==EOF||cin.peek()=='\n') break;
     }
 }
 #ifndef DEBUG
-#define ENABLE_OUT freopen("out.txt", "w", stdout);
+#define FOUT freopen("out.txt", "w", stdout);
 #else
-#define ENABLE_OUT
+#define FOUT
 #endif
 #define LEETCODE_MAIN(solve)            \
     int main()                          \
     {                                   \
         freopen("in.txt", "r", stdin);  \
-        ENABLE_OUT                      \
+        FOUT                      \
         ios::sync_with_stdio(false);    \
         cin.tie(nullptr);               \
         execute(&Solution::solve);      \

@@ -75,7 +75,6 @@
         "body": [
             "#ifdef LOCAL",
             "#include \"lib/leetcode.h\"",
-            "#include \"lib/local.h\"",
             "#endif",
             "using ll = long long;",
             "class Solution",
