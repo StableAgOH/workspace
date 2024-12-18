@@ -25,7 +25,7 @@
             "int main()",
             "{",
             "\tcin.tie(nullptr)->sync_with_stdio(false);",
-            "\tauto solver = [&]<typename F, typename R=invoke_result_t<F,int>>(F&& func)",
+            "\tauto solver = [&]<typename F, typename R=invoke_result_t<F, int>>(F&& func)",
             "\t{",
             "\t\tint t = 1;",
             "\t\tif constexpr(io_options::MULTICASE) cin>>t;",
