@@ -140,5 +140,4 @@ void execute(T (F::*solve)(Args...))
         ios::sync_with_stdio(false);    \
         cin.tie(nullptr);               \
         execute(&Solution::solve);      \
-        return 0;                       \
     }
