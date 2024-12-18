@@ -5,7 +5,6 @@ namespace debug_macro
 {
 template <typename C, typename T, ranges::range R>
 basic_ostream<C,T>& operator<<(basic_ostream<C,T>&, const R&);
-
 template <typename T, typename U>
 ostream& operator<<(ostream& os, const pair<T,U>& x)
 {
@@ -48,7 +47,7 @@ auto trim(const string s)
         | views::drop_while(::isspace)
         | views::reverse;
 }
-void debug(int line, string_view names, auto&& first, auto&&... args)
+void debug(source_location loc, string_view names, auto&& first, auto&&... args)
 {
     vector<string> name_list(1);
     int cnt = 0;
@@ -62,26 +61,29 @@ void debug(int line, string_view names, auto&& first, auto&&... args)
             name_list.back().push_back(c);
         }
     }
-    clog<<boolalpha<<line<<" | ";
+    cerr<<boolalpha<<loc.line()<<" | ";
     auto it_name = begin(name_list);
-    auto it_out = ostream_iterator<char>(clog);
+    auto it_out = ostream_iterator<char>(cerr);
     ranges::copy(trim(*it_name), it_out);
-    clog<<'='<<first;
-    ((clog<<", ", ranges::copy(trim(*++it_name), it_out), clog<<'='<<args), ...);
-    clog<<endl;
+    cerr<<'='<<first;
+    ((cerr<<", ", ranges::copy(trim(*++it_name), it_out), cerr<<'='<<args), ...);
+    cerr<<'\n';
 }
 }
-namespace timer
-{
-    chrono::time_point<chrono::high_resolution_clock> start_time;
-    void set_start_time() { start_time = chrono::high_resolution_clock::now(); };
-    void utime(int line)
-    {
-        auto end_time = chrono::high_resolution_clock::now();
-        auto duration = chrono::duration_cast<chrono::milliseconds>(end_time-start_time);
-        clog<<duration.count()<<" ms used at line "<<line<<endl;
-    }
-}
+#define debug(...) debug_macro::debug(source_location::current(), #__VA_ARGS__, __VA_ARGS__)
 
-#define debug(...) debug_macro::debug(__LINE__, #__VA_ARGS__, __VA_ARGS__)
-#define utime() timer::utime(__LINE__)
+chrono::time_point<chrono::high_resolution_clock> start_time;
+void local_init()
+{
+    freopen("in.txt", "r", stdin);
+#ifndef DEBUG
+    freopen("out.txt", "w", stdout);
+#endif
+    start_time = chrono::high_resolution_clock::now();
+}
+void utime(source_location loc=source_location::current())
+{
+    auto end_time = chrono::high_resolution_clock::now();
+    auto dur = chrono::duration_cast<chrono::milliseconds>(end_time-start_time);
+    cerr<<dur.count()<<" ms used at line "<<loc.line()<<" in function "<<loc.function_name()<<'\n';
+}

@@ -11,37 +11,31 @@
             "#define debug(...)",
             "#define utime()",
             "#endif",
-            "void solve(array<string_view, 2> boolmsg, bool multicase, auto&& func)",
-            "{",
-            "\tusing R = decltype(func(int()));",
-            "\tint t = 1;",
-            "\tif(multicase) cin>>t;",
-            "\tfor(int i=1;i<=t;i++)",
-            "\t{",
-            "\t\tif constexpr(same_as<R, void>) func(i);",
-            "\t\telse if constexpr(same_as<R, bool>) cout<<boolmsg[!func(i)]<<'\\n';",
-            "\t\telse cout<<func(i)<<'\\n';",
-            "\t}",
-            "}",
             "using ll = long long;",
-            "//==========================================",
+            "constexpr bool MULTI = true;",
+            "constexpr array<const char*, 2> BMSG = {\"Yes\", \"No\"};",
+            "auto solve([[maybe_unused]] const int kase)",
+            "{",
+            "\t$0",
+            "}",
             "int main()",
             "{",
             "#ifdef LOCAL",
-            "\tfreopen(\"in.txt\", \"r\", stdin);",
-            "#ifndef DEBUG",
-            "\tfreopen(\"out.txt\", \"w\", stdout);",
+            "\tlocal_init();",
             "#endif",
-            "\ttimer::set_start_time();",
-            "#endif",
-            "\tios::sync_with_stdio(false);",
-            "\tcin.tie(nullptr);",
-            "\t//======================================",
-            "\tsolve({\"Yes\", \"No\"}, true, [&]([[maybe_unused]] const int kase)",
+            "\tcin.tie(nullptr)->sync_with_stdio(false);",
+            "\tauto solver = [&]<typename F, typename R=invoke_result_t<F,int>>(F&& func)",
             "\t{",
-            "\t\t$0",
-            "\t});",
-            "\t//======================================",
+            "\t\tint t = 1;",
+            "\t\tif constexpr(MULTI) cin>>t;",
+            "\t\tfor(int i=1;i<=t;i++)",
+            "\t\t{",
+            "\t\t\tif constexpr(same_as<R, void>) func(i);",
+            "\t\t\telse if constexpr(same_as<R, bool>) cout<<BMSG[!func(i)]<<'\\n';",
+            "\t\t\telse cout<<func(i)<<'\\n';",
+            "\t\t}",
+            "\t};",
+            "\tsolver(solve);",
             "\tutime();",
             "\treturn 0;",
             "}",
@@ -268,25 +262,28 @@
             "}"
         ]
     },
-    "div_ceil": {
-        "scope": "cpp",
-        "prefix": "div_ceil",
-        "body": [
-            "auto div_ceil = [&](auto x, auto y) { return x/y+!!(x%y); };"
-        ]
-    },
     "chmin": {
         "scope": "cpp",
         "prefix": "chmin",
         "body": [
-            "auto chmin = [&](auto& a, const auto& b) { return b<a&&(a=b,true); };"
+            "template <typename T, typename U, typename C=common_type_t<T,U>>",
+            "auto chmin(T& a, const U& b) { return C(b)<C(a)&&(a=b,true); }"
         ]
     },
     "chmax": {
         "scope": "cpp",
         "prefix": "chmax",
         "body": [
-            "auto chmax = [&](auto& a, const auto& b) { return b>a&&(a=b,true); };"
+            "template <typename T, typename U, typename C=common_type_t<T,U>>",
+            "auto chmax(T& a, const U& b) { return C(b)>C(a)&&(a=b,true); }"
+        ]
+    },
+    "div_ceil": {
+        "scope": "cpp",
+        "prefix": "div_ceil",
+        "body": [
+            "template <integral T, integral U, typename C=common_type_t<T,U>>",
+            "auto div_ceil(T a, U b) { auto [p,q] = div(C(a), C(b)); return p+!!q; }"
         ]
     },
     "dfs": {
