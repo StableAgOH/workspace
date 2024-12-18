@@ -73,11 +73,11 @@ void debug(source_location loc, string_view names, auto&& first, auto&&... args)
 #define debug(...) debug_macro::debug(source_location::current(), #__VA_ARGS__, __VA_ARGS__)
 
 chrono::time_point<chrono::high_resolution_clock> start_time;
-void local_init()
+void local_init(const char* inf, const char* outf)
 {
-    freopen("in.txt", "r", stdin);
+    freopen(inf, "r", stdin);
 #ifndef DEBUG
-    freopen("out.txt", "w", stdout);
+    freopen(outf, "w", stdout);
 #endif
     start_time = chrono::high_resolution_clock::now();
 }
