@@ -47,7 +47,7 @@ auto trim(const string s)
         | views::drop_while(::isspace)
         | views::reverse;
 }
-void debug(source_location loc, string_view names, auto&& first, auto&&... args)
+void debug(source_location sl, string_view names, auto&& first, auto&&... args)
 {
     vector<string> name_list(1);
     int cnt = 0;
@@ -61,7 +61,7 @@ void debug(source_location loc, string_view names, auto&& first, auto&&... args)
             name_list.back().push_back(c);
         }
     }
-    cerr<<boolalpha<<loc.line()<<" | ";
+    cerr<<boolalpha<<sl.line()<<" | ";
     auto it_name = begin(name_list);
     auto it_out = ostream_iterator<char>(cerr);
     ranges::copy(trim(*it_name), it_out);
@@ -83,10 +83,16 @@ struct local_initialer
     #endif
         stime = chrono::high_resolution_clock::now();
     }
+    ~local_initialer()
+    {
+        auto etime = chrono::high_resolution_clock::now();
+        auto dur = chrono::duration_cast<chrono::milliseconds>(etime-stime);
+        cerr<<dur.count()<<" ms were used in total"<<'\n';
+    }
 };
-void utime(source_location loc=source_location::current())
+void utime(source_location sl=source_location::current())
 {
     auto etime = chrono::high_resolution_clock::now();
     auto dur = chrono::duration_cast<chrono::milliseconds>(etime-stime);
-    cerr<<dur.count()<<" ms used at line "<<loc.line()<<" in function "<<loc.function_name()<<'\n';
+    cerr<<dur.count()<<" ms were used at line "<<sl.line()<<" in function "<<sl.function_name()<<'\n';
 }
