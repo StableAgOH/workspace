@@ -72,18 +72,21 @@ void debug(source_location loc, string_view names, auto&& first, auto&&... args)
 }
 #define debug(...) debug_macro::debug(source_location::current(), #__VA_ARGS__, __VA_ARGS__)
 
-chrono::time_point<chrono::high_resolution_clock> start_time;
-void local_init(const char* inf, const char* outf)
+chrono::time_point<chrono::high_resolution_clock> stime;
+struct local_initialer
 {
-    freopen(inf, "r", stdin);
-#ifndef DEBUG
-    freopen(outf, "w", stdout);
-#endif
-    start_time = chrono::high_resolution_clock::now();
-}
+    local_initialer(const char* inf, const char* outf)
+    {
+        freopen(inf, "r", stdin);
+    #ifndef DEBUG
+        freopen(outf, "w", stdout);
+    #endif
+        stime = chrono::high_resolution_clock::now();
+    }
+};
 void utime(source_location loc=source_location::current())
 {
-    auto end_time = chrono::high_resolution_clock::now();
-    auto dur = chrono::duration_cast<chrono::milliseconds>(end_time-start_time);
+    auto etime = chrono::high_resolution_clock::now();
+    auto dur = chrono::duration_cast<chrono::milliseconds>(etime-stime);
     cerr<<dur.count()<<" ms used at line "<<loc.line()<<" in function "<<loc.function_name()<<'\n';
 }
