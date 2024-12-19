@@ -21,7 +21,6 @@ ostream& operator<<(ostream& os, const tuple<Args...>& x)
 template <typename T> requires requires(T t) { t.pop(); }
 ostream& operator<<(ostream& os, T x)
 {
-    if(x.empty()) return os<<"{}";
     os<<'{';
     while(!x.empty())
     {
@@ -29,9 +28,10 @@ ostream& operator<<(ostream& os, T x)
         if constexpr(requires(T t) { t.top(); }) o = x.top();
         else o = x.front();
         x.pop();
-        os<<o<<",}"[x.empty()];
+        os<<o;
+        if(!x.empty()) os<<',';
     }
-    return os;
+    return os<<'}';
 }
 template <typename C, typename T, ranges::range R>
 basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x)
@@ -40,14 +40,7 @@ basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x)
     copy(x.begin(), x.end(), experimental::make_ostream_joiner(os, ","));
     return os<<']';
 }
-auto trim(const string s)
-{
-    return s | views::drop_while(::isspace)
-        | views::reverse
-        | views::drop_while(::isspace)
-        | views::reverse;
-}
-void debug(source_location sl, string_view names, auto&& first, auto&&... args)
+void debug(source_location&& sl, string_view names, auto&& first, auto&&... args)
 {
     vector<string> name_list(1);
     int cnt = 0;
@@ -61,12 +54,15 @@ void debug(source_location sl, string_view names, auto&& first, auto&&... args)
             name_list.back().push_back(c);
         }
     }
-    cerr<<boolalpha<<sl.line()<<" | ";
-    auto it_name = begin(name_list);
-    auto it_out = ostream_iterator<char>(cerr);
-    ranges::copy(trim(*it_name), it_out);
-    cerr<<'='<<first;
-    ((cerr<<", ", ranges::copy(trim(*++it_name), it_out), cerr<<'='<<args), ...);
+    for(auto& s : name_list)
+    {
+        s.erase(0, s.find_first_not_of(' '));
+        s.erase(s.find_last_not_of(' ')+1);
+    }
+    cerr<<boolalpha<<sl.line()<<" | "<<sl.function_name()<<" | ";
+    auto it = name_list.begin();
+    cerr<<*it<<'='<<first;
+    ((cerr<<", "<<*++it<<'='<<args), ...);
     cerr<<'\n';
 }
 }
