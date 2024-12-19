@@ -1,5 +1,4 @@
 #include <bits/stdc++.h>
-#include <experimental/iterator>
 using namespace std;
 namespace debug_macro
 {
@@ -37,7 +36,11 @@ template <typename C, typename T, ranges::range R>
 basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x)
 {
     os<<'[';
-    copy(x.begin(), x.end(), experimental::make_ostream_joiner(os, ","));
+    for(auto it=ranges::begin(x);it!=ranges::end(x);++it)
+    {
+        if(it!=ranges::begin(x)) os<<',';
+        os<<*it;
+    }
     return os<<']';
 }
 void debug(source_location&& sl, string_view names, auto&& first, auto&&... args)
