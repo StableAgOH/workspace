@@ -16,7 +16,7 @@
                 "-std=c++23",
                 "-Wall",
                 "-Wextra",
-                "-Wl,--stack=268435456",
+                "-Wl,--stack=1073741824",
                 "-ftrapv",
                 "-lstdc++exp"
             ],
@@ -48,7 +48,7 @@
                 "-std=c++23",
                 "-Wall",
                 "-Wextra",
-                "-Wl,--stack=268435456",
+                "-Wl,--stack=1073741824",
                 "-ftrapv",
                 "-lstdc++exp"
             ],
