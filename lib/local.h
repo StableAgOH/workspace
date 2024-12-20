@@ -86,12 +86,12 @@ struct local_initialer
     {
         auto etime = chrono::high_resolution_clock::now();
         auto dur = chrono::duration_cast<chrono::milliseconds>(etime-stime);
-        cerr<<dur.count()<<" ms were used in total"<<'\n';
+        cerr<<dur.count()<<" ms were elapsed in total"<<'\n';
     }
 };
 void utime(source_location sl=source_location::current())
 {
     auto etime = chrono::high_resolution_clock::now();
     auto dur = chrono::duration_cast<chrono::milliseconds>(etime-stime);
-    cerr<<dur.count()<<" ms were used at line "<<sl.line()<<" in function "<<sl.function_name()<<'\n';
+    cerr<<dur.count()<<" ms were elapsed at line "<<sl.line()<<" in function "<<sl.function_name()<<'\n';
 }
