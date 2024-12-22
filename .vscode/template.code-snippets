@@ -13,7 +13,7 @@
             "template <typename... Args> void debug(Args...) {}",
             "void utime() {}",
             "#endif",
-            "template <typename C, typename T, ranges::range R>",
+            "template <typename C, typename T, ranges::range R> requires (!ranges::view<R>)",
             "basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x)",
             "{",
             "\tcopy(x.begin(), x.end(), experimental::ostream_joiner(os, ' '));",
