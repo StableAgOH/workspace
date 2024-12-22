@@ -1,7 +1,6 @@
 struct prev_less_fn
 {
-    template <input_iterator I, sentinel_for<I> S, weakly_incrementable O, typename Cmp=ranges::less>
-    requires indirectly_writable<O, int>
+    template <input_iterator I, sentinel_for<I> S, output_iterator<int> O, typename Cmp=ranges::less>
     constexpr void operator()(I first, S last, O result, int default_val, Cmp cmp={}) const
     {
         stack<I> st;
@@ -12,8 +11,7 @@ struct prev_less_fn
             st.push(it);
         }
     }
-    template <ranges::input_range R, weakly_incrementable O, typename Cmp=ranges::less>
-    requires indirectly_writable<O, int>
+    template <ranges::input_range R, output_iterator<int> O, typename Cmp=ranges::less>
     constexpr void operator()(R&& rg, O result, int default_val, Cmp cmp={}) const
     {
         (*this)(ranges::begin(rg), ranges::end(rg), result, default_val, cmp);
