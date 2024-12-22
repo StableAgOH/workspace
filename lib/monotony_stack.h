@@ -14,7 +14,7 @@ struct prev_less_fn
     template <ranges::input_range R, output_iterator<int> O, typename Cmp=ranges::less>
     constexpr void operator()(R&& rg, O result, int default_val, Cmp cmp={}) const
     {
-        (*this)(ranges::begin(rg), ranges::end(rg), result, default_val, cmp);
+        (*this)(ranges::begin(rg), ranges::end(rg), move(result), default_val, move(cmp));
     }
 };
 inline constexpr prev_less_fn prev_less;
@@ -40,7 +40,7 @@ struct next_less_fn
     requires indirectly_writable<O, int>
     constexpr void operator()(R&& rg, O result, int default_val, Cmp cmp={}) const
     {
-        (*this)(ranges::begin(rg), ranges::end(rg), result, default_val, cmp);
+        (*this)(ranges::begin(rg), ranges::end(rg), move(result), default_val, move(cmp));
     }
 };
 inline constexpr next_less_fn next_less;
