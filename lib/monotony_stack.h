@@ -27,7 +27,8 @@ struct next_less_fn
     constexpr void operator()(I first, S last, O result, int default_val, Cmp cmp={}) const
     {
         auto sz = ranges::distance(first, last);
-        auto iit=ranges::next(first, sz), oit = ranges::next(result, sz);
+        auto iit = ranges::next(first, sz);
+        auto oit = ranges::next(result, sz);
         stack<I> st;
         while(iit!=first)
         {
