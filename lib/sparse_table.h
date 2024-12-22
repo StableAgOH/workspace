@@ -1,7 +1,7 @@
 template <typename T>
 class sparse_table
 {
-    using CR = const T&;
+    using minmaxfp = const T& (*)(const T&, const T&);
     function<T(T,T)> op;
     vector<vector<T>> f;
     void build(ranges::range auto&& rg)
@@ -21,8 +21,8 @@ class sparse_table
         }
     }
 public:
-    sparse_table(ranges::range auto&& rg, CR (*op)(CR, CR)) : op(op) { build(rg); }
-    template <typename F> sparse_table(ranges::range auto&& rg, F&& op) : op(op) { build(rg); }
+    sparse_table(ranges::range auto&& rg, minmaxfp op) : op(op) { build(rg); }
+    sparse_table(ranges::range auto&& rg, function<T(T,T)> op) : op(move(op)) { build(rg); }
     T operator()(int l, int r) const
     {
         if(l==r) return f[0][l];
@@ -30,7 +30,4 @@ public:
         return op(f[p][l], f[p][r]);
     }
 };
-template <ranges::range R, typename T=ranges::range_value_t<R>>
-sparse_table(R, const T& (*op)(const T&, const T&)) -> sparse_table<T>;
-template <ranges::range R, typename T=ranges::range_value_t<R>, typename F>
-sparse_table(R, F) -> sparse_table<T>;
+template <ranges::range R, typename F> sparse_table(R,F) -> sparse_table<ranges::range_value_t<R>>;
