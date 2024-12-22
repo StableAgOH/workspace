@@ -1,28 +1,30 @@
 template <typename T>
 class sparse_table
 {
+    using op_t = function<T(T,T)>;
     using minmaxfp = const T& (*)(const T&, const T&);
-    function<T(T,T)> op;
+    op_t op;
     vector<vector<T>> f;
-    void build(ranges::range auto&& rg)
+public:
+    template <typename F>
+    sparse_table(ranges::range auto&& rg, F&& op) : op(forward<op_t>(op))
     {
-        int n = ranges::size(rg);
         f.emplace_back(ranges::begin(rg), ranges::end(rg));
+        int n = f.front().size();
         for(int i=1;(1<<i)<n;i++)
         {
             f.emplace_back(n);
             for(int j=1<<i;j<n;j+=1<<(i+1))
             {
                 f[i][j-1] = f[0][j-1];
-                for(int k=j-2;k>=j-(1<<i);k--) f[i][k] = op(f[0][k], f[i][k+1]);
+                for(int k=j-2;k>=j-(1<<i);k--) f[i][k] = this->op(f[0][k], f[i][k+1]);
                 f[i][j] = f[0][j];
-                for(int k=j+1;k<min(n,j+(1<<i));k++) f[i][k] = op(f[i][k-1], f[0][k]);
+                for(int k=j+1;k<min(n,j+(1<<i));k++) f[i][k] = this->op(f[i][k-1], f[0][k]);
             }
         }
     }
-public:
-    sparse_table(ranges::range auto&& rg, minmaxfp op) : op(op) { build(rg); }
-    sparse_table(ranges::range auto&& rg, function<T(T,T)> op) : op(move(op)) { build(rg); }
+    template <ranges::range R>
+    sparse_table(R&& rg, minmaxfp op) : sparse_table(forward<R>(rg), op_t(op)) {}
     T operator()(int l, int r) const
     {
         if(l==r) return f[0][l];
