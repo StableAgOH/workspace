@@ -62,7 +62,7 @@ void debug(source_location&& sl, string_view names, auto&& first, auto&&... args
         s.erase(0, s.find_first_not_of(' '));
         s.erase(s.find_last_not_of(' ')+1);
     }
-    cerr<<boolalpha<<sl.line()<<" | "<<sl.function_name()<<" | ";
+    cerr<<boolalpha<<sl.line()<<" | ";
     auto it = name_list.begin();
     cerr<<*it<<'='<<first;
     ((cerr<<", "<<*++it<<'='<<args), ...);
@@ -93,5 +93,5 @@ void utime(source_location sl=source_location::current())
 {
     auto etime = chrono::high_resolution_clock::now();
     auto dur = chrono::duration_cast<chrono::milliseconds>(etime-stime);
-    cerr<<dur.count()<<" ms were elapsed at line "<<sl.line()<<" in function "<<sl.function_name()<<'\n';
+    cerr<<dur.count()<<" ms were elapsed at line "<<sl.line()<<'\n';
 }
