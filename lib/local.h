@@ -3,7 +3,7 @@ using namespace std;
 namespace debug_macro
 {
 template <typename C, typename T, ranges::range R>
-auto& operator<<(basic_ostream<C,T>&, const R&);
+basic_ostream<C,T>& operator<<(basic_ostream<C,T>&, const R&);
 
 template <typename T, typename U>
 auto& operator<<(ostream& os, const pair<T,U>& x)
