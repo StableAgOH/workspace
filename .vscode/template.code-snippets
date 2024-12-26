@@ -10,7 +10,7 @@
             "#include \"lib/local.h\"",
             "local_initialer _li(\"in.txt\", \"out.txt\");",
             "#else",
-            "template <typename... Args> void debug(Args...) {}",
+            "void debug(...) {}",
             "void utime() {}",
             "#endif",
             "template <typename C, typename T, ranges::range R> requires (!ranges::view<R>)",
