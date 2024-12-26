@@ -3,22 +3,25 @@ using namespace std;
 namespace debug_macro
 {
 template <typename C, typename T, ranges::range R>
-basic_ostream<C,T>& operator<<(basic_ostream<C,T>&, const R&);
+auto& operator<<(basic_ostream<C,T>&, const R&);
+
 template <typename T, typename U>
-ostream& operator<<(ostream& os, const pair<T,U>& x)
+auto& operator<<(ostream& os, const pair<T,U>& x)
 {
     return os<<'<'<<x.first<<','<<x.second<<'>';
 }
+
 template <typename... Args>
-ostream& operator<<(ostream& os, const tuple<Args...>& x)
+auto& operator<<(ostream& os, const tuple<Args...>& x)
 {
     os<<'(';
     apply([&](auto&& first, auto&&... args) { os<<first; ((os<<','<<args), ...); }, x);
     return os<<')';
 }
+
 // std::queue, std::stack and std::priority_queue
 template <typename T> requires requires(T t) { t.pop(); }
-ostream& operator<<(ostream& os, T x)
+auto& operator<<(ostream& os, T x)
 {
     os<<'{';
     while(!x.empty())
@@ -32,6 +35,7 @@ ostream& operator<<(ostream& os, T x)
     }
     return os<<'}';
 }
+
 template <typename C, typename T, ranges::range R>
 basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x)
 {
@@ -43,7 +47,8 @@ basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x)
     }
     return os<<']';
 }
-void debug(source_location&& sl, string_view names, auto&& first, auto&&... args)
+
+void debug(const source_location& sl, string_view names, auto&& first, auto&&... args)
 {
     vector<string> name_list(1);
     int cnt = 0;
