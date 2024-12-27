@@ -132,12 +132,11 @@ void execute(T (F::*solve)(Args...))
 #else
 #define FOUT
 #endif
-#define LEETCODE_MAIN(solve)            \
-    int main()                          \
-    {                                   \
-        freopen("in.txt", "r", stdin);  \
-        FOUT                      \
-        ios::sync_with_stdio(false);    \
-        cin.tie(nullptr);               \
-        execute(&Solution::solve);      \
+#define LEETCODE_MAIN(solve)                        \
+    int main()                                      \
+    {                                               \
+        freopen("in.txt", "r", stdin);              \
+        FOUT                                        \
+        cin.tie(nullptr)->sync_with_stdio(false);   \
+        execute(&Solution::solve);                  \
     }
