@@ -27,8 +27,7 @@ public:
     sparse_table(R&& rg, minmaxfp op) : sparse_table(forward<R>(rg), op_t(op)) {}
     T operator()(int l, int r) const
     {
-        if(l==r) return f[0][l];
-        int p = bit_width(unsigned(l^r))-1;
+        int p = max(0, bit_width(unsigned(l^r))-1);
         return op(f[p][l], f[p][r]);
     }
 };
