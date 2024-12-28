@@ -79,7 +79,7 @@ void debug(const source_location& sl, string_view names, auto&& first, auto&&...
 chrono::time_point<chrono::high_resolution_clock> stime;
 struct local_initialer
 {
-    local_initialer(const char* inf, const char* outf)
+    local_initialer(const char* inf, [[maybe_unused]] const char* outf)
     {
         freopen(inf, "r", stdin);
     #ifndef DEBUG
