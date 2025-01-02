@@ -1,9 +1,8 @@
 template <int BASE=31, int MOD=998244353>
-class string_hasher
+struct string_hasher
 {
     int n;
     vector<int> p, h;
-public:
     string_hasher(const string& s) : n(s.length()), p(n+1, 1), h(n+1)
     {
         for(int i=1;i<=n;i++)
