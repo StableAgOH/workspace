@@ -72,6 +72,20 @@
             ""
         ]
     },
+    "myclass": {
+        "scope": "cpp",
+        "prefix": "myclass",
+        "body": [
+            "#include <iostream>",
+            "using namespace std;",
+            "int main()",
+            "{",
+            "\t$0",
+            "\treturn 0;",
+            "}",
+            ""
+        ]
+    },
     "leetcode": {
         "scope": "cpp",
         "prefix": "leetcode",
