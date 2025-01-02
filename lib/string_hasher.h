@@ -1,16 +1,18 @@
+template <int BASE=31, int MOD=998244353>
 class string_hasher
 {
-private:
-    int mod;
-    vector<ll> w, h;
+    int n;
+    vector<int> p, h;
 public:
-    string_hasher(string_view s, int p=23333, int mod=998244353) : mod(mod), w(1,1), h(1)
+    string_hasher(const string& s) : n(s.length()), p(n+1, 1), h(n+1)
     {
-        for(size_t i=1;i<=s.length();i++)
+        for(int i=1;i<=n;i++)
         {
-            w.push_back(w[i-1]*p%mod);
-            h.push_back((h[i-1]*p+s[i-1])%mod);
+            p[i] = ll(p[i-1])*BASE%MOD;
+            h[i] = (ll(h[i-1])*BASE+s[i-1])%MOD;
         }
     }
-    auto operator()(int l,int r) { return (h[r+1]-h[l]*w[r-l+1]%mod+mod)%mod; }
+    operator int() const { return (*this)(0, n-1); }
+    auto operator()(int l, int r) const { return (h[r+1]-h[l]*p[r-l+1]%MOD+MOD)%MOD; }
+    auto size() const { return n; }
 };
