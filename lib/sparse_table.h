@@ -1,34 +1,37 @@
 template <typename T>
-class sparse_table
+class segtree
 {
-    using op_t = function<T(T,T)>;
-    using minmaxfp = const T& (*)(const T&, const T&);
-    op_t op;
-    vector<vector<T>> f;
+    using crfp = const T& (*)(const T&, const T&);
+    size_t n, sz;
+    vector<T> data; // data[0] is e, data[1] is the root
+    function<T(T,T)> op;
+    void update(int p) { data[p] = op(data[p<<1], data[p<<1|1]); }
 public:
-    template <typename F>
-    sparse_table(ranges::range auto&& rg, F&& op) : op(forward<op_t>(op))
+    segtree() = default;
+    template <ranges::range R, typename F>
+    segtree(R&& rg, F&& op, const T& e) :
+        n(ranges::size(rg)), sz(bit_ceil(n)), data(2*sz, e),
+        op(forward<function<T(T,T)>>(op))
     {
-        f.emplace_back(ranges::begin(rg), ranges::end(rg));
-        int n = f.front().size();
-        for(int i=1;(1<<i)<n;i++)
-        {
-            f.emplace_back(n);
-            for(int j=1<<i;j<n;j+=1<<(i+1))
-            {
-                f[i][j-1] = f[0][j-1];
-                for(int k=j-2;k>=j-(1<<i);k--) f[i][k] = this->op(f[0][k], f[i][k+1]);
-                f[i][j] = f[0][j];
-                for(int k=j+1;k<min(n,j+(1<<i));k++) f[i][k] = this->op(f[i][k-1], f[0][k]);
-            }
-        }
+        ranges::copy(rg, data.begin()+sz);
+        for(int i=sz-1;i>=1;i--) update(i);
     }
+    template <typename F>
+    segtree(size_t n, F&& op, const T& e) : segtree(vector(n, e), forward<F>(op), e) {}
     template <ranges::range R>
-    sparse_table(R&& rg, minmaxfp op) : sparse_table(forward<R>(rg), op_t(op)) {}
-    T operator()(int l, int r) const
+    segtree(R&& rg, crfp op, const T& e) : segtree(forward<R>(rg), function<T(T,T)>(op), e) {}
+    segtree(size_t n, crfp op, const T& e) : segtree(vector(n, e), function<T(T,T)>(op), e) {}
+    void set(size_t p, const T& x) { for(data[p+=sz]=x;p>1;p>>=1) update(p>>1); }
+    auto operator()() const { return data[1]; }
+    auto operator()(size_t p) const { return data[p+sz]; }
+    auto operator()(size_t l, size_t r) const
     {
-        int p = max(0, bit_width(unsigned(l^r))-1);
-        return op(f[p][l], f[p][r]);
+        auto resl=data[0], resr=data[0];
+        for(l+=sz,r+=sz;l<=r;l>>=1,r>>=1)
+        {
+            if(l&1) resl = op(resl, data[l++]);
+            if(r&1) resr = op(data[r--], resr);
+        }
+        return op(resl, resr);
     }
 };
-template <ranges::range R, typename F> sparse_table(R,F) -> sparse_table<ranges::range_value_t<R>>;
