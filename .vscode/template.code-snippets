@@ -581,4 +581,32 @@
             "divide(cent);"
         ]
     },
+    "dijkstra": {
+        "scope": "cpp",
+        "prefix": "dijkstra",
+        "body": [
+            "auto dijkstra = [&](int s)",
+            "{",
+            "\tvector<ll> dis(n+1, 1e18);",
+            "\tdis[s] = 0;",
+            "\tpriority_queue<pair<ll,int>, vector<pair<ll,int>>, greater<>> pq;",
+            "\tpq.emplace(0, s);",
+            "\twhile(!pq.empty())",
+            "\t{",
+            "\t\tauto [d,u] = pq.top();",
+            "\t\tpq.pop();",
+            "\t\tif(d>dis[u]) continue;",
+            "\t\tfor(auto [v,w] : G[u])",
+            "\t\t{",
+            "\t\t\tif(dis[v]>dis[u]+w)",
+            "\t\t\t{",
+            "\t\t\t\tdis[v] = dis[u]+w;",
+            "\t\t\t\tpq.emplace(dis[v], v);",
+            "\t\t\t}",
+            "\t\t}",
+            "\t}",
+            "\treturn dis;",
+            "};"
+        ]
+    }
 }
