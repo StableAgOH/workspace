@@ -6,8 +6,9 @@ class sparse_table
     op_t op;
     vector<vector<T>> f;
 public:
-    template <ranges::range R, typename F>
-    sparse_table(R&& rg, F&& op) : op(forward<F>(op))
+    template <typename F>
+    requires same_as<invoke_result_t<F,T,T>, T>
+    sparse_table(ranges::range auto&& rg, F&& op) : op(forward<F>(op))
     {
         f.emplace_back(ranges::begin(rg), ranges::end(rg));
         size_t n = f.front().size();
@@ -25,7 +26,7 @@ public:
     }
     template <ranges::range R>
     sparse_table(R&& rg, crfp op) : sparse_table(forward<R>(rg), op_t(op)) {}
-    T operator()(size_t l, size_t r) const
+    auto operator()(size_t l, size_t r) const
     {
         int p = max(0, (int)bit_width(l^r)-1); // In gcc 12, bit_width return decltype(l^r)
         return op(f[p][l], f[p][r]);
