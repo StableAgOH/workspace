@@ -1,6 +1,7 @@
 template <typename T>
 class segtree
 {
+    static constexpr auto lowbit(auto x) { return x&-x; }
     using crfp = const T& (*)(const T&, const T&);
     using op_t = function<T(T,T)>;
     size_t n, sz;
@@ -10,17 +11,17 @@ class segtree
 public:
     segtree() = default;
     template <ranges::range R, typename F>
-    segtree(R&& rg, F&& op, const T& e) :
+    segtree(R&& rg, F&& op, const T& e={}) :
         n(ranges::size(rg)), sz(bit_ceil(n)), data(2*sz, e), op(forward<F>(op))
     {
         ranges::copy(rg, data.begin()+sz);
         for(size_t i=sz-1;i>=1;i--) update(i);
     }
     template <ranges::range R>
-    segtree(R&& rg, crfp op, const T& e) : segtree(forward<R>(rg), op_t(op), e) {}
+    segtree(R&& rg, crfp op, const T& e={}) : segtree(forward<R>(rg), op_t(op), e) {}
     template <typename F>
-    segtree(size_t n, F&& op, const T& e) : segtree(vector(n,e), forward<F>(op), e) {}
-    segtree(size_t n, crfp op, const T& e) : segtree(vector(n,e), op_t(op), e) {}
+    segtree(size_t n, F&& op, const T& e={}) : segtree(vector(n,e), forward<F>(op), e) {}
+    segtree(size_t n, crfp op, const T& e={}) : segtree(vector(n,e), op_t(op), e) {}
     void set(size_t p, const T& x) { for(data[p+=sz]=x;p>1;p>>=1) update(p>>1); }
     auto operator()() const { return data[1]; }
     auto operator()(size_t p) const { return data[p+sz]; }
@@ -34,4 +35,61 @@ public:
         }
         return op(resl, resr);
     }
+    template <predicate<T> F>
+    size_t min_left(size_t r, F&& f) const
+    {
+        if(!r) return 0;
+        r += sz;
+        T sum = data[0];
+        do
+        {
+            r--;
+            while(r>1&&(r&1)) r >>= 1;
+            if(!f(op(data[r], sum)))
+            {
+                while(r<sz)
+                {
+                    r = r<<1|1;
+                    if(f(op(data[r], sum)))
+                    {
+                        sum = op(data[r], sum);
+                        r--;
+                    }
+                }
+                return r+1-sz;
+            }
+            sum = op(data[r], sum);
+        }
+        while(lowbit(r)!=r);
+        return 0;
+    }
+    template <predicate<T> F>
+    size_t max_right(size_t l, F&& f) const
+    {
+        if(l==n) return n;
+        l += sz;
+        T sum = data[0];
+        do
+        {
+            while(l%2==0) l >>= 1;
+            if(!f(op(sum, data[l])))
+            {
+                while(l<sz)
+                {
+                    l <<= 1;
+                    if(f(op(sum, data[l])))
+                    {
+                        sum = op(sum, data[l]);
+                        l++;
+                    }
+                }
+                return l-sz;
+            }
+            sum = op(sum, data[l]);
+            l++;
+        }
+        while(lowbit(l)!=l);
+        return n;
+    }
 };
+template <ranges::range R, typename F> segtree(R,F) -> segtree<ranges::range_value_t<R>>;
