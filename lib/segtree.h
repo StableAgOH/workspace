@@ -1,28 +1,31 @@
 template <typename T>
 class segtree
 {
-    static constexpr auto lowbit(auto x) { return x&-x; }
     using crfp = const T& (*)(const T&, const T&);
     using op_t = function<T(T,T)>;
+    static constexpr auto lowbit(auto x) { return x&-x; }
+    op_t op;
     size_t n, sz;
     vector<T> data; // data[0] is e, data[1] is the root
-    op_t op;
     void update(size_t p) { data[p] = op(data[p<<1], data[p<<1|1]); }
 public:
     segtree() = default;
-    template <ranges::range R, typename F>
-    segtree(R&& rg, F&& op, const T& e={}) :
-        n(ranges::size(rg)), sz(bit_ceil(n)), data(2*sz, e), op(forward<F>(op))
+    template <typename F>
+    requires same_as<invoke_result_t<F,T,T>, T>
+    segtree(ranges::range auto&& rg, F&& op, const T& e={}) : op(forward<F>(op))
     {
+        n = ranges::size(rg);
+        sz = bit_ceil(n);
+        data.resize(2*sz, e);
         ranges::copy(rg, data.begin()+sz);
         for(size_t i=sz-1;i>=1;i--) update(i);
     }
     template <ranges::range R>
     segtree(R&& rg, crfp op, const T& e={}) : segtree(forward<R>(rg), op_t(op), e) {}
     template <typename F>
+    requires same_as<invoke_result_t<F,T,T>, T>
     segtree(size_t n, F&& op, const T& e={}) : segtree(vector(n,e), forward<F>(op), e) {}
     segtree(size_t n, crfp op, const T& e={}) : segtree(vector(n,e), op_t(op), e) {}
-    void set(size_t p, const T& x) { for(data[p+=sz]=x;p>1;p>>=1) update(p>>1); }
     auto operator()() const { return data[1]; }
     auto operator()(size_t p) const { return data[p+sz]; }
     auto operator()(size_t l, size_t r) const
@@ -35,6 +38,7 @@ public:
         }
         return op(resl, resr);
     }
+    void set(size_t p, const T& x) { for(data[p+=sz]=x;p>1;p>>=1) update(p>>1); }
     template <predicate<T> F>
     size_t min_left(size_t r, F&& f) const
     {
