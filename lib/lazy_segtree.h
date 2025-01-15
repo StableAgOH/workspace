@@ -31,7 +31,7 @@ public:
         ranges::copy(rg, data.begin()+sz);
         for(size_t i=sz-1;i>=1;i--) update(i);
     }
-    lazy_segtree(size_t n, T e1={}, Lazy e2={}) : lazy_segtree(vector(n), e1, e2) {}
+    lazy_segtree(size_t n, T e1={}, Lazy e2={}) : lazy_segtree(vector<T>(n), e1, e2) {}
     auto operator()() const { return data[1]; }
     auto operator()(size_t p) const
     {
