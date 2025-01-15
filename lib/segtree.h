@@ -6,13 +6,13 @@ class segtree
     static constexpr auto lowbit(auto x) { return x&-x; }
     op_t op;
     size_t n, sz;
-    vector<T> data; // data[0] is e, data[1] is the root
+    vector<T> data; // data[0] is e, data[1] is root
     void update(size_t p) { data[p] = op(data[p<<1], data[p<<1|1]); }
 public:
     segtree() = default;
-    template <typename F>
-    requires same_as<invoke_result_t<F,T,T>, T>
-    segtree(ranges::range auto&& rg, F&& op, const T& e={}) : op(forward<F>(op))
+    template <typename Op>
+    requires same_as<invoke_result_t<Op,T,T>, T>
+    segtree(ranges::range auto&& rg, Op&& op, const T& e={}) : op(forward<Op>(op))
     {
         n = ranges::size(rg);
         sz = bit_ceil(n);
@@ -20,11 +20,11 @@ public:
         ranges::copy(rg, data.begin()+sz);
         for(size_t i=sz-1;i>=1;i--) update(i);
     }
+    template <typename Op>
+    requires same_as<invoke_result_t<Op,T,T>, T>
+    segtree(size_t n, Op&& op, const T& e={}) : segtree(vector(n,e), forward<Op>(op), e) {}
     template <ranges::range R>
     segtree(R&& rg, crfp op, const T& e={}) : segtree(forward<R>(rg), op_t(op), e) {}
-    template <typename F>
-    requires same_as<invoke_result_t<F,T,T>, T>
-    segtree(size_t n, F&& op, const T& e={}) : segtree(vector(n,e), forward<F>(op), e) {}
     segtree(size_t n, crfp op, const T& e={}) : segtree(vector(n,e), op_t(op), e) {}
     auto operator()() const { return data[1]; }
     auto operator()(size_t p) const { return data[p+sz]; }
@@ -39,8 +39,10 @@ public:
         return op(resl, resr);
     }
     void set(size_t p, const T& x) { for(data[p+=sz]=x;p>1;p>>=1) update(p>>1); }
-    template <predicate<T> F>
-    size_t min_left(size_t r, F&& f) const
+    template <typename F>
+    void transform(size_t p, F&& f) { set(p, f((*this)(p))); }
+    template <predicate<T> Pred>
+    size_t min_left(size_t r, Pred&& pred) const
     {
         if(!r) return 0;
         r += sz;
@@ -49,12 +51,12 @@ public:
         {
             r--;
             while(r>1&&(r&1)) r >>= 1;
-            if(!f(op(data[r], sum)))
+            if(!pred(op(data[r], sum)))
             {
                 while(r<sz)
                 {
                     r = r<<1|1;
-                    if(f(op(data[r], sum)))
+                    if(pred(op(data[r], sum)))
                     {
                         sum = op(data[r], sum);
                         r--;
@@ -67,8 +69,8 @@ public:
         while(lowbit(r)!=r);
         return 0;
     }
-    template <predicate<T> F>
-    size_t max_right(size_t l, F&& f) const
+    template <predicate<T> Pred>
+    size_t max_right(size_t l, Pred&& pred) const
     {
         if(l==n) return n;
         l += sz;
@@ -76,12 +78,12 @@ public:
         do
         {
             while(l%2==0) l >>= 1;
-            if(!f(op(sum, data[l])))
+            if(!pred(op(sum, data[l])))
             {
                 while(l<sz)
                 {
                     l <<= 1;
-                    if(f(op(sum, data[l])))
+                    if(pred(op(sum, data[l])))
                     {
                         sum = op(sum, data[l]);
                         l++;
@@ -96,4 +98,4 @@ public:
         return n;
     }
 };
-template <ranges::range R, typename F> segtree(R,F) -> segtree<ranges::range_value_t<R>>;
+template <ranges::range R, typename Op> segtree(R, Op) -> segtree<ranges::range_value_t<R>>;
