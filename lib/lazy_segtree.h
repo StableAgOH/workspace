@@ -1,50 +1,37 @@
-template <typename T, T E1, typename M, M E2>
-requires requires(T x, M f)
+template <typename T, typename Lazy, auto Op, auto Compose, auto Apply>
+requires requires(T info, Lazy lz)
 {
-    requires default_initializable<M>; // identity
-    { f(x) } -> same_as<T>; // mapping
-    { f*f } -> same_as<M>; // composition
+    { Op(info, info) } -> same_as<T>;
+    { Compose(lz, lz) } -> same_as<Lazy>;
+    { Apply(info, lz) } -> same_as<T>;
 }
 class lazy_segtree
 {
-    using crfp = const T& (*)(const T&, const T&);
-    using op_t = function<T(T,T)>;
     static constexpr auto lowbit(auto x) { return x&-x; }
-    op_t op;
     size_t n, sz, lg;
     vector<T> data;
-    vector<M> lazy;
-    void update(size_t p) { data[p] = op(data[p<<1], data[p<<1|1]); }
-    void all_apply(size_t p, const M& f)
+    vector<Lazy> lazy;
+    void update(size_t p) { data[p] = Op(data[p<<1], data[p<<1|1]); }
+    void all_apply(size_t p, const Lazy& lz)
     {
-        data[p] = f(data[p]);
-        if(p<sz) lazy[p] = f*lazy[p];
+        data[p] = Apply(data[p], lz);
+        if(p<sz) lazy[p] = Compose(lz, lazy[p]);
     }
     void push(size_t p)
     {
         all_apply(p<<1, lazy[p]);
         all_apply(p<<1|1, lazy[p]);
-        lazy[p] = {};
+        lazy[p] = lazy[0];
     }
 public:
-    template <typename F>
-    requires same_as<invoke_result_t<F,T,T>, T>
-    lazy_segtree(ranges::range auto&& rg, F&& op) : op(forward<F>(op))
+    lazy_segtree(ranges::range auto&& rg, T e1={}, Lazy e2={}) :
+        n(ranges::size(rg)), sz(bit_ceil(n)), lg(countr_zero(sz)),
+        data(2*sz, e1), lazy(sz, e2)
     {
-        n = ranges::size(rg);
-        sz = bit_ceil(n);
-        lg = countr_zero(sz);
-        data.resize(2*sz, E1);
-        lazy.resize(sz);
         ranges::copy(rg, data.begin()+sz);
         for(size_t i=sz-1;i>=1;i--) update(i);
     }
-    template <ranges::range R>
-    lazy_segtree(R&& rg, crfp op) : lazy_segtree(forward<R>(rg), op_t(op)) {}
-    template <typename F>
-    requires same_as<invoke_result_t<F,T,T>, T>
-    lazy_segtree(size_t n, F&& op) : lazy_segtree(vector(n, E1), forward<F>(op)) {}
-    lazy_segtree(size_t n, crfp op) : lazy_segtree(vector(n, E1), op_t(op)) {}
+    lazy_segtree(size_t n, T e1={}, Lazy e2={}) : lazy_segtree(vector(n), e1, e2) {}
     auto operator()() const { return data[1]; }
     auto operator()(size_t p) const
     {
@@ -64,12 +51,12 @@ public:
         auto resl=data[0], resr=data[0];
         while(l<r)
         {
-            if(l&1) resl = op(resl, data[l++]);
-            if(r&1) resr = op(data[--r], resr);
+            if(l&1) resl = Op(resl, data[l++]);
+            if(r&1) resr = Op(data[--r], resr);
             l >>= 1;
             r >>= 1;
         }
-        return op(resl, resr);
+        return Op(resl, resr);
     }
     void set(size_t p, const T& x)
     {
@@ -78,14 +65,14 @@ public:
         data[p] = x;
         for(size_t i=1;i<=lg;i++) update(p>>i);
     }
-    void apply(size_t p, const M& f)
+    void apply(size_t p, const Lazy& lz)
     {
         p += sz;
         for(size_t i=lg;i>=1;i--) push(p>>i);
-        data[p] = f(data[p]);
+        data[p] = Apply(data[p], lz);
         for(size_t i=1;i<=lg;i++) update(p>>i);
     }
-    void apply(size_t l, size_t r, const M& f)
+    void apply(size_t l, size_t r, const Lazy& lz)
     {
         l += sz;
         r += sz+1;
@@ -98,8 +85,8 @@ public:
         {
             while(l<r)
             {
-                if(l&1) all_apply(l++, f);
-                if(r&1) all_apply(--r, f);
+                if(l&1) all_apply(l++, lz);
+                if(r&1) all_apply(--r, lz);
                 l >>= 1;
                 r >>= 1;
             }
@@ -110,8 +97,8 @@ public:
             if(((r>>i)<<i)!=r) update((r-1)>>i);
         }
     }
-    template <predicate<T> F>
-    size_t min_left(size_t r, F&& pred) const
+    template <predicate<T> Pred>
+    size_t min_left(size_t r, Pred&& pred) const
     {
         if(!r) return 0;
         r += sz;
@@ -121,27 +108,27 @@ public:
         {
             r--;
             while(r>1&&(r&1)) r >>= 1;
-            if(!pred(op(data[r], sum)))
+            if(!pred(Op(data[r], sum)))
             {
                 while(r<sz)
                 {
                     push(r);
                     r = r<<1|1;
-                    if(pred(op(data[r], sum)))
+                    if(pred(Op(data[r], sum)))
                     {
-                        sum = op(data[r], sum);
+                        sum = Op(data[r], sum);
                         r--;
                     }
                 }
                 return r+1-sz;
             }
-            sum = op(data[r], sum);
+            sum = Op(data[r], sum);
         }
         while(lowbit(r)!=r);
         return 0;
     }
-    template <predicate<T> F>
-    size_t max_right(size_t l, F&& pred) const
+    template <predicate<T> Pred>
+    size_t max_right(size_t l, Pred&& pred) const
     {
         if(l==n) return n;
         l += sz;
@@ -150,21 +137,21 @@ public:
         do
         {
             while(l%2==0) l >>= 1;
-            if(!pred(op(sum, data[l])))
+            if(!pred(Op(sum, data[l])))
             {
                 while(l<sz)
                 {
                     push(l);
                     l <<= 1;
-                    if(pred(op(sum, data[l])))
+                    if(pred(Op(sum, data[l])))
                     {
-                        sum = op(sum, data[l]);
+                        sum = Op(sum, data[l]);
                         l++;
                     }
                 }
                 return l-sz;
             }
-            sum = op(sum, data[l]);
+            sum = Op(sum, data[l]);
             l++;
         }
         while(lowbit(l)!=l);
