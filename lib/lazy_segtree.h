@@ -1,9 +1,9 @@
 template <typename T, typename Lazy, auto Op, auto Compose, auto Apply>
-requires requires(T info, Lazy lz)
+requires requires
 {
-    { Op(info, info) } -> same_as<T>;
-    { Compose(lz, lz) } -> same_as<Lazy>;
-    { Apply(info, lz) } -> same_as<T>;
+    { Op(declval<T>(), declval<T>()) } -> same_as<T>;
+    { Compose(declval<Lazy&>(), declval<Lazy>()) } -> same_as<void>;
+    { Apply(declval<T&>(), declval<Lazy>()) } -> same_as<void>;
 }
 class lazy_segtree
 {
@@ -14,8 +14,8 @@ class lazy_segtree
     void update(size_t p) { data[p] = Op(data[p<<1], data[p<<1|1]); }
     void all_apply(size_t p, const Lazy& lz)
     {
-        data[p] = Apply(data[p], lz);
-        if(p<sz) lazy[p] = Compose(lz, lazy[p]);
+        Apply(data[p], lz);
+        if(p<sz) Compose(lazy[p], lz);
     }
     void push(size_t p)
     {
