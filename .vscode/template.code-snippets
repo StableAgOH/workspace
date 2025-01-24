@@ -418,27 +418,28 @@
             "for(int i=0;i<m;i++) cout<<ans[i]<<'\\n';"
         ]
     },
-    "shuwei": {
+    "digitdp": {
         "scope": "cpp",
-        "prefix": "shuwei",
+        "prefix": "digitdp",
         "body": [
             "auto f = [&](ll x) -> ll // [1,x]",
             "{",
             "\tvector<int> a;",
             "\tfor(auto c : to_string(x)) a.push_back(c-'0');",
-            "\tarray<array<array<array<ll, 2>, 2>, 20>, 20> dp = {-1};",
+            "\tarray<array<array<array<optional<ll>, 10>, 2>, 2>, 20> dp;",
             "\t// 到第 p 位，x 代表到当前位时 {?}，前一位是否顶着上界(lim)，前一位是不是前导零(zero)",
             "\tauto dfs = [&](this auto dfs, size_t p, int x, bool lim, bool zero) -> ll",
             "\t{",
             "\t\tif(p==a.size()) return /* {确定一个解对答案的贡献} */;",
-            "\t\tif(~dp[p][x][lim][zero]) return dp[p][x][lim][zero];",
+            "\t\tif(dp[p][x][lim][zero]) return *dp[p][x][lim][zero];",
             "\t\tll res = 0;",
             "\t\tfor(int i=zero;i<=(lim?a[p]:9);i++) // 第 p 位取 i",
             "\t\t{",
             "\t\t\t/* {确定是否需要筛选 i} */",
             "\t\t\tres += dfs(p+1, /* {确定 x 的变化} */, lim&&i==a[p], false);",
             "\t\t}",
-            "\t\treturn dp[p][x][lim][zero] = res;",
+            "\t\tdp[p][x][lim][zero] = res;",
+            "\t\treturn res;",
             "\t};",
             "\tll ret = 0;",
             "\tfor(size_t i=0;i<a.size();i++)  // 第 i 位是第一个非 0 的",
