@@ -33,7 +33,7 @@ public:
     }
     lazy_segtree(size_t n, T e1={}, Lazy e2={}) : lazy_segtree(vector<T>(n), e1, e2) {}
     auto operator()() const { return data[1]; }
-    auto operator()(size_t p) const
+    auto operator()(size_t p)
     {
         p += sz;
         for(size_t i=lg;i>=1;i--) push(p>>i);
