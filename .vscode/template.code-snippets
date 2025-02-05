@@ -424,7 +424,7 @@
             "{",
             "\tvector<int> a;",
             "\tfor(auto c : to_string(x)) a.push_back(c-'0');",
-            "\tarray<array<array<array<optional<ll>, 10>, 2>, 2>, 20> dp;",
+            "\tmdarray<optional<ll>, 20, 10, 2, 2> dp;",
             "\t// 到第 p 位，x 代表到当前位时 {?}，前一位是否顶着上界(lim)，前一位是不是前导零(zero)",
             "\tauto dfs = [&](this auto dfs, size_t p, int x, bool lim, bool zero) -> ll",
             "\t{",
