@@ -1,7 +1,4 @@
 {
-    "c-cpp-compile-run.cpp-flags": "-fdiagnostics-color=always -DLOCAL -D_GLIBCXX_DEBUG -O2 -std=c++23 -Wall -Wextra -Wl,--stack=1073741824 -ftrapv -lstdc++exp",
-    "c-cpp-compile-run.output-location": ".",
-    "c-cpp-compile-run.should-show-notifications": false,
     "files.associations": {
         "**/include/c++/**": "cpp",
         "template.code-snippets": "json"
