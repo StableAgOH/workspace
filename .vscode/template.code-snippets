@@ -30,7 +30,7 @@
             "int main()",
             "{",
             "\tcin.tie(nullptr)->sync_with_stdio(false);",
-            "\t[]<typename F, typename R=invoke_result_t<F, int>>(F&& solve)",
+            "\tauto solver = [&]<typename F, typename R=invoke_result_t<F, int>>(F&& solve)",
             "\t{",
             "\t\tint t = 1;",
             "\t\tif constexpr(IO_OPTS.multi) cin>>t;",
@@ -40,7 +40,8 @@
             "\t\t\telse if constexpr(same_as<R, bool>) cout<<IO_OPTS.bmsg[solve(i)]<<'\\n';",
             "\t\t\telse cout<<solve(i)<<'\\n';",
             "\t\t}",
-            "\t}(solve);",
+            "\t};",
+            "\tsolver(solve);",
             "}",
             ""
         ]
