@@ -6,10 +6,7 @@ namespace debug_macro
     basic_ostream<C,T>& operator<<(basic_ostream<C,T>&, const R&);
 
     template <typename T, typename U>
-    auto& operator<<(ostream& os, const pair<T,U>& x)
-    {
-        return os<<'<'<<x.first<<','<<x.second<<'>';
-    }
+    auto& operator<<(ostream& os, const pair<T,U>& x) { return os<<'<'<<x.first<<','<<x.second<<'>'; }
 
     template <typename... Args>
     auto& operator<<(ostream& os, const tuple<Args...>& x)
@@ -19,18 +16,15 @@ namespace debug_macro
         return os<<')';
     }
 
-    // std::queue, std::stack and std::priority_queue
-    template <typename T> requires requires(T t) { t.pop(); }
+    template <typename T> requires requires(T t) { t.pop(); } // queue, stack, priority_queue
     auto& operator<<(ostream& os, T x)
     {
         os<<'{';
         while(!x.empty())
         {
-            typename T::value_type o;
-            if constexpr(requires(T t) { t.top(); }) o = x.top();
-            else o = x.front();
+            if constexpr(requires(T t) { t.top(); }) os<<x.top();
+            else os<<x.front();
             x.pop();
-            os<<o;
             if(!x.empty()) os<<',';
         }
         return os<<'}';
@@ -67,9 +61,8 @@ namespace debug_macro
             s.erase(0, s.find_first_not_of(' '));
             s.erase(s.find_last_not_of(' ')+1);
         }
-        cerr<<boolalpha<<sl.line()<<" | ";
         auto it = name_list.begin();
-        cerr<<*it<<'='<<first;
+        cerr<<boolalpha<<sl.line()<<" | "<<*it<<'='<<first;
         ((cerr<<", "<<*++it<<'='<<args), ...);
         cerr<<'\n';
     }
