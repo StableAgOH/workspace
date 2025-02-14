@@ -21,7 +21,7 @@ public:
                     low[u] = min(low[u], low[e.to]);
                     if(low[e.to]>=dfn[u])
                     {
-                        if(++s>1||u!=root) m_cuts.push_back(u);
+                        if(++s+(u!=root)==2) m_cuts.push_back(u);
                         m_groups.emplace_back();
                         int w;
                         do
