@@ -307,11 +307,11 @@
         "scope": "cpp",
         "prefix": "dfs",
         "body": [
-            "auto dfs = [&](this auto dfs,int u,int f) -> void",
+            "auto dfs = [&](this auto dfs,int u,int p) -> void",
             "{",
             "\tfor(auto v : G[u])",
             "\t{",
-            "\t\tif(v==f) continue;",
+            "\t\tif(v==p) continue;",
             "\t\tdfs(v,u);",
             "\t}",
             "};",
