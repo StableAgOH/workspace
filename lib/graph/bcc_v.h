@@ -2,7 +2,7 @@ class bcc_v
 {
 public:
     template <typename T>
-    bcc_v(const graph<T>& g)
+    bcc_v(const graph<T>& g) : n(g.size())
     {
         int timestamp = 0;
         vector<int> low(g.size()), dfn(g.size(), -1);
@@ -42,7 +42,19 @@ public:
     int size() const { return m_groups.size(); }
     auto& cuts() const { return m_cuts; }
     auto& groups() const { return m_groups; }
+    auto bctree() const
+    {
+        graph<> t(n+size());
+        int cnt = n;
+        for(auto& group : m_groups)
+        {
+            for(auto v : group) t.add_edge(cnt, v);
+            cnt++;
+        }
+        return t;
+    }
 private:
+    int n;
     vector<int> m_cuts;
     vector<vector<int>> m_groups;
 };
