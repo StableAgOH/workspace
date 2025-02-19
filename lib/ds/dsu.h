@@ -1,10 +1,9 @@
 template <bool KeepMergeOrder=false>
 class dsu
 {
-    int n = 0;
+    int n;
     vector<int> data;
 public:
-    dsu() = default;
     explicit dsu(int n) : n(n), data(n, -1) {}
     int leader(int x) { return data[x]<0?x:data[x]=leader(data[x]); }
     int merge(int x, int y)
