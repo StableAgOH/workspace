@@ -5,8 +5,8 @@ public:
     auto& get_graph() const { return g; }
     void add_disjunction(int x, bool i, int y, bool j)
     {
-        g.add_edge(2*x+!i, 2*y+j);
-        g.add_edge(2*y+!j, 2*x+i);
+        g.add_arc(2*x+!i, 2*y+j);
+        g.add_arc(2*y+!j, 2*x+i);
     }
     vector<bool> operator()() const
     {
