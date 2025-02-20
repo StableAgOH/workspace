@@ -42,7 +42,7 @@ namespace debug_macro
         return os<<']';
     }
 
-    void debug(const source_location& sl, string_view names, auto&& first, auto&&... args)
+    auto debug(const source_location& sl, string_view names, auto&& first, auto&&... args)
     {
         vector<string> name_list(1);
         int cnt = 0;
@@ -65,6 +65,7 @@ namespace debug_macro
         cerr<<boolalpha<<sl.line()<<" | "<<*it<<'='<<first;
         ((cerr<<", "<<*++it<<'='<<args), ...);
         cerr<<'\n';
+        return first;
     }
 }
 #define debug(...) debug_macro::debug(source_location::current(), #__VA_ARGS__, __VA_ARGS__)
