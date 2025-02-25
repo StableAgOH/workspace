@@ -17,6 +17,7 @@ public:
     auto numerator() const { return x; }
     auto denominator() const { return y; }
     auto operator<=>(const fraction& rhs) const { return x*rhs.y<=>rhs.x*y; }
+    auto operator==(const fraction& rhs) const { return x*rhs.y==rhs.x*y; }
     auto operator-() const { return fraction(-x, y); }
     auto& operator+=(const fraction& rhs) { return *this = fraction(x*rhs.y+rhs.x*y, y*rhs.y); }
     auto& operator-=(const fraction& rhs) { return *this = fraction(x*rhs.y-rhs.x*y, y*rhs.y); }
