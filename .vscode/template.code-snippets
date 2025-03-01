@@ -589,19 +589,22 @@
         "scope": "cpp",
         "prefix": "dijkstra",
         "body": [
-            "vector<int> dis(g.size(), 1e9);",
-            "dis[s] = 0;",
-            "priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;",
-            "pq.emplace(0, s);",
-            "while(!pq.empty())",
+            "auto dijkstra = [&](int s)",
             "{",
-            "\tauto [d,u] = pq.top();",
-            "\tpq.pop();",
-            "\tif(dis[u]<d) continue;",
-            "\tfor(auto [v,w] : g[u])",
-            "\t\tif(dis[u]+w<dis[v])",
-            "\t\t\tpq.emplace(dis[v]=dis[u]+w, v);",
-            "}"
+            "\tvector<int> dis(g.size(), 1e9);",
+            "\tdis[s] = 0;",
+            "\tpriority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq;",
+            "\tpq.emplace(0, s);",
+            "\twhile(!pq.empty())",
+            "\t{",
+            "\t\tauto [d,u] = pq.top();",
+            "\t\tpq.pop();",
+            "\t\tif(dis[u]<d) continue;",
+            "\t\tfor(auto [v,w] : g[u])",
+            "\t\t\tif(dis[u]+w<dis[v])",
+            "\t\t\t\tpq.emplace(dis[v]=dis[u]+w, v);",
+            "\t}",
+            "};"
         ]
-    }
+    },
 }
