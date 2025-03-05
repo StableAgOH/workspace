@@ -11,7 +11,7 @@ public:
         {
             low[u] = dfn[u] = timestamp++;
             st.push(u);
-            g.for_each(u, [&](const auto& e)
+            for(auto& e : g[u])
             {
                 if(e.idx==(i^1)) return;
                 if(dfn[e.to]==-1)
@@ -21,7 +21,7 @@ public:
                     if(low[e.to]>dfn[u]) m_cuts.push_back(minmax(e.idx, e.idx^1));
                 }
                 else low[u] = min(low[u], dfn[e.to]);
-            });
+            }
             if(low[u]==dfn[u])
             {
                 while(true)

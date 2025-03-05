@@ -11,7 +11,7 @@ public:
         {
             low[u] = dfn[u] = timestamp++;
             st.push(u);
-            g.for_each(u, [&](int v)
+            for(auto& e : g[u])
             {
                 if(dfn[v]==-1)
                 {
@@ -19,7 +19,7 @@ public:
                     low[u] = min(low[u], low[v]);
                 }
                 else low[u] = min(low[u], dfn[v]);
-            });
+            }
             if(low[u]==dfn[u])
             {
                 while(true)

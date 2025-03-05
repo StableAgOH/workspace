@@ -13,7 +13,7 @@ public:
             st.push(u);
             if(u==root&&g[u].empty()) m_groups.emplace_back(1,u);
             int s = 0;
-            g.for_each(u, [&](const auto& e)
+            for(auto& e : g[u])
             {
                 if(dfn[e.to]==-1)
                 {
@@ -35,7 +35,7 @@ public:
                     }
                 }
                 else low[u] = min(low[u], dfn[e.to]);
-            });
+            }
         };
         for(int i=0;i<g.size();i++) if(dfn[i]==-1) dfs(dfs, i, i);
     }
