@@ -34,27 +34,22 @@ class prime : public Tags<Mx>...
 {
     static_assert(Mx>0);
     bitset<Mx+1> not_prime;
-    void upd_p(int i)
-    {
-        primes.push_back(i);
-        (..., Tags<Mx>::upd_p(i));
-    }
-    void upd_c(int i, int j)
-    {
-        not_prime[i*j] = true;
-        (..., Tags<Mx>::upd_c(i,j));
-    }
 public:
     vector<int> primes;
     prime()
     {
         for(int i=2;i<=Mx;i++)
         {
-            if(!not_prime[i]) upd_p(i);
+            if(!not_prime[i])
+            {
+                primes.push_back(i);
+                (..., Tags<Mx>::upd_p(i));
+            }
             for(auto j : primes)
             {
                 if(i*j>Mx) break;
-                upd_c(i,j);
+                not_prime[i*j] = true;
+                (..., Tags<Mx>::upd_c(i,j));
                 if(i%j==0) break;
             }
         }
