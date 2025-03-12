@@ -31,19 +31,27 @@ struct fft
 struct fwt_and
 {
     template <typename T>
-    void operator()(valarray<T> a, bool inv)
+    void operator()(valarray<T>& a, bool inv)
     {
         int n = a.size();
-        for(int len=2;len<=n;len<<=1)
-        {
-            int k = len>>1;
+        for(int len=2,k=1;len<=n;len<<=1,k<<=1)
+            for(int i=0;i<n;i+=len)
+                for(int j=0;j<k;j++)
+                    a[i+j] += a[i+j+k]*(inv?-1:1);
+    }
+};
+struct fwt_or
+{
+    template <typename T>
+    void operator()(valarray<T>& a, bool inv)
+    {
+        int n = a.size();
+        for(int len=2,k=1;len<=n;len<<=1,k<<=1)
             for(int i=0;i<n;i+=len)
                 for(int j=0;j<k;j++)
                     a[i+j+k] += a[i+j]*(inv?-1:1);
-        }
     }
 };
-using fwt_or = fwt_and;
 struct fwt_xor
 {
     template <typename T>
