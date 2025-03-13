@@ -38,10 +38,12 @@ public:
     friend auto& operator>>(istream& is, modular& rhs) { is>>rhs.x; rhs.x = norm(rhs.x); return is; }
     friend auto& operator<<(ostream& os, const modular& rhs) { return os<<rhs.x; }
 };
-template <auto MOD>
-using mint = modular<integral_constant<int, MOD>>;
-using mint998 = mint<998244353>;
-using mint107 = mint<1000000007>;
+// #define DYNAMIC_MOD
+#ifdef DYNAMIC_MOD
 struct mod { static int value; };
 int mod::value;
-using dynamic_mint = modular<mod>;
+using mint = modular<mod>;
+#else
+const int mod = 1e9+7;
+using mint = modular<integral_constant<int, mod>>;
+#endif
