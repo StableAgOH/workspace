@@ -2,39 +2,43 @@ template <typename T>
 class polynomial
 {
 public:
-    polynomial() : n(0), coef(1) {}
-    polynomial(int n) : n(n), coef(n+1) {}
-    polynomial(initializer_list<T> l) : n(l.size()-1), coef(l) {}
-    polynomial(const valarray<T>& coef) : n(coef.size()-1), coef(coef) {}
+    polynomial() : coef(1) {}
+    explicit polynomial(size_t deg) : coef(deg+1) {}
+    polynomial(initializer_list<T> il) : coef(il) {}
+    polynomial(const valarray<T>& v) : coef(v) {}
+    polynomial(valarray<T>&& v) : coef(move(v)) {}
     operator valarray<T>() const { return coef; }
-    auto operator[](int i) const { return coef[i]; }
-    auto& operator[](int i) { return coef[i]; }
+    auto operator[](size_t i) const { return coef[i]; }
+    auto& operator[](size_t i) { return coef[i]; }
     auto& operator+=(const polynomial& rhs)
     {
-        coef.resize((n=max(n,rhs.n))+1);
-        coef += rhs.coef;
+        coef.redegree(max(degree(), rhs.degree()));
+        for(size_t i=0;i<=rhs.degree();i++) coef[i] += rhs[i];
+        return *this;
+    }
+    auto& operator-=(const polynomial& rhs)
+    {
+        coef.redegree(max(degree(), rhs.degree()));
+        for(size_t i=0;i<=rhs.degree();i++) coef[i] -= rhs[i];
         return *this;
     }
     auto operator+(const polynomial& rhs) const { return polynomial(*this) += rhs; }
-    auto& operator-=(const polynomial& rhs)
-    {
-        coef.resize((n=max(n,rhs.n))+1);
-        coef -= rhs.coef;
-        return *this;
-    }
-    auto operator-(const polynomial& rhs) const { return polynomial(*this) += rhs; }
+    auto operator-(const polynomial& rhs) const { return polynomial(*this) -= rhs; }
     friend istream& operator>>(istream& is, polynomial& p)
     {
-        for(int i=0;i<=p.n;i++) is>>p[i];
+        for(size_t i=0;i<=p.degree();i++) is>>p[i];
         return is;
     }
     friend ostream& operator<<(ostream& os, const polynomial& p)
     {
-        for(int i=0;i<=p.n;i++) os<<p[i]<<' ';
+        for(size_t i=0;i<=p.degree();i++) os<<p[i]<<' ';
         return os;
     }
-    int degree() const { return n; }
+    auto min() const { return coef.min(); }
+    auto max() const { return coef.max(); }
+    auto sum() const { return coef.sum(); }
+    auto degree() const { return coef.size()-1; }
+    auto redegree(size_t deg) { coef.resize(deg+1); }
 private:
-    int n;
     valarray<T> coef;
 };
