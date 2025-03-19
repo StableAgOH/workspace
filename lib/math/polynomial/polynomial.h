@@ -38,6 +38,7 @@ public:
     auto max() const { return coef.max(); }
     auto sum() const { return coef.sum(); }
     auto degree() const { return coef.size()-1; }
+    auto redegree(size_t deg) { coef.resize(deg+1); }
 private:
     valarray<T> coef;
 };
