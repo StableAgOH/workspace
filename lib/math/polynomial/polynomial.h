@@ -39,6 +39,12 @@ public:
     auto sum() const { return coef.sum(); }
     auto degree() const { return coef.size()-1; }
     auto redegree(size_t deg) { coef.resize(deg+1); }
+    template <typename U=T>
+    auto eval(T x, U init=T{}) const
+    {
+        for(int i=degree();i>=0;i--) init = init*x+coef[i];
+        return init;
+    }
 private:
     valarray<T> coef;
 };
