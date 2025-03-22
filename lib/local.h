@@ -2,11 +2,23 @@
 using namespace std;
 namespace debug_macro
 {
+    template <typename T, typename U>
+    auto& operator<<(ostream&, const pair<T,U>&);
+
+    template <typename... Args>
+    auto& operator<<(ostream&, const tuple<Args...>&);
+
+    template <typename T> requires requires(T t) { t.pop(); }
+    auto& operator<<(ostream&, T);
+
     template <typename C, typename T, ranges::range R>
     basic_ostream<C,T>& operator<<(basic_ostream<C,T>&, const R&);
 
     template <typename T, typename U>
-    auto& operator<<(ostream& os, const pair<T,U>& x) { return os<<'<'<<x.first<<','<<x.second<<'>'; }
+    auto& operator<<(ostream& os, const pair<T,U>& x)
+    {
+        return os<<'<'<<x.first<<','<<x.second<<'>';
+    }
 
     template <typename... Args>
     auto& operator<<(ostream& os, const tuple<Args...>& x)
@@ -16,7 +28,7 @@ namespace debug_macro
         return os<<')';
     }
 
-    template <typename T> requires requires(T t) { t.pop(); } // queue, stack, priority_queue
+    template <typename T> requires requires(T t) { t.pop(); }
     auto& operator<<(ostream& os, T x)
     {
         os<<'{';
