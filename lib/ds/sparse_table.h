@@ -1,35 +1,29 @@
-template <typename T>
+template <typename T, auto Op>
+requires convertible_to<invoke_result_t<decltype(Op), T, T>, T>
 class sparse_table
 {
-    using crfp = const T& (*)(const T&, const T&);
-    using op_t = function<T(T,T)>;
-    op_t op;
-    vector<vector<T>> f;
 public:
-    template <typename F>
-    requires same_as<invoke_result_t<F,T,T>, T>
-    sparse_table(ranges::range auto&& rg, F&& op) : op(forward<F>(op))
+    sparse_table(span<T> s)
     {
-        f.emplace_back(ranges::begin(rg), ranges::end(rg));
-        size_t n = f.front().size();
-        for(size_t i=1;(1u<<i)<n;i++)
+        int n = s.size();
+        data.emplace_back(s.begin(), s.end());
+        for(int i=1;(1<<i)<n;i++)
         {
-            f.emplace_back(n);
-            for(size_t j=1<<i;j<n;j+=1<<(i+1))
+            data.emplace_back(n);
+            for(int m=1<<i;m<n;m+=1<<(i+1))
             {
-                f[i][j-1] = f[0][j-1];
-                for(size_t k=j-1;k-->j-(1<<i);) f[i][k] = this->op(f[0][k], f[i][k+1]);
-                f[i][j] = f[0][j];
-                for(size_t k=j+1;k<min(n,j+(1<<i));k++) f[i][k] = this->op(f[i][k-1], f[0][k]);
+                data[i][m-1] = s[m-1];
+                for(int j=m-2;j>=m-(1<<i);j--) data[i][j] = Op(s[j], data[i][j+1]);
+                data[i][m] = s[m];
+                for(int j=m+1;j<min(n,m+(1<<i));j++) data[i][j] = Op(data[i][j-1], s[j]);
             }
         }
     }
-    template <ranges::range R>
-    sparse_table(R&& rg, crfp op) : sparse_table(forward<R>(rg), op_t(op)) {}
-    auto operator()(size_t l, size_t r) const
+    auto operator()(int l, int r) const
     {
-        int p = max(0, (int)bit_width(l^r)-1); // In gcc 12, bit_width return decltype(l^r)
-        return op(f[p][l], f[p][r]);
+        int p = max<int>(0, bit_width(unsigned(l^r))-1);
+        return Op(data[p][l], data[p][r]);
     }
+private:
+    vector<vector<T>> data;
 };
-template <ranges::range R, typename F> sparse_table(R,F) -> sparse_table<ranges::range_value_t<R>>;
