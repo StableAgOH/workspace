@@ -1,23 +1,23 @@
 template <typename T, typename Lazy, auto Op, auto Compose, auto Apply>
 requires requires
 {
-    { Op(declval<T>(), declval<T>()) } -> same_as<T>;
+    { Op(declval<T>(), declval<T>()) } -> convertible_to<T>;
     { Compose(declval<Lazy&>(), declval<Lazy>()) } -> same_as<void>;
     { Apply(declval<T&>(), declval<Lazy>()) } -> same_as<void>;
 }
 class lazy_segtree
 {
     static constexpr auto lowbit(auto x) { return x&-x; }
-    size_t n, sz, lg;
+    int n, sz, lg;
     vector<T> data;
     vector<Lazy> lazy;
-    void update(size_t p) { data[p] = Op(data[p<<1], data[p<<1|1]); }
-    void all_apply(size_t p, const Lazy& lz)
+    void update(int p) { data[p] = Op(data[p<<1], data[p<<1|1]); }
+    void all_apply(int p, const Lazy& lz)
     {
         Apply(data[p], lz);
         if(p<sz) Compose(lazy[p], lz);
     }
-    void push(size_t p)
+    void push(int p)
     {
         all_apply(p<<1, lazy[p]);
         all_apply(p<<1|1, lazy[p]);
@@ -25,25 +25,25 @@ class lazy_segtree
     }
 public:
     lazy_segtree(ranges::range auto&& rg, T e1={}, Lazy e2={}) :
-        n(ranges::size(rg)), sz(bit_ceil(n)), lg(countr_zero(sz)),
+        n(ranges::size(rg)), sz(bit_ceil(unsigned(n))), lg(countr_zero(unsigned(sz))),
         data(2*sz, e1), lazy(sz, e2)
     {
         ranges::copy(rg, data.begin()+sz);
-        for(size_t i=sz-1;i>=1;i--) update(i);
+        for(int i=sz-1;i>=1;i--) update(i);
     }
-    lazy_segtree(size_t n, T e1={}, Lazy e2={}) : lazy_segtree(vector<T>(n), e1, e2) {}
+    lazy_segtree(int n, T e1={}, Lazy e2={}) : lazy_segtree(vector(n, e1), e1, e2) {}
     auto operator()() const { return data[1]; }
-    auto operator()(size_t p)
+    auto operator()(int p)
     {
         p += sz;
-        for(size_t i=lg;i>=1;i--) push(p>>i);
+        for(int i=lg;i>=1;i--) push(p>>i);
         return data[p];
     }
-    auto operator()(size_t l, size_t r)
+    auto operator()(int l, int r)
     {
         l += sz;
         r += sz+1;
-        for(size_t i=lg;i>=1;i--)
+        for(int i=lg;i>=1;i--)
         {
             if(((l>>i)<<i)!=l) push(l>>i);
             if(((r>>i)<<i)!=r) push((r-1)>>i);
@@ -58,30 +58,30 @@ public:
         }
         return Op(resl, resr);
     }
-    void set(size_t p, const T& x)
+    void set(int p, const T& x)
     {
         p += sz;
-        for(size_t i=lg;i>=1;i--) push(p>>i);
+        for(int i=lg;i>=1;i--) push(p>>i);
         data[p] = x;
-        for(size_t i=1;i<=lg;i++) update(p>>i);
+        for(int i=1;i<=lg;i++) update(p>>i);
     }
-    void apply(size_t p, const Lazy& lz)
+    void apply(int p, const Lazy& lz)
     {
         p += sz;
-        for(size_t i=lg;i>=1;i--) push(p>>i);
+        for(int i=lg;i>=1;i--) push(p>>i);
         data[p] = Apply(data[p], lz);
-        for(size_t i=1;i<=lg;i++) update(p>>i);
+        for(int i=1;i<=lg;i++) update(p>>i);
     }
-    void apply(size_t l, size_t r, const Lazy& lz)
+    void apply(int l, int r, const Lazy& lz)
     {
         l += sz;
         r += sz+1;
-        for(size_t i=lg;i>=1;i--)
+        for(int i=lg;i>=1;i--)
         {
             if(((l>>i)<<i)!=l) push(l>>i);
             if(((r>>i)<<i)!=r) push((r-1)>>i);
         }
-        [&](size_t l, size_t r)
+        [&](int l, int r)
         {
             while(l<r)
             {
@@ -91,18 +91,18 @@ public:
                 r >>= 1;
             }
         }(l, r);
-        for(size_t i=1;i<=lg;i++)
+        for(int i=1;i<=lg;i++)
         {
             if(((l>>i)<<i)!=l) update(l>>i);
             if(((r>>i)<<i)!=r) update((r-1)>>i);
         }
     }
     template <predicate<T> Pred>
-    size_t min_left(size_t r, Pred&& pred) const
+    int min_left(int r, Pred&& pred) const
     {
         if(!r) return 0;
         r += sz;
-        for(size_t i=lg;i>=1;i--) push((r-1)>>i);
+        for(int i=lg;i>=1;i--) push((r-1)>>i);
         T sum = data[0];
         do
         {
@@ -128,11 +128,11 @@ public:
         return 0;
     }
     template <predicate<T> Pred>
-    size_t max_right(size_t l, Pred&& pred) const
+    int max_right(int l, Pred&& pred) const
     {
         if(l==n) return n;
         l += sz;
-        for(size_t i=lg;i>=1;i--) push(l>>i);
+        for(int i=lg;i>=1;i--) push(l>>i);
         T sum = data[0];
         do
         {

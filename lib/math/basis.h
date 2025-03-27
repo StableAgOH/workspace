@@ -3,10 +3,7 @@ struct basis
 {
     vector<T> base;
     basis() = default;
-    basis(ranges::range auto&& r)
-    {
-        for(auto i : r) insert(i);
-    }
+    basis(ranges::range auto&& rg) { for(auto i : rg) insert(i); }
     void insert(T x)
     {
         for(auto i : base) x = min(x, x^i);

@@ -1,8 +1,6 @@
 template <bool KeepMergeOrder=false>
 class dsu
 {
-    int n;
-    vector<int> data;
 public:
     explicit dsu(int n) : n(n), data(n, -1) {}
     int leader(int x) { return data[x]<0?x:data[x]=leader(data[x]); }
@@ -33,4 +31,7 @@ public:
         erase_if(result, [&](const auto& v) { return v.empty(); });
         return result;
     }
+private:
+    int n;
+    vector<int> data;
 };
