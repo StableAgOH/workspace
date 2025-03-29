@@ -23,7 +23,7 @@
             "\t\tif constexpr(same_as<R, void>) onecase(i);",
             "\t\telse if constexpr(same_as<R, bool>) cout<<bmsg[onecase(i)]<<'\\n';",
             "\t\telse cout<<onecase(i)<<'\\n';",
-            "\t}\t",
+            "\t}",
             "}",
             "int main()",
             "{",
