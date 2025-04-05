@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "**/include/c++/**": "cpp",
-        "template.code-snippets": "json"
+        "**/atcoder/**": "cpp",
+        "template.code-snippets": "json",
     },
     "files.readonlyInclude": {
         "**/include/c++/**": true,

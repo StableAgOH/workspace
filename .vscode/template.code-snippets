@@ -200,7 +200,7 @@
             "\t\tif(fac.empty()) fac = ifac = {1};",
             "\t\telse",
             "\t\t{",
-            "\t\t\tfac.push_back(fac.back()*fac.size());",
+            "\t\t\tfac.push_back(fac.back()*(int)fac.size());",
             "\t\t\tifac.push_back(1/fac.back());",
             "\t\t}",
             "\t}",
