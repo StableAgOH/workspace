@@ -18,5 +18,5 @@ public:
     }
 private:
     int n;
-    graph<> g;
+    graph g;
 };

@@ -2,10 +2,10 @@ class bcc_v
 {
 public:
     template <typename T>
-    bcc_v(const graph<T>& g) : n(g.size())
+    bcc_v(const graph<T>& g) : n(g.node_cnt())
     {
         int timestamp = 0;
-        vector<int> low(g.size()), dfn(g.size(), -1);
+        vector<int> low(n), dfn(n, -1);
         stack<int> st;
         auto dfs = [&](auto&& dfs, int u, int root) -> void
         {
@@ -37,14 +37,14 @@ public:
                 else low[u] = min(low[u], dfn[e.to]);
             }
         };
-        for(int i=0;i<g.size();i++) if(dfn[i]==-1) dfs(dfs, i, i);
+        for(int i=0;i<g.node_cnt();i++) if(dfn[i]==-1) dfs(dfs, i, i);
     }
     int size() const { return m_groups.size(); }
     auto& cuts() const { return m_cuts; }
     auto& groups() const { return m_groups; }
     auto bctree() const
     {
-        graph<> t(n+size());
+        graph t(n+size());
         int cnt = n;
         for(auto& group : m_groups)
         {

@@ -2,7 +2,7 @@ class bcc_e
 {
 public:
     template <typename T>
-    bcc_e(const graph<T>& g) : n(g.size()), cnt(0), id(n)
+    bcc_e(const graph<T>& g) : n(g.node_cnt()), cnt(0), id(n)
     {
         int timestamp = 0;
         vector<int> low(n), dfn(n, -1);
@@ -13,7 +13,7 @@ public:
             st.push(u);
             for(auto& e : g[u])
             {
-                if(e.idx==(i^1)) return;
+                if(e.idx==(i^1)) continue;
                 if(dfn[e.to]==-1)
                 {
                     dfs(dfs, e.to, e.idx);
@@ -50,5 +50,5 @@ public:
 private:
     int n, cnt;
     vector<int> id;
-    vector<pair<int,int>> m_cuts;
+    vector<pair<int, int>> m_cuts;
 };

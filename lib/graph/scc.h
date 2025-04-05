@@ -2,10 +2,10 @@ class scc
 {
 public:
     template <typename T>
-    scc(const graph<T>& g) : n(g.size()), cnt(0), id(n)
+    scc(const graph<T>& g) : cnt(0), id(g.node_cnt())
     {
         int timestamp = 0;
-        vector<int> low(n), dfn(n, -1);
+        vector<int> low(g.node_cnt()), dfn(g.node_cnt(), -1);
         stack<int> st;
         auto dfs = [&](auto&& dfs, int u) -> void
         {
@@ -13,12 +13,12 @@ public:
             st.push(u);
             for(auto& e : g[u])
             {
-                if(dfn[v]==-1)
+                if(dfn[e.to]==-1)
                 {
-                    dfs(dfs, v);
-                    low[u] = min(low[u], low[v]);
+                    dfs(dfs, e.to);
+                    low[u] = min(low[u], low[e.to]);
                 }
-                else low[u] = min(low[u], dfn[v]);
+                else low[u] = min(low[u], dfn[e.to]);
             }
             if(low[u]==dfn[u])
             {
@@ -26,14 +26,14 @@ public:
                 {
                     int v = st.top();
                     st.pop();
-                    dfn[v] = n;
+                    dfn[v] = g.node_cnt();
                     id[v] = cnt;
                     if(v==u) break;
                 }
                 cnt++;
             }
         };
-        for(int i=0;i<n;i++) if(dfn[i]==-1) dfs(dfs, i);
+        for(int i=0;i<g.node_cnt();i++) if(dfn[i]==-1) dfs(dfs, i);
         for(auto& x : id) x = cnt-1-x;
     }
     auto operator[](int u) const { return id[u]; }
@@ -41,10 +41,10 @@ public:
     auto groups() const
     {
         vector<vector<int>> groups(cnt);
-        for(int i=0;i<n;i++) groups[id[i]].push_back(i);
+        for(size_t i=0;i<id.size();i++) groups[id[i]].push_back(i);
         return groups;
     }
 private:
-    int n, cnt;
+    int cnt;
     vector<int> id;
 };
