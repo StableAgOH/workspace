@@ -1,6 +1,13 @@
 template <typename T>
 class fraction
 {
+    T x, y;
+    void reduct()
+    {
+        auto g = gcd(x, y);
+        x /= g;
+        y /= g;
+    }
 public:
     fraction() : x(0), y(1) {}
     fraction(const auto& x) : x(x), y(1) {}
@@ -22,12 +29,4 @@ public:
     friend auto operator/(fraction lhs, const fraction& rhs) { return lhs /= rhs; }
     friend auto& operator>>(istream& is, fraction& rhs) { is>>rhs.x>>rhs.y; rhs.reduct(); return is; }
     friend auto& operator<<(ostream& os, const fraction& rhs) { return os<<rhs.x<<'/'<<rhs.y; }
-private:
-    T x, y;
-    void reduct()
-    {
-        auto g = gcd(x, y);
-        x /= g;
-        y /= g;
-    }
 };

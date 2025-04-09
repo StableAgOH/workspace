@@ -1,6 +1,7 @@
 template <typename T>
 class polynomial
 {
+    valarray<T> coef;
 public:
     polynomial() : coef(1) {}
     explicit polynomial(size_t deg) : coef(deg+1) {}
@@ -45,6 +46,4 @@ public:
         for(int i=degree();i>=0;i--) init = init*x+coef[i];
         return init;
     }
-private:
-    valarray<T> coef;
 };
