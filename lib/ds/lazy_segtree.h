@@ -1,28 +1,9 @@
 template <typename T, typename Lazy, auto Op, auto Compose, auto Apply>
-requires requires
-{
-    { Op(declval<T>(), declval<T>()) } -> convertible_to<T>;
-    { Compose(declval<Lazy&>(), declval<Lazy>()) } -> same_as<void>;
-    { Apply(declval<T&>(), declval<Lazy>()) } -> same_as<void>;
-}
+requires convertible_to<invoke_result_t<decltype(Op), T, T>, T> &&
+    invocable<decltype(Compose), Lazy&, Lazy> &&
+    invocable<decltype(Apply), T&, Lazy>
 class lazy_segtree
 {
-    static constexpr auto lowbit(auto x) { return x&-x; }
-    int n, sz, lg;
-    vector<T> data;
-    vector<Lazy> lazy;
-    void update(int p) { data[p] = Op(data[p<<1], data[p<<1|1]); }
-    void all_apply(int p, const Lazy& lz)
-    {
-        Apply(data[p], lz);
-        if(p<sz) Compose(lazy[p], lz);
-    }
-    void push(int p)
-    {
-        all_apply(p<<1, lazy[p]);
-        all_apply(p<<1|1, lazy[p]);
-        lazy[p] = lazy[0];
-    }
 public:
     lazy_segtree(ranges::range auto&& rg, T e1={}, Lazy e2={}) :
         n(ranges::size(rg)), sz(bit_ceil(unsigned(n))), lg(countr_zero(unsigned(sz))),
@@ -41,20 +22,17 @@ public:
     }
     auto operator()(int l, int r)
     {
-        l += sz;
-        r += sz+1;
+        l+=sz, r+=sz+1;
         for(int i=lg;i>=1;i--)
         {
             if(((l>>i)<<i)!=l) push(l>>i);
             if(((r>>i)<<i)!=r) push((r-1)>>i);
         }
         auto resl=data[0], resr=data[0];
-        while(l<r)
+        for(;l<r;l>>=1,r>>=1)
         {
             if(l&1) resl = Op(resl, data[l++]);
             if(r&1) resr = Op(data[--r], resr);
-            l >>= 1;
-            r >>= 1;
         }
         return Op(resl, resr);
     }
@@ -74,23 +52,17 @@ public:
     }
     void apply(int l, int r, const Lazy& lz)
     {
-        l += sz;
-        r += sz+1;
+        l+=sz, r+=sz+1;
         for(int i=lg;i>=1;i--)
         {
             if(((l>>i)<<i)!=l) push(l>>i);
             if(((r>>i)<<i)!=r) push((r-1)>>i);
         }
-        [&](int l, int r)
+        for(int i=l,j=r;i<j;i>>=1,j>>=1)
         {
-            while(l<r)
-            {
-                if(l&1) all_apply(l++, lz);
-                if(r&1) all_apply(--r, lz);
-                l >>= 1;
-                r >>= 1;
-            }
-        }(l, r);
+            if(i&1) all_apply(i++, lz);
+            if(j&1) all_apply(--j, lz);
+        }
         for(int i=1;i<=lg;i++)
         {
             if(((l>>i)<<i)!=l) update(l>>i);
@@ -136,7 +108,7 @@ public:
         T sum = data[0];
         do
         {
-            while(l%2==0) l >>= 1;
+            while(!(l&1)) l >>= 1;
             if(!pred(Op(sum, data[l])))
             {
                 while(l<sz)
@@ -156,5 +128,22 @@ public:
         }
         while(lowbit(l)!=l);
         return n;
+    }
+private:
+    static constexpr auto lowbit(auto x) { return x&-x; }
+    int n, sz, lg;
+    vector<T> data;
+    vector<Lazy> lazy;
+    void update(int p) { data[p] = Op(data[p<<1], data[p<<1|1]); }
+    void all_apply(int p, const Lazy& lz)
+    {
+        Apply(data[p], lz);
+        if(p<sz) Compose(lazy[p], lz);
+    }
+    void push(int p)
+    {
+        all_apply(p<<1, lazy[p]);
+        all_apply(p<<1|1, lazy[p]);
+        lazy[p] = lazy[0];
     }
 };
