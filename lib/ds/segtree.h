@@ -30,7 +30,7 @@ public:
     {
         if(!r) return 0;
         r += sz;
-        T sum = data[0];
+        auto sum = data[0];
         do
         {
             r--;
@@ -40,11 +40,7 @@ public:
                 while(r<sz)
                 {
                     r = r<<1|1;
-                    if(pred(Op(data[r], sum)))
-                    {
-                        sum = Op(data[r], sum);
-                        r--;
-                    }
+                    if(auto x=Op(data[r], sum);pred(x)) { sum = x; r--; }
                 }
                 return r+1-sz;
             }
@@ -58,25 +54,20 @@ public:
     {
         if(l==n) return n;
         l += sz;
-        T sum = data[0];
+        auto sum = data[0];
         do
         {
-            while(l%2==0) l >>= 1;
+            while(!(l&1)) l >>= 1;
             if(!pred(Op(sum, data[l])))
             {
                 while(l<sz)
                 {
                     l <<= 1;
-                    if(pred(Op(sum, data[l])))
-                    {
-                        sum = Op(sum, data[l]);
-                        l++;
-                    }
+                    if(auto x=Op(sum, data[l]);pred(x)) { sum = x; l++; }
                 }
                 return l-sz;
             }
-            sum = Op(sum, data[l]);
-            l++;
+            sum = Op(sum, data[l++]);
         }
         while(lowbit(l)!=l);
         return n;

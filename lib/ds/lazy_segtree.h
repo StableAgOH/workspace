@@ -75,7 +75,7 @@ public:
         if(!r) return 0;
         r += sz;
         for(int i=lg;i>=1;i--) push((r-1)>>i);
-        T sum = data[0];
+        auto sum = data[0];
         do
         {
             r--;
@@ -86,11 +86,7 @@ public:
                 {
                     push(r);
                     r = r<<1|1;
-                    if(pred(Op(data[r], sum)))
-                    {
-                        sum = Op(data[r], sum);
-                        r--;
-                    }
+                    if(auto x=Op(data[r], sum);pred(x)) { sum = x; r--; }
                 }
                 return r+1-sz;
             }
@@ -105,7 +101,7 @@ public:
         if(l==n) return n;
         l += sz;
         for(int i=lg;i>=1;i--) push(l>>i);
-        T sum = data[0];
+        auto sum = data[0];
         do
         {
             while(!(l&1)) l >>= 1;
@@ -115,16 +111,11 @@ public:
                 {
                     push(l);
                     l <<= 1;
-                    if(pred(Op(sum, data[l])))
-                    {
-                        sum = Op(sum, data[l]);
-                        l++;
-                    }
+                    if(auto x=Op(sum, data[l]);pred(x)) { sum = x; l++; }
                 }
                 return l-sz;
             }
-            sum = Op(sum, data[l]);
-            l++;
+            sum = Op(sum, data[l++]);
         }
         while(lowbit(l)!=l);
         return n;
