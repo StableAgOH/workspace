@@ -51,6 +51,7 @@ public:
         }
         return Op(resl, resr);
     }
+    auto size() const { return n; }
     void set(size_t p, const T& x)
     {
         p += sz;

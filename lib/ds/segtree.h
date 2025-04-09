@@ -26,6 +26,7 @@ public:
         }
         return Op(resl, resr);
     }
+    auto size() const { return n; }
     void set(size_t p, const T& x) { for(data[p+=sz]=x;p>1;p>>=1) update(p>>1); }
     void transform(size_t p, auto&& f) { set(p, f((*this)(p))); }
     template <predicate<T> Pred>
