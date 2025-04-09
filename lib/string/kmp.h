@@ -1,4 +1,4 @@
-vector<size_t> prefix_function(const string& s)
+auto prefix_function(const string& s)
 {
     vector<size_t> nxt(s.length());
     for(size_t i=1,j=0;i<s.length();i++)
@@ -8,7 +8,7 @@ vector<size_t> prefix_function(const string& s)
     }
     return nxt;
 }
-vector<size_t> kmp(const string& match, const string& pattern, char split='#')
+auto kmp(const string& match, const string& pattern, char split='#')
 {
     vector<size_t> res;
     auto s = pattern+split+match;

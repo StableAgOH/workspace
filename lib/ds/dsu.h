@@ -1,6 +1,7 @@
 template <bool KeepMergeOrder=false>
 class dsu
 {
+    vector<int> data;
 public:
     explicit dsu(int n) : data(n, -1) {}
     int leader(int x) { return data[x]<0?x:data[x]=leader(data[x]); }
@@ -23,6 +24,4 @@ public:
         for(size_t i=0;i<data.size();i++) result[leader(i)].push_back(i);
         return result;
     }
-private:
-    vector<int> data;
 };

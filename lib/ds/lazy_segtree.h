@@ -4,26 +4,41 @@ requires convertible_to<invoke_result_t<decltype(Op), T, T>, T> &&
     invocable<decltype(Apply), T&, Lazy>
 class lazy_segtree
 {
+    static constexpr auto lowbit(auto x) { return x&-x; }
+    size_t n, sz, lg;
+    vector<T> data;
+    vector<Lazy> lazy;
+    void update(size_t p) { data[p] = Op(data[p<<1], data[p<<1|1]); }
+    void all_apply(size_t p, const Lazy& lz)
+    {
+        Apply(data[p], lz);
+        if(p<sz) Compose(lazy[p], lz);
+    }
+    void push(size_t p)
+    {
+        all_apply(p<<1, lazy[p]);
+        all_apply(p<<1|1, lazy[p]);
+        lazy[p] = lazy[0];
+    }
 public:
     lazy_segtree(ranges::range auto&& rg, T e1={}, Lazy e2={}) :
-        n(ranges::size(rg)), sz(bit_ceil(unsigned(n))), lg(countr_zero(unsigned(sz))),
-        data(2*sz, e1), lazy(sz, e2)
+        n(ranges::size(rg)), sz(bit_ceil(n)), lg(countr_zero(sz)), data(2*sz, e1), lazy(sz, e2)
     {
         ranges::copy(rg, data.begin()+sz);
-        for(int i=sz-1;i>=1;i--) update(i);
+        for(auto i=sz-1;i>=1;i--) update(i);
     }
-    lazy_segtree(int n, T e1={}, Lazy e2={}) : lazy_segtree(vector(n, e1), e1, e2) {}
+    lazy_segtree(size_t n, T e1={}, Lazy e2={}) : lazy_segtree(vector(n, e1), e1, e2) {}
     auto operator()() const { return data[1]; }
-    auto operator()(int p)
+    auto operator()(size_t p)
     {
         p += sz;
-        for(int i=lg;i>=1;i--) push(p>>i);
+        for(auto i=lg;i>=1;i--) push(p>>i);
         return data[p];
     }
-    auto operator()(int l, int r)
+    auto operator()(size_t l, size_t r)
     {
         l+=sz, r+=sz+1;
-        for(int i=lg;i>=1;i--)
+        for(auto i=lg;i>=1;i--)
         {
             if(((l>>i)<<i)!=l) push(l>>i);
             if(((r>>i)<<i)!=r) push((r-1)>>i);
@@ -36,45 +51,45 @@ public:
         }
         return Op(resl, resr);
     }
-    void set(int p, const T& x)
+    void set(size_t p, const T& x)
     {
         p += sz;
-        for(int i=lg;i>=1;i--) push(p>>i);
+        for(auto i=lg;i>=1;i--) push(p>>i);
         data[p] = x;
-        for(int i=1;i<=lg;i++) update(p>>i);
+        for(size_t i=1;i<=lg;i++) update(p>>i);
     }
-    void apply(int p, const Lazy& lz)
+    void apply(size_t p, const Lazy& lz)
     {
         p += sz;
-        for(int i=lg;i>=1;i--) push(p>>i);
+        for(auto i=lg;i>=1;i--) push(p>>i);
         data[p] = Apply(data[p], lz);
-        for(int i=1;i<=lg;i++) update(p>>i);
+        for(size_t i=1;i<=lg;i++) update(p>>i);
     }
-    void apply(int l, int r, const Lazy& lz)
+    void apply(size_t l, size_t r, const Lazy& lz)
     {
         l+=sz, r+=sz+1;
-        for(int i=lg;i>=1;i--)
+        for(auto i=lg;i>=1;i--)
         {
             if(((l>>i)<<i)!=l) push(l>>i);
             if(((r>>i)<<i)!=r) push((r-1)>>i);
         }
-        for(int i=l,j=r;i<j;i>>=1,j>>=1)
+        for(auto i=l,j=r;i<j;i>>=1,j>>=1)
         {
             if(i&1) all_apply(i++, lz);
             if(j&1) all_apply(--j, lz);
         }
-        for(int i=1;i<=lg;i++)
+        for(size_t i=1;i<=lg;i++)
         {
             if(((l>>i)<<i)!=l) update(l>>i);
             if(((r>>i)<<i)!=r) update((r-1)>>i);
         }
     }
     template <predicate<T> Pred>
-    int min_left(int r, Pred&& pred) const
+    size_t min_left(size_t r, Pred&& pred) const
     {
         if(!r) return 0;
         r += sz;
-        for(int i=lg;i>=1;i--) push((r-1)>>i);
+        for(auto i=lg;i>=1;i--) push((r-1)>>i);
         auto sum = data[0];
         do
         {
@@ -96,11 +111,11 @@ public:
         return 0;
     }
     template <predicate<T> Pred>
-    int max_right(int l, Pred&& pred) const
+    size_t max_right(size_t l, Pred&& pred) const
     {
         if(l==n) return n;
         l += sz;
-        for(int i=lg;i>=1;i--) push(l>>i);
+        for(auto i=lg;i>=1;i--) push(l>>i);
         auto sum = data[0];
         do
         {
@@ -119,22 +134,5 @@ public:
         }
         while(lowbit(l)!=l);
         return n;
-    }
-private:
-    static constexpr auto lowbit(auto x) { return x&-x; }
-    int n, sz, lg;
-    vector<T> data;
-    vector<Lazy> lazy;
-    void update(int p) { data[p] = Op(data[p<<1], data[p<<1|1]); }
-    void all_apply(int p, const Lazy& lz)
-    {
-        Apply(data[p], lz);
-        if(p<sz) Compose(lazy[p], lz);
-    }
-    void push(int p)
-    {
-        all_apply(p<<1, lazy[p]);
-        all_apply(p<<1|1, lazy[p]);
-        lazy[p] = lazy[0];
     }
 };
