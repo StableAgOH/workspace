@@ -9,7 +9,7 @@ public:
     void add_leq(int u, int v, T w) { add_arc(v, u, w); }
     void add_geq(int u, int v, T w) { add_arc(u, v, -w); }
     void add_eq(int u, int v, T w) { add_leq(u, v, w); add_geq(u, v, w); }
-    vector<T> operator()()
+    auto operator()() const
     {
         vector<T> dis(n+1, numeric_limits<T>::max()/2);
         dis[n] = 0;
@@ -27,6 +27,6 @@ public:
             }
             if(!relax) break;
         }
-        return relax?{}:dis;
+        return relax?vector<T>{}:dis;
     }
 };

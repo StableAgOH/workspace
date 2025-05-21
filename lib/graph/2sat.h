@@ -1,22 +1,20 @@
-class two_sat
+class two_sat : public scc
 {
+    int n;
 public:
-    explicit two_sat(int n) : n(n), g(2*n) {}
-    auto& get_graph() const { return g; }
+    explicit two_sat(int n) : scc(2*n), n(n) {}
     void add_disjunction(int x, bool i, int y, bool j)
     {
-        g.add_arc(2*x+!i, 2*y+j);
-        g.add_arc(2*y+!j, 2*x+i);
+        add_arc(2*x+!i, 2*y+j);
+        add_arc(2*y+!j, 2*x+i);
     }
-    vector<bool> operator()() const
+    auto get_scc_result() const { return scc::operator()(); }
+    auto operator()() const
     {
-        scc s(g);
-        for(int i=0;i<n;i++) if(s[2*i]==s[2*i+1]) return {};
+        auto s = get_scc_result();
+        for(int i=0;i<n;i++) if(s.id[2*i]==s.id[2*i+1]) return vector<bool>{};
         vector<bool> ans(n);
-        for(int i=0;i<n;i++) ans[i] = s[2*i]<s[2*i+1];
+        for(int i=0;i<n;i++) ans[i] = s.id[2*i]<s.id[2*i+1];
         return ans;
     }
-private:
-    int n;
-    graph g;
 };

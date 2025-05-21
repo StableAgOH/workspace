@@ -1,60 +1,59 @@
 class bcc_v
 {
+    vector<vector<int>> g;
 public:
-    template <typename T>
-    bcc_v(const graph<T>& g) : n(g.node_cnt())
+    struct result
     {
+        vector<int> cuts;
+        vector<vector<int>> groups;
+    };
+    explicit bcc_v(int n) : g(n) {}
+    void add_edge(int u, int v) { g[u].push_back(v), g[v].push_back(u); }
+    auto operator()() const
+    {
+        result res;
         int timestamp = 0;
-        vector<int> low(n), dfn(n, -1);
+        vector<int> low(g.size()), dfn(g.size(), -1);
         stack<int> st;
         auto dfs = [&](auto&& dfs, int u, int root) -> void
         {
             low[u] = dfn[u] = timestamp++;
             st.push(u);
-            if(u==root&&g[u].empty()) m_groups.emplace_back(1,u);
+            if(u==root&&g[u].empty()) res.groups.emplace_back(1, u);
             int s = 0;
-            for(auto& e : g[u])
+            for(auto v : g[u])
             {
-                if(dfn[e.to]==-1)
+                if(dfn[v]==-1)
                 {
-                    dfs(dfs, e.to, root);
-                    low[u] = min(low[u], low[e.to]);
-                    if(low[e.to]>=dfn[u])
+                    dfs(dfs, v, root);
+                    low[u] = min(low[u], low[v]);
+                    if(low[v]>=dfn[u])
                     {
-                        if(++s+(u!=root)==2) m_cuts.push_back(u);
-                        m_groups.emplace_back();
+                        if(++s+(u!=root)==2) res.cuts.push_back(u);
+                        res.groups.emplace_back();
                         int w;
                         do
                         {
-                            w = st.top();
+                            res.groups.back().push_back(w=st.top());
                             st.pop();
-                            m_groups.back().push_back(w);
                         }
-                        while(w!=e.to);
-                        m_groups.back().push_back(u);
+                        while(w!=v);
+                        res.groups.back().push_back(u);
                     }
                 }
-                else low[u] = min(low[u], dfn[e.to]);
+                else low[u] = min(low[u], dfn[v]);
             }
         };
-        for(int i=0;i<g.node_cnt();i++) if(dfn[i]==-1) dfs(dfs, i, i);
+        for(size_t i=0;i<g.size();i++) if(dfn[i]==-1) dfs(dfs, i, i);
+        return res;
     }
-    int size() const { return m_groups.size(); }
-    auto& cuts() const { return m_cuts; }
-    auto& groups() const { return m_groups; }
-    auto bctree() const
+    auto get_bctree() const
     {
-        graph t(n+size());
-        int cnt = n;
-        for(auto& group : m_groups)
-        {
-            for(auto v : group) t.add_edge(cnt, v);
-            cnt++;
-        }
-        return t;
+        auto res = (*this)();
+        vector<vector<int>> h(g.size()+res.groups.size());
+        for(int i=0,j=g.size();i<(int)res.groups.size();i++,j++)
+            for(auto v : res.groups[i])
+                h[j].push_back(v), h[v].push_back(j);
+        return h;
     }
-private:
-    int n;
-    vector<int> m_cuts;
-    vector<vector<int>> m_groups;
 };
