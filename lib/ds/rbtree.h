@@ -14,7 +14,7 @@ public:
         if(it->first==x) rbtree_base<T>::erase(it);
     }
     auto order_of_key(const T& x) const { return rbtree_base<T>::order_of_key({x, INT_MIN}); }
-    auto find_by_order(int rk) const { return rbtree_base<T>::find_by_order(rk); }
+    auto find_by_order(int ord) const { return rbtree_base<T>::find_by_order(ord); }
     auto lower_bound(const T& x) const { return rbtree_base<T>::lower_bound({x, INT_MIN}); }
     auto upper_bound(const T& x) const { return rbtree_base<T>::upper_bound({x, INT_MAX}); }
 };

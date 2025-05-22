@@ -1,7 +1,7 @@
 template <typename T, auto Op>
-requires convertible_to<invoke_result_t<decltype(Op), T, T>, T>
 class segtree
 {
+    static_assert(convertible_to<invoke_result_t<decltype(Op), T, T>, T>);
     static constexpr auto lowbit(auto x) { return x&-x; }
     size_t n, sz;
     vector<T> data;

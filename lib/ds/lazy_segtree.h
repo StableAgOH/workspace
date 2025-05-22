@@ -1,9 +1,9 @@
 template <typename T, typename Lazy, auto Op, auto Compose, auto Apply>
-requires convertible_to<invoke_result_t<decltype(Op), T, T>, T> &&
-    invocable<decltype(Compose), Lazy&, Lazy> &&
-    invocable<decltype(Apply), T&, Lazy>
 class lazy_segtree
 {
+    static_assert(convertible_to<invoke_result_t<decltype(Op), T, T>, T>);
+    static_assert(invocable<decltype(Compose), Lazy&, Lazy>);
+    static_assert(invocable<decltype(Apply), T&, Lazy>);
     static constexpr auto lowbit(auto x) { return x&-x; }
     size_t n, sz, lg;
     vector<T> data;

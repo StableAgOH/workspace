@@ -1,7 +1,7 @@
 template <typename T, auto Op>
-requires convertible_to<invoke_result_t<decltype(Op), T, T>, T>
 class sparse_table
 {
+    static_assert(convertible_to<invoke_result_t<decltype(Op), T, T>, T>);
     vector<vector<T>> data;
 public:
     sparse_table(ranges::range auto&& rg)
