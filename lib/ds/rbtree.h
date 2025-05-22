@@ -1,7 +1,7 @@
 #include <ext/pb_ds/assoc_container.hpp>
 using namespace __gnu_pbds;
 template <typename T>
-using rbtree_base = tree<pair<T,int>, null_type, less<>, rb_tree_tag, tree_order_statistics_node_update>;
+using rbtree_base = tree<pair<T, int>, null_type, less<>, rb_tree_tag, tree_order_statistics_node_update>;
 template <typename T>
 class rbtree : public rbtree_base<T>
 {
