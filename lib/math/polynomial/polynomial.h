@@ -1,26 +1,29 @@
 template <typename T>
-class polynomial
+struct polynomial : valarray<T>
 {
-    valarray<T> coef;
-public:
-    polynomial() : coef(1) {}
-    explicit polynomial(size_t deg) : coef(deg+1) {}
-    polynomial(initializer_list<T> il) : coef(il) {}
-    polynomial(const valarray<T>& v) : coef(v) {}
-    polynomial(valarray<T>&& v) : coef(move(v)) {}
-    operator valarray<T>() const { return coef; }
-    auto operator[](size_t i) const { return coef[i]; }
-    auto& operator[](size_t i) { return coef[i]; }
+    using valarray<T>::operator[];
+    using valarray<T>::min;
+    using valarray<T>::max;
+    polynomial() : valarray<T>(1) {}
+    explicit polynomial(size_t deg) : valarray<T>(deg+1) {}
+    polynomial(const valarray<T>& v) : valarray<T>(v) {}
+    polynomial(valarray<T>&& v) : valarray<T>(move(v)) {}
+    template <typename U=T>
+    auto operator()(T x, U init=T{}) const
+    {
+        for(int i=degree();i>=0;i--) init = init*x+(*this)[i];
+        return init;
+    }
     auto& operator+=(const polynomial& rhs)
     {
-        coef.redegree(max(degree(), rhs.degree()));
-        for(size_t i=0;i<=rhs.degree();i++) coef[i] += rhs[i];
+        redegree(max(degree(), rhs.degree()));
+        for(size_t i=0;i<=rhs.degree();i++) (*this)[i] += rhs[i];
         return *this;
     }
     auto& operator-=(const polynomial& rhs)
     {
-        coef.redegree(max(degree(), rhs.degree()));
-        for(size_t i=0;i<=rhs.degree();i++) coef[i] -= rhs[i];
+        redegree(max(degree(), rhs.degree()));
+        for(size_t i=0;i<=rhs.degree();i++) (*this)[i] -= rhs[i];
         return *this;
     }
     auto operator+(const polynomial& rhs) const { return polynomial(*this) += rhs; }
@@ -35,15 +38,6 @@ public:
         for(size_t i=0;i<=p.degree();i++) os<<p[i]<<' ';
         return os;
     }
-    auto min() const { return coef.min(); }
-    auto max() const { return coef.max(); }
-    auto sum() const { return coef.sum(); }
-    auto degree() const { return coef.size()-1; }
-    auto redegree(size_t deg) { coef.resize(deg+1); }
-    template <typename U=T>
-    auto eval(T x, U init=T{}) const
-    {
-        for(int i=degree();i>=0;i--) init = init*x+coef[i];
-        return init;
-    }
+    auto degree() const { return valarray<T>::size()-1; }
+    auto redegree(size_t deg) { valarray<T>::resize(deg+1); }
 };

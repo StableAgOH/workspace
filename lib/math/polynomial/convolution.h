@@ -6,19 +6,19 @@ struct fft
     void operator()(valarray<complex<double>>& a, int f)
     {
         int n = a.size();
-        valarray<int> pos(n);
+        vector<int> pos(n);
         for(int i=0;i<n;i++) pos[i] = pos[i>>1]>>1|(i&1?n>>1:0);
         for(int i=0;i<n;i++) if(i<pos[i]) swap(a[i], a[pos[i]]);
-        for(int i=1;i<n;i<<=1)
+        for(int k=1;k<n;k<<=1)
         {
-            auto w = polar(1.0, f*numbers::pi/i);
-            for(int j=0;j<n;j+=i<<1)
+            auto w = polar(1.0, f*numbers::pi/k);
+            for(int i=0;i<n;i+=k<<1)
             {
                 complex wk = 1.0;
-                for(int k=0;k<i;k++,wk*=w)
+                for(int j=0;j<k;j++,wk*=w)
                 {
-                    auto u=a[j+k], v=a[i+j+k]*wk;
-                    a[j+k] = u+v, a[i+j+k] = u-v;
+                    auto u=a[i+j], v=a[i+j+k]*wk;
+                    a[i+j]=u+v, a[i+j+k]=u-v;
                 }
             }
         }
@@ -43,10 +43,7 @@ struct fwt
 };
 using fwt_and = fwt<[](auto& u, auto& v, int f) { u += f*v; }>;
 using fwt_or = fwt<[](auto& u, auto& v, int f) { v += f*u; }>;
-using fwt_xor = fwt<[](auto& u, auto& v, int f) {
-    tie(u,v) = pair(u+v, u-v);
-    if(f==-1) u/=2, v/=2;
-}>;
+using fwt_xor = fwt<[](auto& u, auto& v, int f) { tie(u,v) = pair(u+v, u-v); if(f==-1) u/=2, v/=2; }>;
 template <typename T, typename Conv=fft>
 polynomial<T> convolution(const polynomial<T>& lhs, const polynomial<T>& rhs, Conv conv={})
 {
