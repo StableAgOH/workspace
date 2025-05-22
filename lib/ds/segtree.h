@@ -15,7 +15,7 @@ public:
     }
     segtree(size_t n, const T& e={}) : segtree(vector(n, e), e) {}
     auto operator()() const { return data[1]; }
-    auto operator()(size_t p) const { return data[p+sz]; }
+    auto operator[](size_t p) const { return data[p+sz]; }
     auto operator()(size_t l, size_t r) const
     {
         auto resl=data[0], resr=data[0];

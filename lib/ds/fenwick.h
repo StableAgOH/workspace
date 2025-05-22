@@ -18,7 +18,7 @@ public:
     }
     fenwick(size_t n, const T& init={}) : fenwick(vector(n, init)) {}
     auto operator()(size_t l, size_t r) const { return scan(r)-scan(l-1); }
-    auto operator()(size_t l) const { return (*this)(l, l); }
+    auto operator[](size_t p) const { return (*this)(p, p); }
     void add(size_t p, const T& x) { for(size_t i=p+1;i<=size();i+=lowbit(i)) data[i] += x; }
     void clear() { data.assign(data.size(), {}); }
     auto size() const { return data.size()-1; }
