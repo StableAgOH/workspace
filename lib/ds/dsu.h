@@ -17,7 +17,7 @@ public:
         return x;
     }
     bool same(int x, int y) { return leader(x)==leader(y); }
-    int size(int x) { return -data[leader(x)]; }
+    size_t size(int x) { return -data[leader(x)]; }
     auto groups()
     {
         vector<vector<int>> result(data.size());
