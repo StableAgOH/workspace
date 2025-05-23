@@ -1,9 +1,4 @@
 template <typename T>
-requires requires(T a, T b)
-{
-    {a+b} -> same_as<T>;
-    {a-b} -> same_as<T>;
-}
 class fenwick
 {
     static constexpr auto lowbit(auto x) { return x&-x; }
