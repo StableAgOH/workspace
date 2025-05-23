@@ -28,6 +28,7 @@
             "int main()",
             "{",
             "\tcin.tie(nullptr)->sync_with_stdio(false);",
+            "\tcin.exceptions(cin.failbit);",
             "\tauto onecase = [&]([[maybe_unused]] const int caseidx)",
             "\t{",
             "\t\t$0",
@@ -54,6 +55,7 @@
             "int main()",
             "{",
             "\tcin.tie(nullptr)->sync_with_stdio(false);",
+            "\tcin.exceptions(cin.failbit);",
             "\t$0",
             "}",
             ""
@@ -73,6 +75,7 @@
             "\tfreopen(\"out.txt\", \"w\", stdout);",
             "#endif",
             "\tcin.tie(nullptr)->sync_with_stdio(false);",
+            "\tcin.exceptions(cin.failbit);",
             "\t$0",
             "}",
             ""
