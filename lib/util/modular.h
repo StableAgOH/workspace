@@ -4,7 +4,7 @@ class modular
     static constexpr auto mod() { return T::value; }
     static constexpr auto norm(integral auto x)
     {
-        if(!(-mod()<=x&&x<mod())) x %= mod();
+        if(cmp_less(x, -mod())||cmp_greater_equal(x, mod())) x %= mod();
         if(x<0) x += mod();
         return x;
     }
