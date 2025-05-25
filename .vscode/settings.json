@@ -6,5 +6,6 @@
     },
     "files.readonlyInclude": {
         "**/include/c++/**": true,
+        "**/atcoder/**": true
     }
 }
