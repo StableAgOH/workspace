@@ -629,8 +629,23 @@
             "\tcopy(b.begin()+l, b.begin()+r, a.begin()+l); // 恢复数据",
             "\tcdq(cdq, m, r);",
             "};",
-            "cdq(cdq, 0, n);",
-            ""
+            "cdq(cdq, 0, n);"
+        ]
+    },
+    "dcdp": {
+        "scope": "cpp",
+        "prefix": "dcdp",
+        "body": [
+            "auto f = [&](int i, int j) { return $0; };",
+            "auto g = [&](auto&& g, int l, int r, int kl, int kr) -> void",
+            "{",
+            "\tint mid=(l+r)/2, best=kl;",
+            "\tfor(int i=kl;i<=min(kr, mid-1);i++) if(f(i, mid)<f(best, mid)) best = i;",
+            "\tdp[mid] = f(best, mid);",
+            "\tif(l<mid) g(g, l, mid-1, kl, best);",
+            "\tif(mid<r) g(g, mid+1, r, best, kr);",
+            "};",
+            "g(g, 1, n, 0, n);"
         ]
     },
 }
