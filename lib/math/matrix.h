@@ -1,81 +1,84 @@
 template <typename T>
 class matrix
 {
-public:
-    size_t rows, cols;
 protected:
-    valarray<T> data;
+    size_t m_rows, m_cols;
+    valarray<T> m_data;
 public:
-    matrix(size_t rows, size_t cols) : rows(rows), cols(cols), data(rows*cols) {}
-    auto& operator()(size_t r, size_t c) { return data[r*cols+c]; }
-    auto operator()(size_t r, size_t c) const { return data[r*cols+c]; }
-    auto row(size_t r) { return data[slice(r*cols, cols, 1)]; }
-    auto col(size_t c) { return data[slice(c, rows, cols)]; }
-    auto operator+(const auto& rhs) const { return matrix(*this) += rhs; }
-    auto operator+=(const T& rhs) { data += rhs; return *this; }
+    matrix(size_t rows, size_t cols) : m_rows(rows), m_cols(cols), m_data(rows*cols) { assert(rows>0&&cols>0); }
+    auto rows() const { return m_rows; }
+    auto cols() const { return m_cols; }
+    auto& operator()(size_t r, size_t c) { return m_data[r*m_cols+c]; }
+    auto operator()(size_t r, size_t c) const { return m_data[r*m_cols+c]; }
+    auto row(size_t r) { return m_data[slice(r*m_cols, m_cols, 1)]; }
+    auto col(size_t c) { return m_data[slice(c, m_rows, m_cols)]; }
+    auto operator+=(const T& rhs)
+    {
+        m_data += rhs;
+        return *this;
+    }
     auto operator+=(const matrix& rhs)
     {
-        assert(rows==rhs.rows&&cols==rhs.cols);
-        data += rhs.data;
+        assert(m_rows==rhs.m_rows&&m_cols==rhs.m_cols);
+        m_data += rhs.m_data;
+        return *this;
+    }
+    auto operator+(const auto& rhs) const { return matrix(*this) += rhs; }
+    auto operator-=(const T& rhs)
+    {
+        m_data -= rhs;
+        return *this;
+    }
+    auto operator-=(const matrix& rhs)
+    {
+        assert(m_rows==rhs.m_rows&&m_cols==rhs.m_cols);
+        m_data -= rhs.m_data;
         return *this;
     }
     auto operator-(const auto& rhs) const { return matrix(*this) -= rhs; }
-    auto operator-=(const T& rhs) { data -= rhs; return *this; }
-    auto operator-=(const matrix& rhs)
-    {
-        assert(rows==rhs.rows&&cols==rhs.cols);
-        data -= rhs.data;
-        return *this;
-    }
+    auto operator*=(const T& rhs) { m_data *= rhs; return *this; }
+    auto operator*=(const matrix& rhs) { return *this = *this*rhs; }
     auto operator*(const T& rhs) const { return matrix(*this) *= rhs; }
-    auto operator*=(const T& rhs) { data *= rhs; return *this; }
     auto operator*(const matrix& rhs) const
     {
-        assert(cols==rhs.rows);
-        matrix res(rows, rhs.cols);
-        for(size_t i=0;i<rows;i++)
-            for(size_t k=0;k<cols;k++)
-                for(size_t j=0;j<rhs.cols;j++)
-                    res(i,j) += operator()(i,k)*rhs(k,j);
+        assert(m_cols==rhs.m_rows);
+        matrix res(m_rows, rhs.m_cols);
+        for(size_t i=0;i<m_rows;i++)
+            for(size_t k=0;k<m_cols;k++)
+                for(size_t j=0;j<rhs.m_cols;j++)
+                    res(i, j) += (*this)(i, k)*rhs(k, j);
         return res;
     }
-    auto operator*=(const matrix& rhs) { return *this = *this*rhs; }
     friend auto& operator>>(istream& is, matrix& rhs)
     {
-        for(size_t i=0;i<rhs.rows;i++)
-            for(size_t j=0;j<rhs.cols;j++)
+        for(size_t i=0;i<rhs.m_rows;i++)
+            for(size_t j=0;j<rhs.m_cols;j++)
                 is>>rhs(i,j);
         return is;
     }
     friend auto& operator<<(ostream& os, const matrix& rhs)
     {
-        for(size_t i=0;i<rhs.rows;i++)
-        {
-            for(size_t j=0;j<rhs.cols;j++)
-            {
-                os<<rhs(i,j);
-                if(j!=rhs.cols-1) os<<' ';
-                else if(i!=rhs.rows-1) os<<'\n';
-            }
-        }
+        for(size_t i=0;i<rhs.m_rows-1;i++)
+            for(size_t j=0;j<rhs.m_cols;j++)
+                os<<rhs(i,j)<<" \n"[j==rhs.m_cols-1];
+        os<<rhs(rhs.m_rows-1, 0);
+        for(size_t j=1;j<rhs.m_cols;j++) os<<' '<<rhs(rhs.m_rows-1, j);
         return os;
     }
 };
 template <typename T>
 class square_matrix : public matrix<T>
 {
+    using matrix<T>::m_rows;
+    using matrix<T>::m_data;
 public:
     static auto identity(size_t n) { square_matrix E(n); E.diagonal() = 1; return E; }
-private:
-    using matrix<T>::rows;
-    using matrix<T>::data;
-public:
-    square_matrix(size_t n) : matrix<T>(n,n) {}
-    auto diagonal() { return data[slice(0, rows, rows+1)]; }
-    auto antidiagonal() { return data[slice(rows-1, rows, rows-1)]; }
-    auto pow(integral auto k)
+    explicit square_matrix(size_t n) : matrix<T>(n, n) {}
+    auto diagonal() { return m_data[slice(0, m_rows, m_rows+1)]; }
+    auto antidiagonal() { return m_data[slice(m_rows-1, m_rows, m_rows-1)]; }
+    auto pow(integral auto k) const
     {
-        square_matrix a=*this, res=identity(rows);
+        square_matrix a=*this, res=identity(m_rows);
         for(;k;k>>=1,a*=a) if(k&1) res *= a;
         return res;
     }
