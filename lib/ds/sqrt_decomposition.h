@@ -1,5 +1,5 @@
 template <typename T, auto Op>
-requires convertible_to<invoke_result_t<decltype(Op), T, T>, T>
+requires same_as<invoke_result_t<decltype(Op), T, T>, T>
 class sqrt_decomposition
 {
     size_t n, sz;

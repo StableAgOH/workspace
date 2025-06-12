@@ -22,6 +22,4 @@ public:
         return init;
     }
     auto operator[](size_t p) const { return (*this)(p, p); }
-    void clear() { data.assign(data.size(), {}); }
-    auto size() const { return data.size(); }
 };
