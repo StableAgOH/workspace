@@ -5,7 +5,7 @@ using rbtree_base = tree<pair<T, int>, null_type, less<>, rb_tree_tag, tree_orde
 template <typename T>
 class rbtree : public rbtree_base<T>
 {
-    int cnt = 0;
+    inline static int cnt = 0;
 public:
     auto insert(const T& x) { rbtree_base<T>::insert({x, cnt++}); }
     auto erase(const T& x)
