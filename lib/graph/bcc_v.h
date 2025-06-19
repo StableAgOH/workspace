@@ -44,14 +44,14 @@ public:
                 else low[u] = min(low[u], dfn[v]);
             }
         };
-        for(size_t i=0;i<g.size();i++) if(dfn[i]==-1) dfs(dfs, i, i);
+        for(size_t i=0; i<g.size(); i++) if(dfn[i]==-1) dfs(dfs, i, i);
         return res;
     }
     auto get_bctree() const
     {
         auto res = (*this)();
         vector<vector<int>> h(g.size()+res.groups.size());
-        for(int i=0,j=g.size();i<(int)res.groups.size();i++,j++)
+        for(int i=0,j=g.size(); i<(int)res.groups.size(); i++,j++)
             for(auto v : res.groups[i])
                 h[j].push_back(v), h[v].push_back(j);
         return h;

@@ -6,7 +6,7 @@ struct string_hasher
     vector<int> p, h;
     string_hasher(const string& s) : n(s.length()), p(n+1, 1), h(n+1)
     {
-        for(int i=1;i<=n;i++)
+        for(int i=1; i<=n; i++)
         {
             p[i] = ll(p[i-1])*base%mod;
             h[i] = (ll(h[i-1])*base+s[i-1])%mod;

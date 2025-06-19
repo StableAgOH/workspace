@@ -19,7 +19,7 @@ public:
     xor_hasher(ranges::range auto&& r, const xor_hasher_weight<T>& w) : p(ranges::size(r)+1), w(w)
     {
         auto it = ranges::begin(r);
-        for(size_t i=1;i<p.size();i++) p[i] = p[i-1]^w(*it++);
+        for(size_t i=1; i<p.size(); i++) p[i] = p[i-1]^w(*it++);
     }
     auto& weight_function() { return w; }
     int operator()(size_t l, size_t r) const { return p[r+1]^p[l]; }

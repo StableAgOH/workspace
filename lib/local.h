@@ -46,7 +46,7 @@ namespace debug_macro
     basic_ostream<C,T>& operator<<(basic_ostream<C,T>& os, const R& x)
     {
         os<<'[';
-        for(auto it=ranges::begin(x);it!=ranges::end(x);++it)
+        for(auto it=ranges::begin(x); it!=ranges::end(x); ++it)
         {
             if(it!=ranges::begin(x)) os<<',';
             os<<*it;

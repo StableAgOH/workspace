@@ -40,7 +40,7 @@ public:
         {
             if(u==s) return up;
             T res = 0;
-            for(int& i=iter[u];i<(int)adj[u].size();i++)
+            for(int& i=iter[u]; i<(int)adj[u].size(); i++)
             {
                 auto& e = adj[u][i];
                 if(level[u]<=level[e.to]||adj[e.to][e.rev].cap==0) continue;

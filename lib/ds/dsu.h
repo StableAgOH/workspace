@@ -17,7 +17,7 @@ public:
     auto groups()
     {
         vector<vector<int>> result(data.size());
-        for(size_t i=0;i<data.size();i++) result[(*this)(i)].push_back(i);
+        for(size_t i=0; i<data.size(); i++) result[(*this)(i)].push_back(i);
         return result;
     }
 };

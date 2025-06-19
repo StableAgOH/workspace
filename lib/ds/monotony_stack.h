@@ -4,7 +4,7 @@ struct prev_less_fn
     constexpr void operator()(I first, S last, O result, int default_val, Cmp cmp={}) const
     {
         stack<I> st;
-        for(auto it=first;it!=last;++it)
+        for(auto it=first; it!=last; ++it)
         {
             while(!st.empty()&&!cmp(*st.top(), *it)) st.pop();
             *result++ = st.empty()?default_val:ranges::distance(first, st.top());

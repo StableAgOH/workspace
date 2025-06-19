@@ -7,15 +7,15 @@ struct fft
     {
         int n = a.size();
         vector<int> pos(n);
-        for(int i=0;i<n;i++) pos[i] = pos[i>>1]>>1|(i&1?n>>1:0);
-        for(int i=0;i<n;i++) if(i<pos[i]) swap(a[i], a[pos[i]]);
-        for(int k=1;k<n;k<<=1)
+        for(int i=0; i<n; i++) pos[i] = pos[i>>1]>>1|(i&1?n>>1:0);
+        for(int i=0; i<n; i++) if(i<pos[i]) swap(a[i], a[pos[i]]);
+        for(int k=1; k<n; k<<=1)
         {
             auto w = polar(1.0, f*numbers::pi/k);
-            for(int i=0;i<n;i+=k<<1)
+            for(int i=0; i<n; i+=k<<1)
             {
                 complex wk = 1.0;
-                for(int j=0;j<k;j++,wk*=w)
+                for(int j=0; j<k; j++,wk*=w)
                 {
                     auto u=a[i+j], v=a[i+j+k]*wk;
                     a[i+j]=u+v, a[i+j+k]=u-v;
@@ -35,9 +35,9 @@ struct fwt
     void operator()(valarray<T>& a, int f)
     {
         int n = a.size();
-        for(int k=1;k<n;k<<=1)
-            for(int i=0;i<n;i+=k<<1)
-                for(int j=0;j<k;j++)
+        for(int k=1; k<n; k<<=1)
+            for(int i=0; i<n; i+=k<<1)
+                for(int j=0; j<k; j++)
                     F(a[i+j], a[i+j+k], f);
     }
 };
@@ -49,13 +49,13 @@ polynomial<T> convolution(const polynomial<T>& lhs, const polynomial<T>& rhs, Co
 {
     int m = bit_ceil(Conv::vd(lhs.degree(), rhs.degree())+1);
     typename Conv::vtype<T> c1(m), c2(m);
-    for(size_t i=0;i<=lhs.degree();i++) c1[i] = lhs[i];
-    for(size_t i=0;i<=rhs.degree();i++) c2[i] = rhs[i];
+    for(size_t i=0; i<=lhs.degree(); i++) c1[i] = lhs[i];
+    for(size_t i=0; i<=rhs.degree(); i++) c2[i] = rhs[i];
     conv(c1, 1), conv(c2, 1), c1 *= c2, conv(c1, -1);
     if constexpr(same_as<Conv, fft>)
     {
         polynomial<T> ret(lhs.degree()+rhs.degree());
-        for(size_t i=0;i<=ret.degree();i++) ret[i] = round(c1[i].real());
+        for(size_t i=0; i<=ret.degree(); i++) ret[i] = round(c1[i].real());
         return ret;
     }
     else return c1;

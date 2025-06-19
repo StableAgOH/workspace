@@ -16,7 +16,7 @@ public:
     auto pow(integral auto rhs) const
     {
         modular a=*this, res=1;
-        for(;rhs;rhs>>=1,a*=a) if(rhs&1) res *= a;
+        for(; rhs; rhs>>=1,a*=a) if(rhs&1) res *= a;
         return res;
     }
     auto operator~() const { return pow(mod()-2); }

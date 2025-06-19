@@ -27,7 +27,7 @@ struct ListNode
     friend ostream& operator<<(ostream& os, ListNode* l)
     {
         os<<'[';
-        for(;l;l=l->next) os<<l->val<<",]"[l->next==nullptr];
+        for(; l; l=l->next) os<<l->val<<",]"[l->next==nullptr];
         return os;
     }
 };

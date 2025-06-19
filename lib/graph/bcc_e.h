@@ -12,7 +12,7 @@ public:
         auto groups() const
         {
             vector<vector<int>> groups(cnt);
-            for(size_t i=0;i<id.size();i++) groups[id[i]].push_back(i);
+            for(size_t i=0; i<id.size(); i++) groups[id[i]].push_back(i);
             return groups;
         }
     };
@@ -52,7 +52,7 @@ public:
                 res.cnt++;
             }
         };
-        for(size_t i=0;i<g.size();i++) if(dfn[i]==-1) dfs(dfs, i, -1);
+        for(size_t i=0; i<g.size(); i++) if(dfn[i]==-1) dfs(dfs, i, -1);
         for(auto& x : res.id) x = res.cnt-1-x;
         return res;
     }
