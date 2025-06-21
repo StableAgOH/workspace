@@ -11,7 +11,7 @@ public:
     auto erase(const T& x)
     {
         auto it = lower_bound(x);
-        if(it->first==x) rbtree_base<T>::erase(it);
+        if(it!=this->end()&&it->first==x) rbtree_base<T>::erase(it);
     }
     auto order_of_key(const T& x) const { return rbtree_base<T>::order_of_key({x, INT_MIN}); }
     auto find_by_order(int ord) const { return rbtree_base<T>::find_by_order(ord); }

@@ -33,9 +33,9 @@ public:
     {
         assert(m_cols==rhs.m_rows);
         matrix res(m_rows, rhs.m_cols);
-        for(size_t i=0; i<m_rows; i++)
-            for(size_t k=0; k<m_cols; k++)
-                for(size_t j=0; j<rhs.m_cols; j++)
+        for(size_t i=0;i<m_rows;i++)
+            for(size_t k=0;k<m_cols;k++)
+                for(size_t j=0;j<rhs.m_cols;j++)
                     res(i, j) = Op1(res(i, j), Op2((*this)(i, k), rhs(k, j)));
         return *this = move(res);
     }
@@ -53,7 +53,7 @@ public:
     auto pow(integral auto k, square_matrix init)
     {
         auto a = *this;
-        for(; k; k>>=1,a*=a) if(k&1) init *= a;
+        for(;k;k>>=1,a*=a) if(k&1) init *= a;
         return init;
     }
 };

@@ -11,7 +11,7 @@ public:
         vector<invoke_result_t<decltype(calc), Q>> ans(q.size());
         int siz = n/sqrt(q.size());
         vector<int> pos(n+1);
-        for(size_t i=1; i<=n; i++) pos[i] = i/siz;
+        for(size_t i=1;i<=n;i++) pos[i] = i/siz;
         vector<int> o(q.size());
         iota(o.begin(), o.end(), 0);
         sort(o.begin(), o.end(), [&](int i, int j) {

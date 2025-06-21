@@ -12,9 +12,9 @@ public:
     auto operator()() const
     {
         auto s = get_scc_result();
-        for(int i=0; i<n; i++) if(s.id[2*i]==s.id[2*i+1]) return vector<bool>{};
+        for(int i=0;i<n;i++) if(s.id[2*i]==s.id[2*i+1]) return vector<bool>{};
         vector<bool> ans(n);
-        for(int i=0; i<n; i++) ans[i] = s.id[2*i]<s.id[2*i+1];
+        for(int i=0;i<n;i++) ans[i] = s.id[2*i]<s.id[2*i+1];
         return ans;
     }
 };

@@ -10,7 +10,7 @@ public:
     segtree(ranges::range auto&& rg, const T& e) : n(ranges::size(rg)), sz(bit_ceil(n)), data(sz<<1, e)
     {
         ranges::copy(rg, data.begin()+sz);
-        for(auto i=sz-1; i>=1; i--) update(i);
+        for(auto i=sz-1;i>=1;i--) update(i);
     }
     segtree(size_t n, const T& e, const T& init={}) : segtree(vector(n, init), e) {}
     auto operator()() const { return data[1]; }
@@ -18,14 +18,14 @@ public:
     auto operator()(size_t l, size_t r) const
     {
         auto resl=data[0], resr=data[0];
-        for(l+=sz,r+=sz+1; l<r; l>>=1,r>>=1)
+        for(l+=sz,r+=sz+1;l<r;l>>=1,r>>=1)
         {
             if(l&1) resl = Op(resl, data[l++]);
             if(r&1) resr = Op(data[--r], resr);
         }
         return Op(resl, resr);
     }
-    void set(size_t p, const T& x) { for(data[p+=sz]=x; p>1; p>>=1) update(p>>1); }
+    void set(size_t p, const T& x) { for(data[p+=sz]=x;p>1;p>>=1) update(p>>1); }
     size_t min_left(size_t r, predicate<T> auto&& pred) const
     {
         if(!r) return 0;

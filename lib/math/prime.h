@@ -9,7 +9,7 @@ public:
     auto factorization_logn(integral auto x) const
     {
         vector<int> res;
-        for(; x>1; x/=minf[x]) res.push_back(minf[x]);
+        for(;x>1;x/=minf[x]) res.push_back(minf[x]);
         return res;
     }
 };
@@ -31,7 +31,7 @@ public:
     vector<int> primes;
     prime()
     {
-        for(int i=2; i<=Mx; i++)
+        for(int i=2;i<=Mx;i++)
         {
             if(!not_prime[i])
             {
@@ -64,7 +64,7 @@ public:
         for(auto i : primes)
         {
             if(ll(i)*i>x) break;
-            for(; x%i==0; x/=i) res.push_back(i);
+            for(;x%i==0;x/=i) res.push_back(i);
         }
         if(x>1) res.push_back(x);
         return res;

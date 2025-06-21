@@ -9,8 +9,8 @@ public:
     sqrt_decomposition(ranges::range auto&& rg) : n(ranges::size(rg)), sz(sqrt(n)), id(n),
         data(ranges::begin(rg), ranges::end(rg)), block((n-1)/sz+1)
     {
-        for(size_t i=0; i<n; i++) id[i] = i/sz;
-        for(size_t i=0; i<n; i++) block[id[i]] = i%sz==0?data[i]:Op(block[id[i]], data[i]);
+        for(size_t i=0;i<n;i++) id[i] = i/sz;
+        for(size_t i=0;i<n;i++) block[id[i]] = i%sz==0?data[i]:Op(block[id[i]], data[i]);
     }
     sqrt_decomposition(size_t n, const T& init={}) : sqrt_decomposition(vector(n, init)) {}
     auto operator[](size_t p) const { return data[p]; }

@@ -1,7 +1,7 @@
 ll qpow(__int128 a, ll k, ll p)
 {
     ll res = 1;
-    for(; k; k>>=1,a=a*a%p) if(k&1) res=res*a%p;
+    for(;k;k>>=1,a=a*a%p) if(k&1) res=res*a%p;
     return res;
 }
 bool miller_rabin(ll x)
@@ -13,7 +13,7 @@ bool miller_rabin(ll x)
     {
         __int128 v = qpow(a, u, x);
         if(v<=1) continue;
-        for(int s=0; s<t; s++)
+        for(int s=0;s<t;s++)
         {
             if(v==x-1) goto nxt;
             v = v*v%x;

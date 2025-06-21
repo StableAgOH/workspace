@@ -18,14 +18,14 @@ public:
     using range = pair<size_t, size_t>;
     explicit seggraph(size_t n) : n(n), sz(bit_ceil(n)), base({2*sz-1, 4*sz-1}), adj(base[1]+n)
     {
-        for(size_t i=1; i<sz; i++)
+        for(size_t i=1;i<sz;i++)
         {
             adj[i].emplace_back(i<<1, 0);
             adj[i].emplace_back(i<<1|1, 0);
             adj[base[0]+(i<<1)].emplace_back(base[0]+i, 0);
             adj[base[0]+(i<<1|1)].emplace_back(base[0]+i, 0);
         }
-        for(size_t i=0; i<n; i++)
+        for(size_t i=0;i<n;i++)
         {
             auto o = id(i);
             adj[i+sz].emplace_back(o, 0);
