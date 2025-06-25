@@ -24,7 +24,7 @@ public:
         int timestamp = 0;
         vector<int> low(g.size()), dfn(g.size(), -1);
         stack<int> st;
-        auto dfs = [&](auto&& dfs, int u, int i) -> void
+        auto dfs = [&](auto&& self, int u, int i) -> void
         {
             low[u] = dfn[u] = timestamp++;
             st.push(u);
@@ -33,7 +33,7 @@ public:
                 if(idx==(i^1)) continue;
                 if(dfn[v]==-1)
                 {
-                    dfs(dfs, v, idx);
+                    self(self, v, idx);
                     low[u] = min(low[u], low[v]);
                     if(low[v]>dfn[u]) res.cuts.push_back(minmax(idx, idx^1));
                 }

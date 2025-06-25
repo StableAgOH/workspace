@@ -36,7 +36,7 @@ public:
                 }
             }
         };
-        auto dfs = [&](auto&& dfs, int u, T up)
+        auto dfs = [&](auto&& self, int u, T up)
         {
             if(u==s) return up;
             T res = 0;
@@ -44,7 +44,7 @@ public:
             {
                 auto& e = adj[u][i];
                 if(level[u]<=level[e.to]||adj[e.to][e.rev].cap==0) continue;
-                T d = dfs(dfs, e.to, min(up-res, adj[e.to][e.rev].cap));
+                T d = self(self, e.to, min(up-res, adj[e.to][e.rev].cap));
                 if(d<=0) continue;
                 e.cap += d;
                 adj[e.to][e.rev].cap -= d;

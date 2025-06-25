@@ -78,7 +78,7 @@ auto factorize(R&& factorization_result)
     for(auto i : factorization_result) cnt[i]++;
     vector pf(cnt.begin(), cnt.end());
     vector<T> fac;
-    auto dfs = [&](auto&& dfs, size_t p, T mul) -> void
+    auto dfs = [&](auto&& self, size_t p, T mul) -> void
     {
         if(p==pf.size())
         {
@@ -87,7 +87,7 @@ auto factorize(R&& factorization_result)
         }
         for(auto i : views::iota(0))
         {
-            dfs(dfs, p+1, mul);
+            self(self, p+1, mul);
             if(i==pf[p].second) break;
             mul *= pf[p].first;
         }

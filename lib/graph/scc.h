@@ -22,7 +22,7 @@ public:
         int timestamp = 0;
         vector<int> low(g.size()), dfn(g.size(), -1);
         stack<int> st;
-        auto dfs = [&](auto&& dfs, int u) -> void
+        auto dfs = [&](auto&& self, int u) -> void
         {
             low[u] = dfn[u] = timestamp++;
             st.push(u);
@@ -30,7 +30,7 @@ public:
             {
                 if(dfn[v]==-1)
                 {
-                    dfs(dfs, v);
+                    self(self, v);
                     low[u] = min(low[u], low[v]);
                 }
                 else low[u] = min(low[u], dfn[v]);

@@ -35,34 +35,34 @@ public:
     auto operator()(int rt=0) const
     {
         result res(g.size());
-        auto dfs1 = [&](auto&& dfs1, int u, int p) -> void
+        auto dfs1 = [&](auto&& self, int u, int p) -> void
         {
             res.dep[u] = p==-1?0:res.dep[p]+1;
             res.par[u] = p;
             for(auto v : g[u])
             {
                 if(v==p) continue;
-                dfs1(dfs1, v, u);
+                self(self, v, u);
                 res.siz[u] += res.siz[v];
                 if(res.son[u]==-1||res.siz[v]>res.siz[res.son[u]]) res.son[u] = v;
             }
         };
         dfs1(dfs1, rt, -1);
         int timestamp = 0;
-        auto dfs2 = [&](auto&& dfs2, int u, int t) -> void
+        auto dfs2 = [&](auto&& self, int u, int t) -> void
         {
             res.top[u] = t;
             res.dfn[u] = timestamp++;
             if(res.son[u]!=-1)
             {
-                dfs2(dfs2, res.son[u], t);
+                self(self, res.son[u], t);
                 res.bot[u] = res.bot[res.son[u]];
             }
             else res.bot[u] = u;
             for(auto v : g[u])
             {
                 if(v==res.par[u]||v==res.son[u]) continue;
-                dfs2(dfs2, v, v);
+                self(self, v, v);
             }
         };
         dfs2(dfs2, rt, rt);

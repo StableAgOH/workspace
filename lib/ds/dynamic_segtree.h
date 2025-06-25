@@ -23,14 +23,14 @@ public:
     auto operator[](size_t p) const { return (*this)(p, p); }
     auto operator()(size_t l, size_t r) const
     {
-        auto impl = [&](auto&& impl, size_t L, size_t R, pnode cur)
+        auto impl = [&](auto&& self, size_t L, size_t R, pnode cur)
         {
             if(!cur) return e;
             if(l<=L&&R<=r+1) return cur->data;
             auto M = (L+R)>>1;
             T res = e;
-            if(l<M) res = Op(res, impl(impl, L, M, cur->left));
-            if(r>=M) res = Op(res, impl(impl, M, R, cur->right));
+            if(l<M) res = Op(res, self(self, L, M, cur->left));
+            if(r>=M) res = Op(res, self(self, M, R, cur->right));
             return res;
         };
         return impl(impl, 0, n, root);
@@ -39,7 +39,7 @@ public:
     requires invocable<F, T&>
     void transform(size_t p, F&& f)
     {
-        auto impl = [&](auto&& impl, size_t L, size_t R, pnode& cur) -> void
+        auto impl = [&](auto&& self, size_t L, size_t R, pnode& cur) -> void
         {
             if(!cur) cur = new_node();
             if(L+1==R)
@@ -48,8 +48,8 @@ public:
                 return;
             }
             auto M = (L+R)>>1;
-            if(p<M) impl(impl, L, M, cur->left);
-            else impl(impl, M, R, cur->right);
+            if(p<M) self(self, L, M, cur->left);
+            else self(self, M, R, cur->right);
             update(cur);
         };
         impl(impl, 0, n, root);
