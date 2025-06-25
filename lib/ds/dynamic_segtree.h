@@ -35,14 +35,16 @@ public:
         };
         return impl(impl, 0, n, root);
     }
-    void set(size_t p, const T& x)
+    template <typename F>
+    requires invocable<F, T&>
+    void transform(size_t p, F&& f)
     {
         auto impl = [&](auto&& impl, size_t L, size_t R, pnode& cur) -> void
         {
             if(!cur) cur = new_node();
             if(L+1==R)
             {
-                cur->data = x;
+                f(cur->data);
                 return;
             }
             auto M = (L+R)>>1;
@@ -52,4 +54,5 @@ public:
         };
         impl(impl, 0, n, root);
     }
+    void set(size_t p, const T& x) { transform(p, [&](T& y) { y = x; }); }
 };
