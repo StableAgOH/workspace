@@ -1,5 +1,5 @@
 template <typename T, auto Op>
-requires same_as<invoke_result_t<decltype(Op), T, T>, T>
+requires convertible_to<invoke_result_t<decltype(Op), T, T>, T>
 class segtree
 {
     static constexpr auto lowbit(size_t x) { return x&-x; }

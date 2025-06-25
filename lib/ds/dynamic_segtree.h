@@ -1,5 +1,5 @@
 template <typename T, auto Op, typename Alloc=allocator<T>>
-requires same_as<invoke_result_t<decltype(Op), T, T>, T>
+requires convertible_to<invoke_result_t<decltype(Op), T, T>, T>
 class dynamic_segtree
 {
     typedef struct node { T data; node *left, *right; }* pnode;

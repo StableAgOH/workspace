@@ -1,5 +1,5 @@
 template <typename T, auto Op, typename Lazy, auto Compose, auto Apply>
-requires same_as<invoke_result_t<decltype(Op), T, T>, T> &&
+requires convertible_to<invoke_result_t<decltype(Op), T, T>, T> &&
     invocable<decltype(Compose), Lazy&, Lazy> &&
     invocable<decltype(Apply), T&, Lazy>
 class lazy_segtree
