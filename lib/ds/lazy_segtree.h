@@ -51,16 +51,14 @@ public:
         }
         return Op(resl, resr);
     }
-    template <typename F>
-    requires invocable<F, T&>
-    void transform(size_t p, F&& f)
+    void transform(size_t p, invocable<T&> auto&& f)
     {
         p += sz;
         for(auto i=lg;i>=1;i--) push(p>>i);
         f(data[p]);
         for(size_t i=1;i<=lg;i++) update(p>>i);
     }
-    void set(size_t p, const T& x) { transform(p, [&](T& y) { y = x; }); }
+    void set(size_t p, const T& x) { transform(p, [&](T& v) { v = x; }); }
     void apply(size_t p, const Lazy& lz)
     {
         p += sz;

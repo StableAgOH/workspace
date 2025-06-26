@@ -25,10 +25,8 @@ public:
         }
         return Op(resl, resr);
     }
-    template <typename F>
-    requires invocable<F, T&>
-    void transform(size_t p, F&& f) { for(f(data[p+=sz]);p>1;p>>=1) update(p>>1); }
-    void set(size_t p, const T& x) { transform(p, [&](T& y) { y = x; }); }
+    void transform(size_t p, invocable<T&> auto&& f) { for(f(data[p+=sz]);p>1;p>>=1) update(p>>1); }
+    void set(size_t p, const T& x) { transform(p, [&](T& v) { v = x; }); }
     size_t min_left(size_t r, predicate<T> auto&& pred) const
     {
         if(!r) return 0;
