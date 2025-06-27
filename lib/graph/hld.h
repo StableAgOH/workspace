@@ -4,8 +4,8 @@ class hld
 public:
     struct result
     {
-        vector<int> dep, par, siz, son, top, bot, dfn;
-        explicit result(int n) : dep(n), par(n), siz(n, 1), son(n, -1), top(n), bot(n), dfn(n) {}
+        vector<int> dep, par, siz, son, top, dfn;
+        explicit result(int n) : dep(n), par(n), siz(n, 1), son(n, -1), top(n), dfn(n) {}
         auto is_ancestor(int u, int v) { return dfn[u]<=dfn[v]&&dfn[v]<dfn[u]+siz[u]; }
         auto lca(int u, int v)
         {
@@ -17,8 +17,7 @@ public:
             return (dep[u]<dep[v])?u:v;
         }
         auto dis(int u, int v) { return dep[u]+dep[v]-2*dep[lca(u, v)]; }
-        template <typename F>
-        void path(int u, int v, F cb)
+        void path(int u, int v, invocable<int, int> auto&& cb)
         {
             while(top[u]!=top[v])
             {
@@ -28,6 +27,18 @@ public:
             }
             if(dep[u]>dep[v]) swap(u, v);
             cb(u, v);
+        }
+        template <bool ExcludeLCA=false>
+        void dfn_path(int u, int v, invocable<int, int> auto&& cb)
+        {
+            while(top[u]!=top[v])
+            {
+                if(dep[top[u]]<dep[top[v]]) swap(u, v);
+                cb(dfn[top[u]], dfn[u]);
+                u = par[top[u]];
+            }
+            if(dep[u]>dep[v]) swap(u, v);
+            cb(dfn[u]+ExcludeLCA, dfn[v]);
         }
     };
     explicit hld(int n) : g(n) {}
@@ -49,22 +60,15 @@ public:
             }
         };
         dfs1(dfs1, rt, -1);
-        int timestamp = 0;
+        int ts = 0;
         auto dfs2 = [&](auto&& self, int u, int t) -> void
         {
             res.top[u] = t;
-            res.dfn[u] = timestamp++;
-            if(res.son[u]!=-1)
-            {
-                self(self, res.son[u], t);
-                res.bot[u] = res.bot[res.son[u]];
-            }
-            else res.bot[u] = u;
+            res.dfn[u] = ts++;
+            if(res.son[u]!=-1) self(self, res.son[u], t);
             for(auto v : g[u])
-            {
-                if(v==res.par[u]||v==res.son[u]) continue;
-                self(self, v, v);
-            }
+                if(v!=res.par[u]&&v!=res.son[u])
+                    self(self, v, v);
         };
         dfs2(dfs2, rt, rt);
         return res;
