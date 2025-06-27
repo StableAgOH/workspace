@@ -63,7 +63,7 @@ public:
     {
         p += sz;
         for(auto i=lg;i>=1;i--) push(p>>i);
-        data[p] = data[p]+lz;
+        Apply(data[p], lz);
         for(size_t i=1;i<=lg;i++) update(p>>i);
     }
     void apply(size_t l, size_t r, const Lazy& lz)
