@@ -12,6 +12,7 @@ public:
     explicit dijkstra(int n) : g(n) {}
     void add_arc(int u, int v, W w) { g[u].emplace_back(v, w); }
     void add_edge(int u, int v, W w) { add_arc(u, v, w), add_arc(v, u, w); }
+    auto operator[](size_t p) const { return g[p]; }
     auto operator()(int start, const W inf = numeric_limits<W>::max()/2) const
     {
         result res(g.size(), start, inf);

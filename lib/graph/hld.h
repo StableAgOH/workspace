@@ -32,6 +32,7 @@ public:
     };
     explicit hld(int n) : g(n) {}
     void add_edge(int u, int v) { g[u].push_back(v), g[v].push_back(u); }
+    auto operator[](size_t p) const { return g[p]; }
     auto operator()(int rt=0) const
     {
         result res(g.size());

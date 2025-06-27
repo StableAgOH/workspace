@@ -17,7 +17,8 @@ public:
         }
     };
     explicit bcc_e(int n) : g(n) {}
-    void add_edge(int u, int v) { g[u].emplace_back(v, idx++); g[v].emplace_back(u, idx++); }
+    void add_edge(int u, int v) { g[u].emplace_back(v, idx++), g[v].emplace_back(u, idx++); }
+    auto operator[](size_t p) const { return g[p]; }
     auto operator()() const
     {
         result res(g.size());

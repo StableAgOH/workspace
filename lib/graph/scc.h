@@ -16,6 +16,7 @@ public:
     };
     explicit scc(int n) : g(n) {}
     void add_arc(int u, int v) { g[u].push_back(v); }
+    auto operator[](size_t p) const { return g[p]; }
     auto operator()() const
     {
         result res(g.size());

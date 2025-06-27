@@ -14,6 +14,7 @@ public:
         adj[u].emplace_back(v, adj[v].size(), cap, 0);
         adj[v].emplace_back(u, adj[u].size()-1, 0, 0);
     }
+    auto operator[](size_t p) const { return g[p]; }
     auto flow(int s, int t, T limit=numeric_limits<T>::max())
     {
         vector<int> level(adj.size()), iter(adj.size());
