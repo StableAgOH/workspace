@@ -296,12 +296,12 @@
             "auto chmax(T& a, const U& b) { return C(b)>C(a)&&(a=b,true); }"
         ]
     },
-    "div_ceil": {
+        "div_ceil": {
         "scope": "cpp",
         "prefix": "div_ceil",
         "body": [
-            "template <integral T, integral U, typename C=common_type_t<T,U>>",
-            "auto div_ceil(T a, U b) { auto [p,q] = div(C(a), C(b)); return p+!!q; }"
+            "template <integral T, integral U, typename C=common_type_t<T, U>>",
+            "auto div_ceil(T a, U b) { auto [p, q] = div(C(a), C(b)); return p+!!q; }"
         ]
     },
     "dfs": {
