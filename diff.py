@@ -56,15 +56,13 @@ for i in itertools.count(1):
         stdin=open("in.txt", "r"),
         stdout=open("out2.txt", "w"),
     )
-    output1 = list(map(lambda s: s.rstrip(" "), open("out.txt", "r").readlines()))
-    while output1 and output1[-1] == "\n":
-        output1.pop()
-    output2 = list(map(lambda s: s.rstrip(" "), open("out2.txt", "r").readlines()))
-    while output2 and output2[-1] == "\n":
-        output2.pop()
-    diff = list(
-        difflib.context_diff(output1, output2, args.your_code, args.answer_code)
-    )
+    out1 = list(map(lambda s: s.rstrip(" \n"), open("out.txt", "r").readlines()))
+    while out1 and out1[-1] == "\n":
+        out1.pop()
+    out2 = list(map(lambda s: s.rstrip(" \n"), open("out2.txt", "r").readlines()))
+    while out2 and out2[-1] == "\n":
+        out2.pop()
+    diff = list(difflib.context_diff(out1, out2, args.your_code, args.answer_code))
     if diff:
         if len(diff) > 100:
             logging.warning("Diff result is too long for output")
