@@ -58,7 +58,8 @@ public:
         f(data[p]);
         for(size_t i=1;i<=lg;i++) update(p>>i);
     }
-    void set(size_t p, const T& x) { transform(p, [&](T& v) { v = x; }); }
+    void set(size_t p, const T& x) { transform(p, [&](T& y) { y = x; }); }
+    void try_change(size_t p, const T& x) { transform(p, [&](T& y) { y = Op(y, x); }); }
     void apply(size_t p, const Lazy& lz)
     {
         p += sz;
