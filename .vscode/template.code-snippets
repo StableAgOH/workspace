@@ -245,7 +245,7 @@
             "vector<vector<int>> g(n+1);",
             "for(int i=1;i<n;i++)",
             "{",
-            "\tint u,v;",
+            "\tint u, v;",
             "\tcin>>u>>v;",
             "\tg[u].push_back(v);",
             "\tg[v].push_back(u);",
@@ -259,7 +259,7 @@
             "vector<vector<int>> g(n+1);",
             "for(int i=0;i<m;i++)",
             "{",
-            "\tint u,v;",
+            "\tint u, v;",
             "\tcin>>u>>v;",
             "\tg[u].push_back(v);",
             "\tg[v].push_back(u);",
@@ -273,7 +273,7 @@
             "vector<vector<pair<int, int>>> g(n+1);",
             "for(int i=0;i<m;i++)",
             "{",
-            "\tint u,v,w;",
+            "\tint u, v, w;",
             "\tcin>>u>>v>>w;",
             "\tg[u].emplace_back(v, w);",
             "\tg[v].emplace_back(u, w);",
@@ -284,7 +284,7 @@
         "scope": "cpp",
         "prefix": "chmin",
         "body": [
-            "template <typename T, typename U, typename C=common_type_t<T,U>>",
+            "template <typename T, typename U, typename C=common_type_t<T, U>>",
             "auto chmin(T& a, const U& b) { return C(b)<C(a)&&(a=b,true); }"
         ]
     },
@@ -292,11 +292,11 @@
         "scope": "cpp",
         "prefix": "chmax",
         "body": [
-            "template <typename T, typename U, typename C=common_type_t<T,U>>",
+            "template <typename T, typename U, typename C=common_type_t<T, U>>",
             "auto chmax(T& a, const U& b) { return C(b)>C(a)&&(a=b,true); }"
         ]
     },
-        "div_ceil": {
+    "div_ceil": {
         "scope": "cpp",
         "prefix": "div_ceil",
         "body": [
@@ -404,7 +404,7 @@
             "};"
         ]
     },
-        "dsuontree": {
+    "dsuontree": {
         "scope": "cpp",
         "prefix": "dsuontree",
         "body": [
@@ -519,7 +519,7 @@
             "\tpq.emplace(0, s);",
             "\twhile(!pq.empty())",
             "\t{",
-            "\t\tauto [d,u] = pq.top();",
+            "\t\tauto [d, u] = pq.top();",
             "\t\tpq.pop();",
             "\t\tif(dis[u]<d) continue;",
             "\t\tfor(auto [v,w] : g[u])",
