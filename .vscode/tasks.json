@@ -19,7 +19,8 @@
                 "-Wextra",
                 "-Wl,--stack=1073741824",
                 "-ftrapv",
-                "-lstdc++exp"
+                "-lstdc++exp",
+                "-pipe"
             ],
             "options": {
                 "cwd": "${fileDirname}"
@@ -51,7 +52,8 @@
                 "-Wextra",
                 "-Wl,--stack=1073741824",
                 "-ftrapv",
-                "-lstdc++exp"
+                "-lstdc++exp",
+                "-pipe"
             ],
             "options": {
                 "cwd": "${fileDirname}"
