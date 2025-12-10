@@ -1,5 +1,5 @@
 {
-        "codeforces": {
+    "codeforces": {
         "scope": "cpp",
         "prefix": "codeforces",
         "body": [
@@ -38,7 +38,7 @@
             ""
         ]
     },
-        "communication": {
+    "communication": {
         "scope": "cpp",
         "prefix": "communication",
         "body": [
@@ -342,12 +342,20 @@
             "auto chmax(T& a, const U& b) { return C(b)>C(a)&&(a=b,true); }"
         ]
     },
+    "div_floor": {
+        "scope": "cpp",
+        "prefix": "div_floor",
+        "body": [
+            "template <integral T, integral U>",
+            "auto div_floor(T a, U b) { return a/b-((a%b!=0)&&((a<0)^(b<0))); }"
+        ]
+    },
     "div_ceil": {
         "scope": "cpp",
         "prefix": "div_ceil",
         "body": [
-            "template <integral T, integral U, typename C=common_type_t<T, U>>",
-            "auto div_ceil(T a, U b) { auto [p, q] = div(C(a), C(b)); return p+!!q; }"
+            "template <integral T, integral U>",
+            "auto div_ceil(T a, U b) { return a/b+((a%b!=0)&&((a<0)==(b<0))); }"
         ]
     },
     "dfs": {
