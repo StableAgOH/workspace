@@ -34,7 +34,7 @@ public:
             update(p>>1);
     }
     void set(size_t p, const T& x) { transform(p, [&](T& y) { y = x; }); }
-    void try_change(size_t p, const T& x) { transform(p, [&](T& y) { y = op(y, x); }); }
+    void compose(size_t p, const T& x) { transform(p, [&](T& y) { y = op(y, x); }); }
     auto min_left(size_t r, predicate<T> auto&& pred) const
     {
         if(!r) return 0;
@@ -81,5 +81,5 @@ public:
         return n;
     }
 };
-template <ranges::range R, typename Op, typename E>
-segtree(R, Op, E) -> segtree<ranges::range_value_t<R>, Op, E>;
+template <typename Op, typename E>
+segtree(auto, Op, E) -> segtree<invoke_result_t<E>, Op, E>;

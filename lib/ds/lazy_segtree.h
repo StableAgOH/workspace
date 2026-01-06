@@ -65,7 +65,7 @@ public:
         for(size_t i=1;i<=lg;i++) update(p>>i);
     }
     void set(size_t p, const T& x) { transform(p, [&](T& y) { y = x; }); }
-    void try_change(size_t p, const T& x) { transform(p, [&](T& y) { y = op(y, x); }); }
+    void compose(size_t p, const T& x) { transform(p, [&](T& y) { y = op(y, x); }); }
     void apply(size_t p, const Lazy& lz)
     {
         p += sz;
@@ -142,6 +142,6 @@ public:
         return n;
     }
 };
-template <ranges::range R, typename Op, typename E1, typename Compose, typename Apply, typename E2>
-lazy_segtree(R, Op, E1, Compose, Apply, E2) -> lazy_segtree<ranges::range_value_t<R>, Op, E1, 
+template <typename Op, typename E1, typename Compose, typename Apply, typename E2>
+lazy_segtree(auto, Op, E1, Compose, Apply, E2) -> lazy_segtree<invoke_result_t<E1>, Op, E1, 
     invoke_result_t<E2>, Compose, Apply, E2>;
