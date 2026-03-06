@@ -70,7 +70,7 @@ public:
     {
         p += sz;
         for(auto i=lg;i>=1;i--) push(p>>i);
-        apply(data[p], lz);
+        ap(data[p], lz);
         for(size_t i=1;i<=lg;i++) update(p>>i);
     }
     void apply(size_t l, size_t r, const Lazy& lz)
@@ -92,7 +92,7 @@ public:
             if(((r>>i)<<i)!=r) update((r-1)>>i);
         }
     }
-    auto min_left(size_t r, predicate<T> auto&& pred) const
+    size_t min_left(size_t r, predicate<T> auto&& pred)
     {
         if(!r) return 0;
         r += sz;
@@ -117,7 +117,7 @@ public:
         while(lowbit(r)!=r);
         return 0;
     }
-    auto max_right(size_t l, predicate<T> auto&& pred) const
+    size_t max_right(size_t l, predicate<T> auto&& pred)
     {
         if(l==n) return n;
         l += sz;
