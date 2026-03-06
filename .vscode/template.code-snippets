@@ -630,4 +630,16 @@
             "g(g, 1, n, 0, n);"
         ]
     },
+    "points_sort": {
+        "scope": "cpp",
+        "prefix": "points_sort",
+        "body": [
+            "using P = pair<ll, ll>;",
+            "auto f = [&](P p) { return p.second>0||(p.second==0&&p.first>0); };",
+            "sort(pts.begin(), pts.end(), [&](P a, P b) {",
+            "\tauto p=f(a), q=f(b);",
+            "\treturn p!=q?p>q:a.first*b.second>a.second*b.first;",
+            "});"
+        ]
+    },
 }
