@@ -1,7 +1,6 @@
 template <typename T>
 class modular
 {
-    static constexpr auto mod() { return T::value; }
     static constexpr auto norm(integral auto x)
     {
         if(cmp_less(x, -mod())||cmp_greater_equal(x, mod())) x %= mod();
@@ -10,11 +9,13 @@ class modular
     }
     int x;
 public:
+    static constexpr auto mod() { return T::value; }
     modular() : x() {}
     modular(const auto& x) : x(norm(x)) {}
     explicit operator auto() const { return x; }
-    auto pow(integral auto rhs) const
+    modular pow(integral auto rhs) const
     {
+        if(rhs<0) return ~pow(-rhs);
         modular a=*this, res=1;
         for(;rhs;rhs>>=1,a*=a) if(rhs&1) res *= a;
         return res;
@@ -24,7 +25,7 @@ public:
     auto operator-() const { return modular(-x); }
     auto& operator+=(const modular& rhs) { if((x+=rhs.x)>=mod()) x -= mod(); return *this; }
     auto& operator-=(const modular& rhs) { if((x-=rhs.x)<0) x += mod(); return *this; }
-    auto& operator*=(const modular& rhs) { return *this = (long long)x*rhs.x; }
+    auto& operator*=(const modular& rhs) { x=1LL*x*rhs.x%mod(); return *this; }
     auto& operator/=(const modular& rhs) { return *this *= (~rhs); }
     friend auto operator+(modular lhs, const modular& rhs) { return lhs += rhs; }
     friend auto operator-(modular lhs, const modular& rhs) { return lhs -= rhs; }
