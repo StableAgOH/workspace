@@ -36,6 +36,8 @@ public:
 };
 template <int MOD>
 using static_mint = modular<integral_constant<int, MOD>>;
+using mint998244353 = static_mint<998244353>;
+using mint1000000007 = static_mint<1000000007>;
 struct dynamic_mod { static int value; };
 int dynamic_mod::value;
 using dynamic_mint = modular<dynamic_mod>;
