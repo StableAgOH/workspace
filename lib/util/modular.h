@@ -1,43 +1,44 @@
 template <typename T>
 class modular
 {
-    static constexpr auto norm(integral auto x)
-    {
-        if(cmp_less(x, -mod())||cmp_greater_equal(x, mod())) x %= mod();
-        if(x<0) x += mod();
-        return x;
-    }
     int x;
 public:
-    static constexpr auto mod() { return T::value; }
-    modular() : x() {}
-    modular(const auto& x) : x(norm(x)) {}
+    static constexpr int mod() { return T::value; }
+    modular(long long v=0) : x(v%mod()) { if(x<0) x += mod(); }
     explicit operator auto() const { return x; }
-    modular pow(integral auto rhs) const
+    modular inv() const
     {
-        if(rhs<0) return ~pow(-rhs);
-        modular a=*this, res=1;
-        for(;rhs;rhs>>=1,a*=a) if(rhs&1) res *= a;
-        return res;
+        int a=x, b=mod(), u=1, v=0;
+        while(b)
+        {
+            int t = a/b;
+            a = exchange(b, a%b);
+            u = exchange(v, u-t*v);
+        }
+        return u;
     }
-    auto operator~() const { return pow(mod()-2); }
+    modular pow(long long p) const
+    {
+        if(p<0) return inv().pow(-p);
+        modular a=*this, r=1;
+        for(;p;p>>=1,a*=a) if(p&1) r *= a;
+        return r;
+    }
     auto operator<=>(const modular& rhs) const = default;
     auto operator-() const { return modular(-x); }
-    auto& operator+=(const modular& rhs) { if((x+=rhs.x)>=mod()) x -= mod(); return *this; }
-    auto& operator-=(const modular& rhs) { if((x-=rhs.x)<0) x += mod(); return *this; }
-    auto& operator*=(const modular& rhs) { x=1LL*x*rhs.x%mod(); return *this; }
-    auto& operator/=(const modular& rhs) { return *this *= (~rhs); }
-    friend auto operator+(modular lhs, const modular& rhs) { return lhs += rhs; }
-    friend auto operator-(modular lhs, const modular& rhs) { return lhs -= rhs; }
-    friend auto operator*(modular lhs, const modular& rhs) { return lhs *= rhs; }
-    friend auto operator/(modular lhs, const modular& rhs) { return lhs /= rhs; }
-    friend auto& operator>>(istream& is, modular& rhs) { is>>rhs.x; rhs.x = norm(rhs.x); return is; }
-    friend auto& operator<<(ostream& os, const modular& rhs) { return os<<rhs.x; }
+    auto& operator+=(modular r) { if((x+=r.x)>=mod()) x -= mod(); return *this; }
+    auto& operator-=(modular r) { if((x-=r.x)<0) x += mod(); return *this; }
+    auto& operator*=(modular r) { x = 1LL*x*r.x%mod(); return *this; }
+    auto& operator/=(modular r) { return *this *= r.inv(); }
+    friend auto operator+(modular l, modular r) { return l += r; }
+    friend auto operator-(modular l, modular r) { return l -= r; }
+    friend auto operator*(modular l, modular r) { return l *= r; }
+    friend auto operator/(modular l, modular r) { return l /= r; }
+    friend auto& operator>>(istream& is, modular& a) { long long v; is>>v; a=v; return is; }
+    friend auto& operator<<(ostream& os, modular a) { return os<<a.x; }
 };
-template <int MOD>
-using static_mint = modular<integral_constant<int, MOD>>;
-using mint998244353 = static_mint<998244353>;
-using mint1000000007 = static_mint<1000000007>;
-struct dynamic_mod { static int value; };
+template <int M>
+using static_mint = modular<integral_constant<int, M>>;
+struct dynamic_mod { static int value; }; 
 int dynamic_mod::value;
 using dynamic_mint = modular<dynamic_mod>;

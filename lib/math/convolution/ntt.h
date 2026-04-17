@@ -1,6 +1,6 @@
 class ntt
 {
-    using T = mint998244353;
+    using T = static_mint<998244353>;
     inline static vector<T> r{1}, ir{1};
     static void dft(vector<T>& a)
     {

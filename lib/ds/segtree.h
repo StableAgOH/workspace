@@ -1,85 +1,78 @@
-template <typename T, typename Op, typename E>
-requires convertible_to<invoke_result_t<Op, T, T>, T> &&
-    convertible_to<invoke_result_t<E>, T>
+template <typename T, auto Op>
+requires convertible_to<invoke_result_t<decltype(Op), T, T>, T>
 class segtree
 {
-    static constexpr auto lowbit(size_t x) { return x&-x; }
-    Op op; E e;
     size_t n, sz;
-    vector<T> data;
-    void update(size_t p) { data[p] = op(data[p<<1], data[p<<1|1]); }
+    vector<T> d;
+    void pull(size_t p) { d[p] = Op(d[p<<1], d[p<<1|1]); }
 public:
-    segtree(ranges::range auto&& rg, Op op, E e) : op(op), e(e), 
-        n(ranges::size(rg)), sz(bit_ceil(n)), data(sz<<1, e())
+    segtree(size_t n, const T& e={}) : n(n), sz(bit_ceil(n)), d(sz<<1, e) {}
+    segtree(ranges::range auto&& rg, const T& e={}) : segtree(ranges::size(rg), e)
     {
-        ranges::copy(rg, data.begin()+sz);
-        for(auto i=sz-1;i>=1;i--) update(i);
+        ranges::copy(rg, d.begin()+sz);
+        for(size_t i=sz-1;i>=1;i--) pull(i);
     }
-    segtree(size_t n, Op op, E e, const T& init={}) : segtree(vector(n, init), op, e) {}
-    auto operator()() const { return data[1]; }
-    auto operator[](size_t p) const { return data[p+sz]; }
-    auto operator()(size_t l, size_t r) const
+    T operator()() const { return d[1]; }
+    T operator[](size_t p) const { return d[p+sz]; }
+    T operator()(size_t l, size_t r) const
     {
-        auto resl=data[0], resr=data[0];
+        T resl=d[0], resr=d[0];
         for(l+=sz,r+=sz+1;l<r;l>>=1,r>>=1)
         {
-            if(l&1) resl = op(resl, data[l++]);
-            if(r&1) resr = op(data[--r], resr);
+            if(l&1) resl = Op(resl, d[l++]);
+            if(r&1) resr = Op(d[--r], resr);
         }
-        return op(resl, resr);
+        return Op(resl, resr);
     }
     void transform(size_t p, invocable<T&> auto&& f)
     {
-        for(f(data[p+=sz]);p>1;p>>=1)
-            update(p>>1);
+        for(f(d[p+=sz]);p>1;p>>=1)
+            pull(p>>1);
     }
     void set(size_t p, const T& x) { transform(p, [&](T& y) { y = x; }); }
-    void compose(size_t p, const T& x) { transform(p, [&](T& y) { y = op(y, x); }); }
-    auto min_left(size_t r, predicate<T> auto&& pred) const
+    void compose(size_t p, const T& x) { transform(p, [&](T& y) { y = Op(y, x); }); }
+    size_t min_left(size_t r, predicate<T> auto&& pred) const
     {
-        if(!r) return 0;
-        r += sz;
-        auto sum = data[0];
+        r += sz+1;
+        T sum = d[0];
         do
         {
             r--;
             while(r>1&&(r&1)) r >>= 1;
-            if(!pred(op(data[r], sum)))
+            if(!pred(Op(d[r], sum)))
             {
                 while(r<sz)
                 {
                     r = r<<1|1;
-                    if(auto x=op(data[r], sum);pred(x)) { sum = x; r--; }
+                    if(T x=Op(d[r], sum);pred(x)) { sum = x; r--; }
                 }
                 return r+1-sz;
             }
-            sum = op(data[r], sum);
+            sum = Op(d[r], sum);
         }
-        while(lowbit(r)!=r);
+        while((r&-r)!=r);
         return 0;
     }
-    auto max_right(size_t l, predicate<T> auto&& pred) const
+    size_t max_right(size_t l, predicate<T> auto&& pred) const
     {
-        if(l==n) return n;
+        if(l==n) return n-1;
         l += sz;
-        auto sum = data[0];
+        T sum = d[0];
         do
         {
             while(!(l&1)) l >>= 1;
-            if(!pred(op(sum, data[l])))
+            if(!pred(Op(sum, d[l])))
             {
                 while(l<sz)
                 {
                     l <<= 1;
-                    if(auto x=op(sum, data[l]);pred(x)) { sum = x; l++; }
+                    if(T x=Op(sum, d[l]);pred(x)) { sum = x; l++; }
                 }
-                return l-sz;
+                return l-sz-1;
             }
-            sum = op(sum, data[l++]);
+            sum = Op(sum, d[l++]);
         }
-        while(lowbit(l)!=l);
-        return n;
+        while((l&-l)!=l);
+        return n-1;
     }
 };
-template <typename Op, typename E>
-segtree(auto, Op, E) -> segtree<invoke_result_t<E>, Op, E>;
