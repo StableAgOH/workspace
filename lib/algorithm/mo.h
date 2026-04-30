@@ -1,33 +1,37 @@
-template <typename Q>
+template <typename T>
 class mo
 {
-    size_t n;
-    vector<Q> q;
-public:
-    mo(size_t n) : n(n) {}
-    void add_query(Q&& q) { this->q.push_back(q); }
-    auto operator()(auto&& push_front, auto&& pop_front, auto&& push_back, auto&& pop_back, auto&& calc)
+    struct Q { int l, r; size_t id; uint64_t h; };
+    const int K;
+    vector<Q> qs;
+    uint64_t hilbert(int x, int y) const
     {
-        vector<invoke_result_t<decltype(calc), Q>> ans(q.size());
-        int siz = n/sqrt(q.size());
-        vector<int> pos(n+1);
-        for(size_t i=1;i<=n;i++) pos[i] = i/siz;
-        vector<int> o(q.size());
-        iota(o.begin(), o.end(), 0);
-        sort(o.begin(), o.end(), [&](int i, int j) {
-            if(pos[get<0>(q[i])]!=pos[get<0>(q[j])]) return get<0>(q[i])<get<0>(q[j]);
-            if((pos[get<0>(q[i])]&1)) return get<1>(q[i])<get<1>(q[j]);
-            return get<1>(q[i])>get<1>(q[j]);
-        });
-        int cl=0, cr=-1;
-        for(auto i : o)
+        uint64_t d = 0;
+        for(int s=1<<(K-1);s>0;s>>=1)
         {
-            int l=get<0>(q[i]), r=get<1>(q[i]);
-            while(cl>l) push_front(--cl);
-            while(cr<r) push_back(++cr);
-            while(cl<l) pop_front(cl++);
-            while(cr>r) pop_back(cr--);
-            ans[i] = calc(q[i]);
+            bool rx=x&s, ry=y&s;
+            d += (uint64_t)s*s*((3*rx)^ry);
+            if(ry) continue;
+            if(rx) x=(1<<K)-1-x, y=(1<<K)-1-y;
+            swap(x, y);
+        }
+        return d;
+    }
+public:
+    explicit mo(size_t n) : K(bit_width(n)) {}
+    void add_query(size_t l, size_t r) { qs.emplace_back(l, r, qs.size(), hilbert(l, r)); }
+    auto operator()(auto&& al, auto&& ar, auto&& dl, auto&& dr, auto&& get)
+    {
+        ranges::sort(qs, {}, &Q::h);
+        vector<T> ans(qs.size());
+        int l=0, r=-1;
+        for(const auto& q : qs)
+        {
+            while(l>q.l) al(--l);
+            while(r<q.r) ar(++r);
+            while(l<q.l) dl(l++);
+            while(r>q.r) dr(r--);
+            ans[q.id] = get(l, r);
         }
         return ans;
     }

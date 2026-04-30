@@ -258,7 +258,7 @@
             "for(auto i : a) cnt[i]++;"
         ]
     },
-    "comb": {
+        "comb": {
         "scope": "cpp",
         "prefix": "comb",
         "body": [
@@ -271,17 +271,13 @@
             "\t\tif(fac.empty()) fac = ifac = {1};",
             "\t\telse",
             "\t\t{",
-            "\t\t\tfac.push_back(fac.back()*(int)fac.size());",
-            "\t\t\tifac.push_back(1/fac.back());",
+            "\t\t\tfac.push_back(fac.back()*fac.size());",
+            "\t\t\tifac.push_back(fac.back().inv());",
             "\t\t}",
             "\t}",
             "\treturn fac[n]*ifac[n-m];",
             "}",
-            "mint C(int n, int m)",
-            "{",
-            "\tauto a = A(n, m);",
-            "\treturn a==0?0:a*ifac[m];",
-            "}"
+            "mint C(int n, int m) { return A(n, m)*ifac[m]; }"
         ]
     },
     "tree": {
