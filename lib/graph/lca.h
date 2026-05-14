@@ -1,29 +1,25 @@
-// https://judge.yosupo.jp/submission/360243
-vector<int> dep(n+1), in(n+1), asc(n+1), top(n+1);
-vector<pair<int, int>> ord;
-auto lowbit = [](auto x) { return x&-x; };
+vector<int> dep(n+1);
+vector<array<int, 20>> f(n+1);
 auto dfs = [&](auto&& self, int u, int p) -> void
 {
-    ord.emplace_back(u, p);
-    in[u] = ord.size();
+    dep[u] = dep[p]+1;
+    f[u][0] = p;
+    for(int i=1;i<20;i++) f[u][i] = f[f[u][i-1]][i-1];
     for(auto v : g[u])
-    {
-        if(v==p) continue;
-        dep[v] = dep[u]+1;
-        self(self, v, u);
-        top[in[v]] = u;
-        if(lowbit(in[u])<lowbit(in[v])) in[u] = in[v];
-    }
+        if(v!=p) self(self, v, u);
 };
-dfs(dfs, s, 0);
-for(auto [u, p] : ord) asc[u] = asc[p]|lowbit(in[u]);
+dfs(dfs, 1, 0);
 auto lca = [&](int u, int v)
 {
-    if(unsigned j = in[u]^in[v])
+    if(dep[u]<dep[v]) swap(u, v);
+    for(int i=19;i>=0;i--)
+        if(dep[f[u][i]]>=dep[v])
+            u = f[u][i];
+    if(u==v) return u;
+    for(int i=19;i>=0;i--)
     {
-        j = asc[u]&asc[v]&-bit_floor(j);
-        if(auto k=bit_floor(asc[u]^j)) u = top[(in[u]&-k)|k];
-        if(auto k=bit_floor(asc[v]^j)) v = top[(in[v]&-k)|k];
+        if(f[u][i]==f[v][i]) continue;
+        u=f[u][i], v=f[v][i];
     }
-    return dep[u]<dep[v]?u:v;
+    return f[u][0];
 };

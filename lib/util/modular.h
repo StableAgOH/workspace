@@ -11,7 +11,7 @@ class modular
 public:
     static constexpr auto mod() { return T::value; }
     constexpr modular(long long v=0) : x(norm(v)) {}
-    constexpr operator int() const { return x; }
+    constexpr explicit operator int() const { return x; }
     constexpr modular inv() const
     {
         int a=x, b=mod();

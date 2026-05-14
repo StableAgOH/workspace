@@ -51,7 +51,7 @@ public:
         p += sz;
         for(auto i=lg;i>=1;i--) push(p>>i);
         f(d[p]);
-        for(auto i=1;i<=lg;i++) pull(p>>i);
+        for(size_t i=1;i<=lg;i++) pull(p>>i);
     }
     void set(size_t p, const T& x) { transform(p, [&](T& y) { y = x; }); }
     void compose(size_t p, const T& x) { transform(p, [&](T& y) { y = Op(y, x); }); }
@@ -75,7 +75,7 @@ public:
             if(i&1) all_apply(i++, lz);
             if(j&1) all_apply(--j, lz);
         }
-        for(auto i=1;i<=lg;i++)
+        for(size_t i=1;i<=lg;i++)
         {
             if(((l>>i)<<i)!=l) pull(l>>i);
             if(((r>>i)<<i)!=r) pull((r-1)>>i);
